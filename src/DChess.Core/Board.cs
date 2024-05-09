@@ -40,9 +40,15 @@ public class Board
 
     public Piece GetPiece(Position position) => new(PieceType.Pawn, PieceColor.White);
 
-    public Piece this[char c, int i]
+    public Piece this[char column, int row]
     {
         get => new(PieceType.Pawn, PieceColor.White);
-        set {  }
+        set
+        {
+            if (column < 'A' || column > 'G' || row < 1 || row > 8)
+            {
+                throw new ArgumentOutOfRangeException($"The '{column}{row}' is not a valid position");
+            }
+        }
     }
 }
