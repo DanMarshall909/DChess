@@ -30,13 +30,12 @@ public class BoardTests
         // Arrange
         var board = new Board();
         var piece = new Piece(PieceType.Pawn, PieceColor.White);
-        board['A', 1] = piece;
         var position = new Position('A', 1);
 
         // Act
-        board.PlacePiece(piece, position);
+        board['A', 1] = piece;
 
         // Assert
-        board.GetPiece(position).Should().Be(piece);
+        board['A', 1].Should().Be(piece);
     }
 }
