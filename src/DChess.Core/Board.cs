@@ -44,7 +44,7 @@ public class Board
         }
     }
 
-    public Piece GetPiece(Position position) => new(PieceType.Pawn, PieceColor.White);
+    public Piece GetPiece(Position position) => new Pawn(PieceType.Pawn, PieceColor.White);
 
     public Piece this[char column, int row]
     {
@@ -52,3 +52,5 @@ public class Board
         set => PlacePiece(value, new Position(column, row));
     }
 }
+
+public record Pawn(PieceType Type, PieceColor Color) : Piece(Type, Color);
