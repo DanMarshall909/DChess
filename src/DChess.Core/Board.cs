@@ -1,4 +1,5 @@
 using System.Text;
+using DChess.Core;
 
 namespace DChess.Test.Unit;
 
@@ -31,5 +32,14 @@ public class Board
 
             return result.ToString();
         }
+    }
+
+    public void PlacePiece(Piece piece, Position position)
+    {
+    }
+
+    public Piece GetPiece(Position position)
+    {
+        return new Piece(PieceType.Pawn, PieceColor.White);
     }
 }

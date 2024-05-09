@@ -1,4 +1,6 @@
-﻿namespace DChess.Test.Unit;
+﻿using DChess.Core;
+
+namespace DChess.Test.Unit;
 
 public class BoardTests
 {
@@ -21,18 +23,19 @@ public class BoardTests
             ░ █ ░ █ ░ █ ░ █
             """);
     }
-    
-[Fact(DisplayName = "A piece can be placed on the board")]
-public void a_piece_can_be_placed_on_the_board()
-{
-    // Arrange
-    var board = new Board();
-    var piece = new Piece(Piece.PieceType.Pawn, Piece.Color.White);
-    var position = new Position(1, 1);
 
-    // Act
-    board.PlacePiece(piece, position);
+    [Fact(DisplayName = "A piece can be placed on the board")]
+    public void a_piece_can_be_placed_on_the_board()
+    {
+        // Arrange
+        var board = new Board();
+        var piece = new Piece(PieceType.Pawn, PieceColor.White);
+        var position = new Position('A', 1);
 
-    // Assert
-    board.GetPiece(position).Should().Be(piece);
+        // Act
+        board.PlacePiece(piece, position);
+
+        // Assert
+        board.GetPiece(position).Should().Be(piece);
+    }
 }
