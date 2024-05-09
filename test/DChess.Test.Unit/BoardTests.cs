@@ -38,6 +38,20 @@ public class BoardTests
         board['A', 1].Should().Be(piece);
     }
     
+    Fact(DisplayName = "If there is no piece on the board, a null piece should be returned")]
+        public void if_there_is_no_piece_on_the_board_a_null_piece_should_be_returned()
+        {
+            // Arrange
+            var board = new Board();
+
+            // Act
+            var piece = board['A', 1];
+            var pieceType = piece.GetType();
+
+            // Assert
+            pieceType.Should().Be(typeof(NullPiece));
+        }
+    
     [Theory(DisplayName = "A piece cannot be placed outside the board")]
     [InlineData('A', -1)]
     [InlineData('A', 0)]
