@@ -1,3 +1,3 @@
 ﻿namespace DChess.Test.Unit;
 
-public record Position(char Row, int Column);
+public record Position(char Column, int Row);

@@ -1,7 +1,7 @@
 using System.Text;
-using DChess.Core;
+using DChess.Test.Unit;
 
-namespace DChess.Test.Unit;
+namespace DChess.Core;
 
 public class Board
 {
@@ -36,19 +36,19 @@ public class Board
 
     public void PlacePiece(Piece piece, Position position)
     {
+        int row = position.Row;
+        char column = position.Column;
+        if (column < 'A' || column > 'G' || row < 1 || row > 8)
+        {
+            throw new ArgumentOutOfRangeException($"The '{column}{row}' is not a valid position");
+        }
     }
 
     public Piece GetPiece(Position position) => new(PieceType.Pawn, PieceColor.White);
 
     public Piece this[char column, int row]
     {
-        get => new(PieceType.Pawn, PieceColor.White);
-        set
-        {
-            if (column < 'A' || column > 'G' || row < 1 || row > 8)
-            {
-                throw new ArgumentOutOfRangeException($"The '{column}{row}' is not a valid position");
-            }
-        }
+        get => GetPiece(new Position(column, row));
+        set => PlacePiece(value, new Position(column, row));
     }
 }
