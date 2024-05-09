@@ -30,12 +30,30 @@ public class BoardTests
         // Arrange
         var board = new Board();
         var piece = new Piece(PieceType.Pawn, PieceColor.White);
-        var position = new Position('A', 1);
 
         // Act
         board['A', 1] = piece;
 
         // Assert
         board['A', 1].Should().Be(piece);
+    }
+    
+    [Theory(DisplayName = "A piece cannot be placed outside the board")]
+    [InlineData('A', -1)]
+    [InlineData('A', 0)]
+    [InlineData('A', 9)]
+    [InlineData('H', 1)]
+    [InlineData('1', 1)]
+    public void a_piece_cannot_be_placed_outside_the_board(char column, int row)
+    {
+        // Arrange
+        var board = new Board();
+        var piece = new Piece(PieceType.Pawn, PieceColor.White);
+
+        // Act
+        Action act = () => board[column, row] = piece;
+
+        // Assert
+        act.Should().Throw<ArgumentOutOfRangeException>();
     }
 }
