@@ -30,6 +30,7 @@ public class BoardTests
         // Arrange
         var board = new Board();
         var piece = new Piece(PieceType.Pawn, PieceColor.White);
+        board['A', 1] = piece;
         var position = new Position('A', 1);
 
         // Act

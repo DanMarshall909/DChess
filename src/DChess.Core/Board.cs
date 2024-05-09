@@ -38,8 +38,11 @@ public class Board
     {
     }
 
-    public Piece GetPiece(Position position)
+    public Piece GetPiece(Position position) => new(PieceType.Pawn, PieceColor.White);
+
+    public Piece this[char c, int i]
     {
-        return new Piece(PieceType.Pawn, PieceColor.White);
+        get => new(PieceType.Pawn, PieceColor.White);
+        set {  }
     }
 }
