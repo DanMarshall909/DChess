@@ -34,23 +34,30 @@ public class Board
         }
     }
 
-    public void PlacePiece(Piece piece, Position position)
+    public void PlacePiece(Piece? piece, Position position)
     {
-        int row = position.Row;
-        char column = position.Column;
-        if (column < 'a' || column > 'g' || row < 1 || row > 8)
-        {
-            throw new ArgumentOutOfRangeException($"The '{column}{row}' is not a valid position");
-        }
     }
 
-    public Piece GetPiece(Position position) => new Pawn(PieceType.Pawn, PieceColor.White);
+    public Piece? GetPiece(Position position)
+    {
+        int fileIndex = position.File - 'a';
+        int rankIndex = position.Rank - 1;
+        var cell = Cells[fileIndex, rankIndex];
+        return cell.Piece;
+    }
 
-    public Piece this[char column, int row]
+    public Cell[,]  Cells { get; set; } = new Cell[8, 8];
+
+    public Piece? this[char column, int row]
     {
         get => GetPiece(new Position(column, row));
         set => PlacePiece(value, new Position(column, row));
     }
+}
+
+public record struct Cell
+{
+    public Piece? Piece { get; set; }
 }
 
 public record Pawn(PieceType Type, PieceColor Color) : Piece(Type, Color);
