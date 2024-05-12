@@ -3,9 +3,9 @@ using DChess.Test.Unit;
 
 namespace DChess.Core;
 
-public class Board
+public partial class Board
 {
-    private Cell[,] _cells = new Cell[8, 8];
+    private readonly Cell[,] _cells = new Cell[8, 8];
 
     public Board()
     {
@@ -17,6 +17,7 @@ public class Board
             }
         }
     }
+
     public string PrettyText
     {
         get
@@ -49,6 +50,8 @@ public class Board
     public Cell CellAt(Position position) => _cells[position.File - 'a', position.Rank - 1];
 
     public Cell this[char column, int row] => CellAt(new Position(column, row));
+
+    public Cell this[string position] => CellAt(new Position(position));
 }
 
 public class Cell
@@ -57,5 +60,3 @@ public class Cell
 
     public Piece? Piece { get; set; } = null;
 }
-
-public record Pawn(PieceType Type, PieceColor Color) : Piece(Type, Color);

@@ -1,4 +1,6 @@
 ﻿using DChess.Core;
+using static DChess.Core.PieceColor;
+using static DChess.Core.PieceDefinitions;
 
 namespace DChess.Test.Unit;
 
@@ -28,14 +30,16 @@ public class BoardTests
     public void a_piece_can_be_placed_on_the_board()
     {
         // Arrange
-        var board = new Board();
-        var piece = new Pawn(PieceType.Pawn, PieceColor.White);
-
-        // Act
-        board['a', 1].Piece = piece;
+        var board = new Board
+        {
+            ['a', 1] =
+            {
+                Piece = WhitePawn
+            }
+        };
 
         // Assert
-        board['a', 1].Should().BeEquivalentTo(new Cell(piece));
+        board['a', 1].Should().BeEquivalentTo(new Cell(WhitePawn));
         board['a', 2].Should().BeEquivalentTo(new Cell(null));
     }
 
@@ -63,12 +67,22 @@ public class BoardTests
     {
         // Arrange
         var board = new Board();
-        var piece = new Pawn(PieceType.Pawn, PieceColor.White);
 
         // Act
-        Action act = () => board[column, row].Piece = piece;
+        Action act = () => board[column, row].Piece = WhitePawn;
 
         // Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
+    }
+    
+    [Fact(DisplayName = "Cell shorthand can be used to get a cell")]
+    public void cell_shorthand_can_be_used_to_get_a_cell()
+    {
+        // Arrange
+        var board = new Board();
+        board['a', 1].Piece = WhitePawn;
+
+        // Assert
+        board["a1"].Piece.Should().Be(WhitePawn);
     }
 }
