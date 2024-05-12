@@ -32,10 +32,10 @@ public class BoardTests
         var piece = new Pawn(PieceType.Pawn, PieceColor.White);
 
         // Act
-        board['A', 1] = piece;
+        board['a', 1] = piece;
 
         // Assert
-        board['A', 1].Should().Be(piece);
+        board['a', 1].Should().Be(piece);
     }
 
     [Fact(DisplayName = "If there is no piece on the board, a null piece should be returned")]
@@ -45,7 +45,7 @@ public class BoardTests
         var board = new Board();
 
         // Act
-        var piece = board['A', 1];
+        var piece = board['a', 1];
         var pieceType = piece.GetType();
 
         // Assert
@@ -53,10 +53,10 @@ public class BoardTests
     }
 
     [Theory(DisplayName = "A piece cannot be placed outside the board")]
-    [InlineData('A', -1)]
-    [InlineData('A', 0)]
-    [InlineData('A', 9)]
-    [InlineData('H', 1)]
+    [InlineData('a', -1)]
+    [InlineData('a', 0)]
+    [InlineData('a', 9)]
+    [InlineData('h', 1)]
     [InlineData('1', 1)]
     public void a_piece_cannot_be_placed_outside_the_board(char column, int row)
     {

@@ -38,7 +38,7 @@ public class Board
     {
         int row = position.Row;
         char column = position.Column;
-        if (column < 'A' || column > 'G' || row < 1 || row > 8)
+        if (column < 'a' || column > 'g' || row < 1 || row > 8)
         {
             throw new ArgumentOutOfRangeException($"The '{column}{row}' is not a valid position");
         }
