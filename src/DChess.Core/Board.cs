@@ -5,17 +5,20 @@ namespace DChess.Core;
 
 public partial class Board
 {
-    private readonly Cell[,] _cells = new Cell[8, 8];
+    private readonly Cell[,] _cells = EmptyBoard();
 
-    public Board()
+    private static Cell[,] EmptyBoard()
     {
+        Cell[,] cells = new Cell[8, 8];
         for (var i = 0; i < 8; i++)
         {
             for (var j = 0; j < 8; j++)
             {
-                _cells[i, j] = new Cell(null);
+                cells[i, j] = new Cell(null);
             }
         }
+
+        return cells;
     }
 
     public string PrettyText
