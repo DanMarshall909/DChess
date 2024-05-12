@@ -5,6 +5,18 @@ namespace DChess.Core;
 
 public class Board
 {
+    private Cell[,] _cells = new Cell[8, 8];
+
+    public Board()
+    {
+        for (var i = 0; i < 8; i++)
+        {
+            for (var j = 0; j < 8; j++)
+            {
+                _cells[i, j] = new Cell(null);
+            }
+        }
+    }
     public string PrettyText
     {
         get
@@ -34,30 +46,16 @@ public class Board
         }
     }
 
-    public void PlacePiece(Piece? piece, Position position)
-    {
-    }
+    public Cell CellAt(Position position) => _cells[position.File - 'a', position.Rank - 1];
 
-    public Piece? GetPiece(Position position)
-    {
-        int fileIndex = position.File - 'a';
-        int rankIndex = position.Rank - 1;
-        var cell = Cells[fileIndex, rankIndex];
-        return cell.Piece;
-    }
-
-    public Cell[,]  Cells { get; set; } = new Cell[8, 8];
-
-    public Piece? this[char column, int row]
-    {
-        get => GetPiece(new Position(column, row));
-        set => PlacePiece(value, new Position(column, row));
-    }
+    public Cell this[char column, int row] => CellAt(new Position(column, row));
 }
 
-public record struct Cell
+public class Cell
 {
-    public Piece? Piece { get; set; }
+    public Cell(Piece? piece) => Piece = piece;
+
+    public Piece? Piece { get; set; } = null;
 }
 
 public record Pawn(PieceType Type, PieceColor Color) : Piece(Type, Color);

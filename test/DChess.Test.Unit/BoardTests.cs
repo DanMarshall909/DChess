@@ -32,10 +32,11 @@ public class BoardTests
         var piece = new Pawn(PieceType.Pawn, PieceColor.White);
 
         // Act
-        board['a', 1] = piece;
+        board['a', 1].Piece = piece;
 
         // Assert
-        board['a', 1].Should().Be(piece);
+        board['a', 1].Should().BeEquivalentTo(new Cell(piece));
+        board['a', 2].Should().BeEquivalentTo(new Cell(null));
     }
 
     [Fact(DisplayName = "If there are no pieces on the board, a cell's piece is null")]
@@ -45,7 +46,8 @@ public class BoardTests
         var board = new Board();
 
         // Act
-        var piece = board.Cells['a', 1].Piece;
+        var cell = board['a', 1];
+        var piece = cell.Piece;
 
         // Assert
         piece.Should().BeNull();
@@ -64,7 +66,7 @@ public class BoardTests
         var piece = new Pawn(PieceType.Pawn, PieceColor.White);
 
         // Act
-        Action act = () => board[column, row] = piece;
+        Action act = () => board[column, row].Piece = piece;
 
         // Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
