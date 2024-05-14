@@ -26,7 +26,7 @@ public readonly record struct Position
         get => _file;
         init
         {
-            if (value is < 'a' or > 'g')
+            if (value is < 'a' or > 'h')
             {
                 throw new ArgumentOutOfRangeException(nameof(value), $"File must be between 'a' and 'g' but found {_file}");
             }
