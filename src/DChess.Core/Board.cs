@@ -38,10 +38,6 @@ public partial class Board
                     char square = PieceChar(j, i);
 
                     result.Append(square);
-                    if (j < 7) // Don't append space on the last character of each line
-                    {
-                        result.Append(' ');
-                    }
                 }
 
                 if (i < 7) // Don't append newline on the last line
