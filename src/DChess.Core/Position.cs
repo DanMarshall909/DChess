@@ -5,15 +5,15 @@ public readonly record struct Position
     private readonly char _file;
     private readonly int _rank;
 
-    public Position(string postion)
+    public Position(string positionName)
     {
-        if (postion.Length != 2)
+        if (positionName.Length != 2)
         {
             throw new ArgumentException("Position must be 2 characters long");
         }
 
-        File = postion[0];
-        Rank = postion[1] - '0';
+        File = positionName[0];
+        Rank = positionName[1] - '0';
     }
     public Position(char File, int Rank)
     {

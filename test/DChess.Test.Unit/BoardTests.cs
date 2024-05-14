@@ -1,12 +1,13 @@
 ﻿using DChess.Core;
 using static DChess.Core.PieceColour;
-using static DChess.Core.PieceDefinitions;
 using static DChess.Core.PieceType;
 
 namespace DChess.Test.Unit;
 
 public class BoardTests
 {
+    private readonly Piece _whitePawn = new(Pawn, White);
+
     [Fact(DisplayName = "The board should be displayed correctly")]
     public void the_board_should_be_displayed_correctly()
     {
@@ -26,7 +27,7 @@ public class BoardTests
             ░█░█░█░█
             """);
     }
-
+    
     [Fact(DisplayName = "A standard  board should be displayed correctly with pieces")]
     public void a_standard_board_should_be_displayed_correctly_with_pieces()
     {
@@ -43,6 +44,34 @@ public class BoardTests
             ♜♞♝♛♚♝♞♜
             """);
     }
+        
+    [Theory(DisplayName = "An invalid position should throw an exception")]
+    [InlineData("a")]
+    [InlineData("a11")]
+    [InlineData("i1")]
+    [InlineData("a0")]
+    [InlineData("a9")]
+    [InlineData("1a")]
+    [InlineData("9a")]
+    public void an_invalid_position_should_throw_an_exception(string positionName)
+    {
+        // Arrange
+        Action act = () => new Position(positionName);
+        // Assert
+        act.Should().Throw<ArgumentException>();
+    }
+    
+    
+    [Fact(DisplayName = "A position can be described by a file and rank")]
+    public void a_position_can_be_described_by_a_file_and_rank()
+    {
+        // Arrange
+        var position = new Position("a1");
+
+        // Assert
+        position.File.Should().Be('a');
+        position.Rank.Should().Be(1);
+    }
 
     [Fact(DisplayName = "A piece can be placed on the board")]
     public void a_piece_can_be_placed_on_the_board()
@@ -52,12 +81,12 @@ public class BoardTests
         {
             ['a', 1] =
             {
-                Piece = WhitePawn
+                Piece = _whitePawn
             }
         };
 
         // Assert
-        board['a', 1].Should().BeEquivalentTo(new Cell(WhitePawn));
+        board['a', 1].Should().BeEquivalentTo(new Cell(_whitePawn));
         board['a', 2].Should().BeEquivalentTo(new Cell(null));
     }
 
@@ -87,7 +116,7 @@ public class BoardTests
         var board = new Board();
 
         // Act
-        Action act = () => board[column, row].Piece = WhitePawn;
+        Action act = () => board[column, row].Piece = _whitePawn;
 
         // Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
@@ -98,12 +127,11 @@ public class BoardTests
     {
         // Arrange
         var board = new Board();
-        board['a', 1].Piece = WhitePawn;
+        board['a', 1].Piece = _whitePawn;
 
         // Assert
-        board["a1"].Piece.Should().Be(WhitePawn);
+        board["a1"].Piece.Should().Be(_whitePawn);
     }
-
     [Theory(DisplayName = "Board can be created with a standard piece layout")]
     [InlineData("a8", Rook, Black)]
     [InlineData("b8", Knight, Black)]
