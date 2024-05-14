@@ -22,10 +22,10 @@ My initial goals are for it to be:
 
 ## Development Checklist for DCHESS
 
-- [ ] **Display a Chess Board with Pieces**
-    - [ ] Create a `Board` class that holds all pieces and their positions.
-    - [ ] Display the board in the console or graphical UI.
-    - [ ] Populate the board with initial positions for all pieces.
+- [x] **Display a Chess Board with Pieces**
+    - [x] Create a `Board` class that holds all pieces and their positions.
+    - [x] Display the board in the console or graphical UI.
+    - [x] Populate the board with initial positions for all pieces.
 
 - [ ] **Allow the User to Move Pieces Using Algebraic Notation**
     - [ ] Parse algebraic notation into board coordinates.
