@@ -5,7 +5,7 @@ using static DChess.Core.PieceType;
 
 namespace DChess.Core;
 
-public partial class Board
+public class Board
 {
     public const char WhiteSquare = '\u2588';
     public const char BlackSquare = '\u2591';
