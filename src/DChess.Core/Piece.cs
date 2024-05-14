@@ -2,13 +2,13 @@
 
 namespace DChess.Core;
 
-public record struct Piece(PieceType Type, PieceColor Colour)
+public record struct Piece(PieceType Type, PieceColour Colour)
 {
     public override string ToString()
     {
         return Colour switch
         {
-            PieceColor.Black => Type switch
+            PieceColour.Black => Type switch
             {
                 Pawn => "♙",
                 Rook => "♖",
@@ -42,7 +42,7 @@ public enum PieceType
     King
 }
 
-public enum PieceColor
+public enum PieceColour
 {
     White, Black
 }

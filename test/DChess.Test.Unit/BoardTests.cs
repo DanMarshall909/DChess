@@ -1,6 +1,7 @@
 ﻿using DChess.Core;
-using static DChess.Core.PieceColor;
+using static DChess.Core.PieceColour;
 using static DChess.Core.PieceDefinitions;
+using static DChess.Core.PieceType;
 
 namespace DChess.Test.Unit;
 
@@ -85,4 +86,44 @@ public class BoardTests
         // Assert
         board["a1"].Piece.Should().Be(WhitePawn);
     }
+    
+    [Theory(DisplayName = "Board can be created with a standard piece layout")]
+    [InlineData("a1", Rook, White)]
+    [InlineData("b1",Knight, White)]
+    [InlineData("c1",Bishop, White)]
+    [InlineData("d1",Queen, White)]
+    [InlineData("e1",King, White)]
+    [InlineData("f1",Bishop, White)]
+    [InlineData("g1",Knight, White)]
+    [InlineData("a2",Pawn, White)]
+    [InlineData("b2",Pawn, White)]
+    [InlineData("c2",Pawn, White)]
+    [InlineData("d2",Pawn, White)]
+    [InlineData("e2",Pawn, White)]
+    [InlineData("f2",Pawn, White)]
+    [InlineData("g2",Pawn, White)]
+    [InlineData("a7",Pawn, Black)]
+    [InlineData("b7",Pawn, Black)]
+    [InlineData("c7",Pawn, Black)]
+    [InlineData("d7",Pawn, Black)]
+    [InlineData("e7",Pawn, Black)]
+    [InlineData("f7",Pawn, Black)]
+    [InlineData("g7",Pawn, Black)]
+    [InlineData("a8",Rook, Black)]
+    [InlineData("b8",Knight, Black)]
+    [InlineData("c8",Bishop, Black)]
+    [InlineData("d8",Queen, Black)]
+    [InlineData("e8",King, Black)]
+    [InlineData("f8",Bishop, Black)]
+    [InlineData("g8",Knight, Black)]
+
+    public void board_can_be_created_with_a_standard_piece_layout(string position, PieceType type, PieceColour  colour)
+    {
+        // Arrange
+        var board =  Board.StandardLayout();
+
+        // Assert
+        board[position].Piece.Should().Be(new Piece(type, colour));
+    }
+
 }

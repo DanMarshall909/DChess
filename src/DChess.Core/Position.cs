@@ -26,9 +26,9 @@ public readonly record struct Position
         get => _file;
         init
         {
-            if (value < 'a' || value > 'g')
+            if (value is < 'a' or > 'g')
             {
-                throw new ArgumentOutOfRangeException(nameof(value), "File must be between 'a' and 'h'");
+                throw new ArgumentOutOfRangeException(nameof(value), $"File must be between 'a' and 'g' but found {_file}");
             }
             _file = value;
         }
@@ -39,7 +39,7 @@ public readonly record struct Position
         get => _rank;
         init
         {
-            if (value < 1 || value > 8)
+            if (value is < 1 or > 8)
             {
                 throw new ArgumentOutOfRangeException(nameof(value), "Rank must be between 1 and 8");
             }
