@@ -19,7 +19,10 @@ public class BoardTests
     public void an_invalid_position_should_throw_an_exception(string positionName)
     {
         // Arrange
+        // ReSharper disable once ObjectCreationAsStatement
+#pragma warning disable CA1806
         Action act = () => new Coordinate(positionName);
+#pragma warning restore CA1806
         // Assert
         act.Should().Throw<ArgumentException>();
     }
@@ -89,8 +92,13 @@ public class BoardTests
     public void cell_shorthand_can_be_used_to_get_a_cell()
     {
         // Arrange
-        var board = new Board();
-        board['a', 1].Piece = _whitePawn;
+        var board = new Board
+        {
+            ['a', 1] =
+            {
+                Piece = _whitePawn
+            }
+        };
 
         // Assert
         board["a1"].Piece.Should().Be(_whitePawn);

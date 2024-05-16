@@ -1,4 +1,4 @@
-﻿namespace DChess.Test.Unit;
+﻿namespace DChess.Core;
 
 public readonly record struct Coordinate
 {
@@ -24,7 +24,7 @@ public readonly record struct Coordinate
     public char File
     {
         get => _file;
-        init
+        private init
         {
             if (value is < 'a' or > 'h')
             {
@@ -37,7 +37,7 @@ public readonly record struct Coordinate
     public int Rank
     {
         get => _rank;
-        init
+        private init
         {
             if (value is < 1 or > 8)
             {
@@ -45,11 +45,5 @@ public readonly record struct Coordinate
             }
             _rank = value;
         }
-    }
-
-    public void Deconstruct(out char File, out int Rank)
-    {
-        File = this.File;
-        Rank = this.Rank;
     }
 }

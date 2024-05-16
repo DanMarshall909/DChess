@@ -2,7 +2,7 @@
 
 namespace DChess.Core;
 
-public record struct Piece(PieceType Type, PieceColour Colour)
+public readonly record struct Piece(PieceType Type, PieceColour Colour)
 {
     public override string ToString() => DisplayChar().ToString();
 

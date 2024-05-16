@@ -1,4 +1,3 @@
-using DChess.Test.Unit;
 using static DChess.Core.PieceColour;
 using static DChess.Core.PieceType;
 
@@ -81,9 +80,7 @@ public class Board
     public Cell this[string position] => CellAt(new Coordinate(position));
 }
 
-public class Cell
+public class Cell(Piece? piece)
 {
-    public Cell(Piece? piece) => Piece = piece;
-
-    public Piece? Piece { get; set; } = null;
+    public Piece? Piece { get; set; } = piece;
 }
