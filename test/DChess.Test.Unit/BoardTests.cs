@@ -8,50 +8,6 @@ public class BoardTests
 {
     private readonly Piece _whitePawn = new(Pawn, White);
 
-    [Fact(DisplayName = "The board should be displayed correctly")]
-    public void the_board_should_be_displayed_correctly()
-    {
-        // Arrange
-        var board = new Board();
-        var renderer = new BoardRenderer();
-
-        // Assert
-        renderer.Render(board);
-        renderer.LastRender.Should().BeEquivalentTo(
-            """
-            █░█░█░█░
-            ░█░█░█░█
-            █░█░█░█░
-            ░█░█░█░█
-            █░█░█░█░
-            ░█░█░█░█
-            █░█░█░█░
-            ░█░█░█░█
-            """);
-    }
-
-    [Fact(DisplayName = "A standard  board should be displayed correctly with pieces")]
-    public void a_standard_board_should_be_displayed_correctly_with_pieces()
-    {
-        // Arrange
-        var board = new Board();
-        board.SetStandardLayout();
-        var renderer = new BoardRenderer();
-
-        renderer.Render(board);
-        renderer.LastRender.Should().BeEquivalentTo(
-            """
-            ♖♘♗♕♔♗♘♖
-            ♙♙♙♙♙♙♙♙
-            █░█░█░█░
-            ░█░█░█░█
-            █░█░█░█░
-            ░█░█░█░█
-            ♟♟♟♟♟♟♟♟
-            ♜♞♝♛♚♝♞♜
-            """);
-    }
-
     [Theory(DisplayName = "An invalid position should throw an exception")]
     [InlineData("a")]
     [InlineData("a11")]

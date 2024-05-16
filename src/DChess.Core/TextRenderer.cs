@@ -2,7 +2,7 @@
 
 namespace DChess.Core;
 
-public class BoardRenderer : IBoardRenderer
+public class TextRenderer : IBoardRenderer
 {
     private const char WhiteSquare = '\u2588';
     private const char BlackSquare = '\u2591';
