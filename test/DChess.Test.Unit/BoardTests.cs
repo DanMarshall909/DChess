@@ -13,9 +13,11 @@ public class BoardTests
     {
         // Arrange
         var board = new Board();
+        var renderer = new BoardRenderer();
 
         // Assert
-        board.PrettyText.Should().BeEquivalentTo(
+        renderer.Render(board);
+        renderer.LastRender.Should().BeEquivalentTo(
             """
             █░█░█░█░
             ░█░█░█░█
@@ -27,12 +29,17 @@ public class BoardTests
             ░█░█░█░█
             """);
     }
-    
+
     [Fact(DisplayName = "A standard  board should be displayed correctly with pieces")]
     public void a_standard_board_should_be_displayed_correctly_with_pieces()
     {
-        // Assert
-        Board.StandardLayout.PrettyText.Should().BeEquivalentTo(
+        // Arrange
+        var board = new Board();
+        board.SetStandardLayout();
+        var renderer = new BoardRenderer();
+
+        renderer.Render(board);
+        renderer.LastRender.Should().BeEquivalentTo(
             """
             ♖♘♗♕♔♗♘♖
             ♙♙♙♙♙♙♙♙
@@ -44,7 +51,7 @@ public class BoardTests
             ♜♞♝♛♚♝♞♜
             """);
     }
-        
+
     [Theory(DisplayName = "An invalid position should throw an exception")]
     [InlineData("a")]
     [InlineData("a11")]
@@ -60,8 +67,8 @@ public class BoardTests
         // Assert
         act.Should().Throw<ArgumentException>();
     }
-    
-    
+
+
     [Fact(DisplayName = "A position can be described by a file and rank")]
     public void a_position_can_be_described_by_a_file_and_rank()
     {
@@ -132,6 +139,7 @@ public class BoardTests
         // Assert
         board["a1"].Piece.Should().Be(_whitePawn);
     }
+
     [Theory(DisplayName = "Board can be created with a standard piece layout")]
     [InlineData("a8", Rook, Black)]
     [InlineData("b8", Knight, Black)]
@@ -168,7 +176,8 @@ public class BoardTests
     public void board_can_be_created_with_a_standard_piece_layout(string position, PieceType type, PieceColour colour)
     {
         // Arrange
-        var board = Board.StandardLayout;
+        var board = new Board();
+        board.SetStandardLayout();
 
         // Assert
         board[position].Piece.Should().Be(new Piece(type, colour));

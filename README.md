@@ -34,9 +34,9 @@ My initial goals are for it to be:
 - [x] Populate the board with initial positions for all pieces.
 
 ## Move text rendering into a separate class
-- [ ] Provide interface for rendering the board
-  -  [ ] Takes in a board and returns a string representation of the board
-- [ ] Adjust the display logic to use the new class
+- [X] Provide interface for rendering the board
+  -  [X] Takes in a board and returns a string representation of the board
+- [X] Adjust the display logic to use the new class
 
 ## Refactor the board to be a collection of pieces rather than a 2D array of cells
 
