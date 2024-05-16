@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using static DChess.Core.PieceType;
 
 namespace DChess.Core;
 
@@ -32,11 +33,39 @@ public class TextRenderer : IBoardRenderer
 
     private static char PieceChar(int j, int i, Board board)
     {
-        char? displayChar = board.Cells[j, 7-i].Piece?.DisplayChar();
-        if (displayChar is not null)
-            return displayChar.Value;
+        var piece = board.Cells[j, 7-i].Piece;
+        if (piece != null)
+            return DisplayChar(piece.Value);
 
         bool isOddSquare = (i + j) % 2 == 0;
+        
         return isOddSquare ? WhiteSquare : BlackSquare;
+    }
+
+    private static char DisplayChar(Piece piece)
+    {
+        return piece.Colour switch
+        {
+            PieceColour.Black => piece.Type switch
+            {
+                Pawn => '♙',
+                Rook => '♖',
+                Knight => '♘',
+                Bishop => '♗',
+                Queen => '♕',
+                King => '♔',
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), piece.Type, "Unknown piece type")
+            },
+            _ => piece.Type switch
+            {
+                Pawn => '♟',
+                Rook => '♜',
+                Knight => '♞',
+                Bishop => '♝',
+                Queen => '♛',
+                King => '♚',
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), piece.Type, "Unknown piece type")
+            }
+        };
     }
 }

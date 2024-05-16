@@ -1,37 +1,7 @@
-﻿using static DChess.Core.PieceType;
-
-namespace DChess.Core;
+﻿namespace DChess.Core;
 
 public readonly record struct Piece(PieceType Type, PieceColour Colour)
 {
-    public override string ToString() => DisplayChar().ToString();
-
-    public char DisplayChar()
-    {
-        return Colour switch
-        {
-            PieceColour.Black => Type switch
-            {
-                Pawn => '♙',
-                Rook => '♖',
-                Knight => '♘',
-                Bishop => '♗',
-                Queen => '♕',
-                King => '♔',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), Type, "Unknown piece type")
-            },
-            _ => Type switch
-            {
-                Pawn => '♟',
-                Rook => '♜',
-                Knight => '♞',
-                Bishop => '♝',
-                Queen => '♛',
-                King => '♚',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), Type, "Unknown piece type")
-            }
-        };
-    }
 }
 
 public enum PieceType
