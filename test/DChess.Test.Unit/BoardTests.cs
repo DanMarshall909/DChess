@@ -56,7 +56,7 @@ public class BoardTests
     public void an_invalid_position_should_throw_an_exception(string positionName)
     {
         // Arrange
-        Action act = () => new Position(positionName);
+        Action act = () => new Coordinate(positionName);
         // Assert
         act.Should().Throw<ArgumentException>();
     }
@@ -66,7 +66,7 @@ public class BoardTests
     public void a_position_can_be_described_by_a_file_and_rank()
     {
         // Arrange
-        var position = new Position("a1");
+        var position = new Coordinate("a1");
 
         // Assert
         position.File.Should().Be('a');

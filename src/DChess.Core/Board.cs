@@ -110,11 +110,11 @@ public class Board
         }
     }
 
-    public Cell CellAt(Position position) => _cells[position.File - 'a', position.Rank - 1];
+    public Cell CellAt(Coordinate coordinate) => _cells[coordinate.File - 'a', coordinate.Rank - 1];
 
-    public Cell this[char column, int row] => CellAt(new Position(column, row));
+    public Cell this[char column, int row] => CellAt(new Coordinate(column, row));
 
-    public Cell this[string position] => CellAt(new Position(position));
+    public Cell this[string position] => CellAt(new Coordinate(position));
 }
 
 public class Cell

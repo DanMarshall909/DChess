@@ -1,11 +1,11 @@
 ﻿namespace DChess.Test.Unit;
 
-public readonly record struct Position
+public readonly record struct Coordinate
 {
     private readonly char _file;
     private readonly int _rank;
 
-    public Position(string positionName)
+    public Coordinate(string positionName)
     {
         if (positionName.Length != 2)
         {
@@ -15,7 +15,7 @@ public readonly record struct Position
         File = positionName[0];
         Rank = positionName[1] - '0';
     }
-    public Position(char File, int Rank)
+    public Coordinate(char File, int Rank)
     {
         this.File = File;
         this.Rank = Rank;
