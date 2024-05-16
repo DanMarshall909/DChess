@@ -27,10 +27,8 @@ My initial goals are for it to be:
     - [x] Display the board in the console or graphical UI.
     - [x] Populate the board with initial positions for all pieces.
 
-- [ ] **Allow the User to Move Pieces Using Algebraic Notation**
-    - [ ] Parse algebraic notation into board coordinates.
-    - [ ] Create a function to update the board based on the parsed move.
-    - [ ] Develop input validation to ensure notation is syntactically correct.
+- [ ] **Allow a piece to be moved**
+    - [ ] Create a function to update the board by coordinate.
 
 - [ ] **Implement the Rules of Chess, Only Allowing Legal Moves**
     - [ ] **General Movement Rules**
@@ -68,6 +66,11 @@ My initial goals are for it to be:
 - [ ] **Game Status**
     - [ ] Implement a system to keep track of the game status (e.g., ongoing, check, checkmate, stalemate). Display the current game status each time the board is shown.
 
+- [ ] **Allow the User to Move Pieces Using Algebraic Notation**
+    - [ ] Parse algebraic notation into board coordinates.
+    - [ ] Create a function to update the board based on the parsed move.
+    - [ ] Develop input validation to ensure notation is syntactically correct.
+ 
 - [ ] **Turn System**
     - [ ] Implement a turn system to ensure that players alternate turns correctly. Include turn validation in the move processing logic to prevent a player from making consecutive moves.
 
@@ -79,3 +82,4 @@ My initial goals are for it to be:
 - [ ] **Error Handling**
     - [ ] Plan for robust error handling, especially for user input. This includes providing useful error messages when illegal moves are attempted.
     - [ ] Ensure that the error messages are clear and helpful, guiding the user on how to correct their input or explaining why a move cannot be made.
+
