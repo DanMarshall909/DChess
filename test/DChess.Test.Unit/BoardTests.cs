@@ -98,7 +98,7 @@ public class BoardTests
         };
 
         // Assert
-        board["a1"].Piece.Should().Be(WhitePawn("a1"));
+        board["a1"].Piece.Should().BeEquivalentTo(WhitePawn("a1"));
     }
 
     [Theory(DisplayName = "Board can be created with a standard piece layout")]
@@ -141,7 +141,7 @@ public class BoardTests
         Board.SetStandardLayout(board);
 
         // Assert
-        board[coordinateString].Piece.Should().Be(new Piece(type, colour, coordinateString));
+        board[coordinateString].Piece.Should().BeEquivalentTo(new Piece(type, colour, coordinateString));
     }
 
     [Fact(DisplayName = "A piece can be added to the board")]

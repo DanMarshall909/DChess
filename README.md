@@ -40,7 +40,7 @@ My initial goals are for it to be:
 
 ## Refactor the board to be a collection of pieces rather than a 2D array of cells
 
-- [ ] Create a `Piece` base abstract class that holds the piece type and color (eventually it will contain the rules and other things specific to that piece).
+- [ ] Create a `Piece` base abstract class that holds the piece type and colour (eventually it will contain the rules and other things specific to that piece).
 - [ ] Refactor the `Board` class to store pieces and their positions.
 - [ ] Update the display logic to show pieces on the board.
 
@@ -129,3 +129,12 @@ My initial goals are for it to be:
   illegal moves are attempted.
 - [ ] Ensure that the error messages are clear and helpful, guiding the user on how to correct their input or explaining
   why a move cannot be made.
+
+## AI
+
+- [ ] Implement a basic AI to play against the user. The AI should be able to make legal moves based on the current board
+  state.
+
+# Optimisation 
+- [ ] Use bitboards to represent the board state
+- [ ] Use the flyweight pattern to reduce memory usage

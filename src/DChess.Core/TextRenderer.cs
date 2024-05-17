@@ -35,7 +35,7 @@ public class TextRenderer : IBoardRenderer
     {
         var piece = board.Cells[j, 7-i].Piece;
         if (piece != null)
-            return DisplayChar(piece.Value);
+            return DisplayChar(piece);
 
         bool isOddSquare = (i + j) % 2 == 0;
         

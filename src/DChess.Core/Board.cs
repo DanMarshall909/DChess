@@ -6,7 +6,7 @@ namespace DChess.Core;
 public class Board
 {
     private const int MaxPieces = 32;
-    public List<Piece> Pieces = new() { Capacity = MaxPieces };
+    public readonly List<Piece> Pieces = new() { Capacity = MaxPieces };
     
     private readonly Cell[,] _emptyCells = GetEmptyCells();
     
@@ -24,24 +24,21 @@ public class Board
             return cells;
         }
         private
-        set
+        init
         {
             Pieces.Clear();
             foreach (var cell in value)
             {
-                if (cell?.Piece != null)
-                    Pieces.Add(cell.Piece.Value);
+                if (cell.Piece != null)
+                    Pieces.Add(cell.Piece);
             }
         }
     }
 
 
-    public Board(Cell[,]? cells = null)
-    {
-        Cells = cells ?? _emptyCells;
-    }
+    public Board(Cell[,]? cells = null) => Cells = cells ?? _emptyCells;
 
-    public static Cell[,] GetEmptyCells()
+    private static Cell[,] GetEmptyCells()
     {
         var emptyCells = new Cell[8, 8];
         for (var file = 0; file < 8; file++)
@@ -100,7 +97,9 @@ public class Board
         }
     }
 
-    public Cell CellAt(Coordinate coordinate) => Cells[coordinate.File - 'a', coordinate.Rank - 1];
+    private Cell CellAt(Coordinate coordinate) => Cells[coordinate.File - 'a', coordinate.Rank - 1];
+    
+    public Cell this[Coordinate coordinate] => CellAt(coordinate);
 
     public Cell this[char column, int row] => CellAt(new Coordinate(column, row));
 
