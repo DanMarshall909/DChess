@@ -146,4 +146,11 @@ public class BoardTests
         // Assert
         board[position].Piece.Should().Be(new Piece(type, colour));
     }
+
+    [Fact(DisplayName = "A piece can be added to the board")]
+    {
+        var board = new Board();
+        var piece = new Piece(PieceType.Pawn, PieceColour.White, "a1");
+        Board.Pieces.Add(piece);
+    }
 }
