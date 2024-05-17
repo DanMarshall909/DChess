@@ -6,7 +6,8 @@ namespace DChess.Test.Unit;
 
 public class BoardTests
 {
-    private readonly Piece _whitePawn = new(Pawn, White);
+    private Piece WhitePawn(Coordinate coordinate) => new(Pawn, White, coordinate);
+    private Piece WhitePawn(string coordinateString) => new(Pawn, White, coordinateString);
 
     [Theory(DisplayName = "An invalid position should throw an exception")]
     [InlineData("a")]
@@ -43,16 +44,12 @@ public class BoardTests
     public void a_piece_can_be_placed_on_the_board()
     {
         // Arrange
-        var board = new Board
-        {
-            ['a', 1] =
-            {
-                Piece = _whitePawn
-            }
-        };
+        var board = new Board();
+        
+        board['a', 1].Piece = WhitePawn("a1");
 
         // Assert
-        board['a', 1].Should().BeEquivalentTo(new Cell(_whitePawn));
+        board['a', 1].Should().BeEquivalentTo(new Cell(WhitePawn("a1")));
         board['a', 2].Should().BeEquivalentTo(new Cell(null));
     }
 
@@ -82,7 +79,7 @@ public class BoardTests
         var board = new Board();
 
         // Act
-        Action act = () => board[column, row].Piece = _whitePawn;
+        Action act = () => board[column, row].Piece = WhitePawn(new Coordinate(column, row));
 
         // Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
@@ -96,12 +93,12 @@ public class BoardTests
         {
             ['a', 1] =
             {
-                Piece = _whitePawn
+                Piece = WhitePawn("a1")
             }
         };
 
         // Assert
-        board["a1"].Piece.Should().Be(_whitePawn);
+        board["a1"].Piece.Should().Be(WhitePawn("a1"));
     }
 
     [Theory(DisplayName = "Board can be created with a standard piece layout")]
@@ -137,20 +134,23 @@ public class BoardTests
     [InlineData("f1", Bishop, White)]
     [InlineData("g1", Knight, White)]
     [InlineData("h1", Rook, White)]
-    public void board_can_be_created_with_a_standard_piece_layout(string position, PieceType type, PieceColour colour)
+    public void board_can_be_created_with_a_standard_piece_layout(string coordinateString, PieceType type, PieceColour colour)
     {
         // Arrange
         var board = new Board();
-        board.SetStandardLayout();
+        Board.SetStandardLayout(board);
 
         // Assert
-        board[position].Piece.Should().Be(new Piece(type, colour));
+        board[coordinateString].Piece.Should().Be(new Piece(type, colour, coordinateString));
     }
 
     [Fact(DisplayName = "A piece can be added to the board")]
+    public void a_piece_can_be_added_to_the_board()
     {
         var board = new Board();
-        var piece = new Piece(PieceType.Pawn, PieceColour.White, "a1");
-        Board.Pieces.Add(piece);
+        var whitePawn = WhitePawn("a1");
+        board.Pieces.Add(whitePawn);
+        
+        board["a1"].Piece.Should().Be(whitePawn);
     }
 }

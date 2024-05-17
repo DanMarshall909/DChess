@@ -5,72 +5,99 @@ namespace DChess.Core;
 
 public class Board
 {
-    public Cell[,] Cells { get; private set; } = null!;
-
-    public Board(Cell[,]? cells = null)
+    private const int MaxPieces = 32;
+    public List<Piece> Pieces = new() { Capacity = MaxPieces };
+    
+    private readonly Cell[,] _emptyCells = GetEmptyCells();
+    
+    public Cell[,] Cells
     {
-        if (cells == null
-            || cells.GetLength(0) != 8
-            || cells.GetLength(1) != 8)
+        get
         {
-            ClearBoard();
-        }
-        else
-            Cells = cells;
-    }
-
-    public void ClearBoard()
-    {
-        Cells = new Cell[8, 8];
-        for (var i = 0; i < 8; i++)
-        {
-            for (var j = 0; j < 8; j++)
+            var cells = _emptyCells;
+            foreach (var piece in Pieces)
             {
-                Cells[i, j] = new Cell(null);
+                var coordinate = piece.Coordinate;
+                cells[coordinate.File - 'a', coordinate.Rank - 1].Piece = piece;
+            }
+
+            return cells;
+        }
+        private
+        set
+        {
+            Pieces.Clear();
+            foreach (var cell in value)
+            {
+                if (cell?.Piece != null)
+                    Pieces.Add(cell.Piece.Value);
             }
         }
     }
 
-    public void SetStandardLayout()
+
+    public Board(Cell[,]? cells = null)
     {
-        var place = (char column, int row, PieceType type, PieceColour colour) =>
-            this[column, row].Piece = new Piece(type, colour);
+        Cells = cells ?? _emptyCells;
+    }
 
-        place('a', 8, Rook, Black);
-        place('b', 8, Knight, Black);
-        place('c', 8, Bishop, Black);
-        place('d', 8, Queen, Black);
-        place('e', 8, King, Black);
-        place('f', 8, Bishop, Black);
-        place('g', 8, Knight, Black);
-        place('h', 8, Rook, Black);
+    public static Cell[,] GetEmptyCells()
+    {
+        var emptyCells = new Cell[8, 8];
+        for (var file = 0; file < 8; file++)
+        {
+            for (var rank = 0; rank < 8; rank++)
+            {
+                emptyCells[file, rank] = new Cell(null);
+            }
+        }
 
-        place('a', 7, Pawn, Black);
-        place('b', 7, Pawn, Black);
-        place('c', 7, Pawn, Black);
-        place('d', 7, Pawn, Black);
-        place('e', 7, Pawn, Black);
-        place('f', 7, Pawn, Black);
-        place('g', 7, Pawn, Black);
-        place('h', 7, Pawn, Black);
+        return emptyCells;
+    }
 
-        place('a', 2, Pawn, White);
-        place('b', 2, Pawn, White);
-        place('c', 2, Pawn, White);
-        place('d', 2, Pawn, White);
-        place('e', 2, Pawn, White);
-        place('f', 2, Pawn, White);
-        place('g', 2, Pawn, White);
-        place('h', 2, Pawn, White);
+    public static void SetStandardLayout(Board board)
+    {
+        Place('a', 8, Rook, Black);
+        Place('b', 8, Knight, Black);
+        Place('c', 8, Bishop, Black);
+        Place('d', 8, Queen, Black);
+        Place('e', 8, King, Black);
+        Place('f', 8, Bishop, Black);
+        Place('g', 8, Knight, Black);
+        Place('h', 8, Rook, Black);
 
-        place('a', 1, Rook, White);
-        place('b', 1, Knight, White);
-        place('c', 1, Bishop, White);
-        place('d', 1, Queen, White);
-        place('e', 1, King, White);
-        place('f', 1, Bishop, White);
-        place('g', 1, Knight, White);
-        place('h', 1, Rook, White);
+        Place('a', 7, Pawn, Black);
+        Place('b', 7, Pawn, Black);
+        Place('c', 7, Pawn, Black);
+        Place('d', 7, Pawn, Black);
+        Place('e', 7, Pawn, Black);
+        Place('f', 7, Pawn, Black);
+        Place('g', 7, Pawn, Black);
+        Place('h', 7, Pawn, Black);
+
+        Place('a', 2, Pawn, White);
+        Place('b', 2, Pawn, White);
+        Place('c', 2, Pawn, White);
+        Place('d', 2, Pawn, White);
+        Place('e', 2, Pawn, White);
+        Place('f', 2, Pawn, White);
+        Place('g', 2, Pawn, White);
+        Place('h', 2, Pawn, White);
+
+        Place('a', 1, Rook, White);
+        Place('b', 1, Knight, White);
+        Place('c', 1, Bishop, White);
+        Place('d', 1, Queen, White);
+        Place('e', 1, King, White);
+        Place('f', 1, Bishop, White);
+        Place('g', 1, Knight, White);
+        Place('h', 1, Rook, White);
+        return;
+
+        void Place(char file, int rank, PieceType type, PieceColour colour)
+        {
+            board[file, rank].Piece = new Piece(type, colour, new Coordinate(file, rank));
+        }
     }
 
     public Cell CellAt(Coordinate coordinate) => Cells[coordinate.File - 'a', coordinate.Rank - 1];
@@ -78,9 +105,4 @@ public class Board
     public Cell this[char column, int row] => CellAt(new Coordinate(column, row));
 
     public Cell this[string position] => CellAt(new Coordinate(position));
-}
-
-public class Cell(Piece? piece)
-{
-    public Piece? Piece { get; set; } = piece;
 }

@@ -28,7 +28,7 @@ public readonly record struct Coordinate
         {
             if (value is < 'a' or > 'h')
             {
-                throw new ArgumentOutOfRangeException(nameof(value), $"File must be between 'a' and 'g' but found {_file}");
+                throw new ArgumentOutOfRangeException(nameof(value), $"File must be between 'a' and 'g' but found {_file.ToString()}");
             }
             _file = value;
         }

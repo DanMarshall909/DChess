@@ -31,7 +31,7 @@ public class RenderingTests
     {
         // Arrange
         var board = new Board();
-        board.SetStandardLayout();
+        Board.SetStandardLayout(board);
         var renderer = new TextRenderer();
 
         renderer.Render(board);
