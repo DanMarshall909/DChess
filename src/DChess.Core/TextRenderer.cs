@@ -1,5 +1,6 @@
 ﻿using System.Text;
-using static DChess.Core.PieceType;
+using static DChess.Core.Piece;
+using static DChess.Core.Piece.PieceType;
 
 namespace DChess.Core;
 

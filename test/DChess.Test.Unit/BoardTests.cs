@@ -1,6 +1,7 @@
 ﻿using DChess.Core;
-using static DChess.Core.PieceColour;
-using static DChess.Core.PieceType;
+using static DChess.Core.CoordinateExtensions;
+using static DChess.Core.Piece.PieceColour;
+using static DChess.Core.Piece.PieceType;
 
 namespace DChess.Test.Unit;
 
@@ -73,7 +74,7 @@ public class BoardTests
     [InlineData('a', 9)]
     [InlineData('i', 1)]
     [InlineData('1', 1)]
-    public void a_piece_cannot_be_placed_outside_the_board(char column, int row)
+    public void a_piece_cannot_be_placed_outside_the_board(char column, byte row)
     {
         // Arrange
         var board = new Board();
@@ -134,7 +135,7 @@ public class BoardTests
     [InlineData("f1", Bishop, White)]
     [InlineData("g1", Knight, White)]
     [InlineData("h1", Rook, White)]
-    public void board_can_be_created_with_a_standard_piece_layout(string coordinateString, PieceType type, PieceColour colour)
+    public void board_can_be_created_with_a_standard_piece_layout(string coordinateString, Piece.PieceType type, Piece.PieceColour colour)
     {
         // Arrange
         var board = new Board();
@@ -148,9 +149,10 @@ public class BoardTests
     public void a_piece_can_be_added_to_the_board()
     {
         var board = new Board();
-        var whitePawn = WhitePawn("a1");
+        var whitePawn = WhitePawn(a1);
         board.Pieces.Add(whitePawn);
-        
-        board["a1"].Piece.Should().Be(whitePawn);
+
+        var cell = board[a1];
+        cell.Piece.Should().Be(whitePawn);
     }
 }

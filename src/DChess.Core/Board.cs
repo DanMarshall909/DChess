@@ -1,15 +1,17 @@
-using static DChess.Core.PieceColour;
-using static DChess.Core.PieceType;
+using static DChess.Core.Piece;
 
 namespace DChess.Core;
+
+using static PieceColour;
+using static PieceType;
 
 public class Board
 {
     private const int MaxPieces = 32;
-    public readonly List<Piece> Pieces = new() { Capacity = MaxPieces };
-    
+    public readonly PieceCollection Pieces = new();
+
     private readonly Cell[,] _emptyCells = GetEmptyCells();
-    
+
     public Cell[,] Cells
     {
         get
@@ -28,10 +30,8 @@ public class Board
         {
             Pieces.Clear();
             foreach (var cell in value)
-            {
                 if (cell.Piece != null)
                     Pieces.Add(cell.Piece);
-            }
         }
     }
 
@@ -54,7 +54,7 @@ public class Board
 
     public static void SetStandardLayout(Board board)
     {
-        Place('a', 8, Rook, Black);
+        Place('a', 8, PieceType.Rook, Black);
         Place('b', 8, Knight, Black);
         Place('c', 8, Bishop, Black);
         Place('d', 8, Queen, Black);
@@ -91,17 +91,17 @@ public class Board
         Place('h', 1, Rook, White);
         return;
 
-        void Place(char file, int rank, PieceType type, PieceColour colour)
+        void Place(char file, byte rank, PieceType type, PieceColour colour)
         {
             board[file, rank].Piece = new Piece(type, colour, new Coordinate(file, rank));
         }
     }
 
     private Cell CellAt(Coordinate coordinate) => Cells[coordinate.File - 'a', coordinate.Rank - 1];
-    
+
     public Cell this[Coordinate coordinate] => CellAt(coordinate);
 
-    public Cell this[char column, int row] => CellAt(new Coordinate(column, row));
+    public Cell this[char file, byte rank] => CellAt(new Coordinate(file, rank));
 
     public Cell this[string position] => CellAt(new Coordinate(position));
 }
