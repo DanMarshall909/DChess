@@ -3,7 +3,7 @@
 public readonly record struct Coordinate
 {
     private readonly char _file;
-    private readonly int _rank;
+    private readonly byte _rank;
 
     public Coordinate(string positionName)
     {
@@ -13,13 +13,16 @@ public readonly record struct Coordinate
         }
 
         File = positionName[0];
-        Rank = positionName[1] - '0';
+        Rank = (byte)(positionName[1] - '0');
     }
-    public Coordinate(char File, int Rank)
+    
+    public Coordinate(char File, byte Rank)
     {
         this.File = File;
         this.Rank = Rank;
     }
+
+    public override string ToString() => $"{File}{Rank}";
 
     public char File
     {
@@ -34,9 +37,9 @@ public readonly record struct Coordinate
         }
     }
 
-    public int Rank
+    public byte Rank
     {
-        get => _rank;
+        get => (byte)_rank;
         private init
         {
             if (value is < 1 or > 8)

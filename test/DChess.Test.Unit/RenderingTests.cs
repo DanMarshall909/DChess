@@ -15,14 +15,15 @@ public class RenderingTests
         renderer.Render(board);
         renderer.LastRender.Should().BeEquivalentTo(
             """
-            █░█░█░█░
-            ░█░█░█░█
-            █░█░█░█░
-            ░█░█░█░█
-            █░█░█░█░
-            ░█░█░█░█
-            █░█░█░█░
-            ░█░█░█░█
+             abcdefgh
+            8█░█░█░█░
+            7░█░█░█░█
+            6█░█░█░█░
+            5░█░█░█░█
+            4█░█░█░█░
+            3░█░█░█░█
+            2█░█░█░█░
+            1░█░█░█░█
             """);
     }
 
@@ -35,16 +36,18 @@ public class RenderingTests
         var renderer = new TextRenderer();
 
         renderer.Render(board);
-        renderer.LastRender.Should().BeEquivalentTo(
+        (Environment.NewLine + renderer.LastRender).Should().BeEquivalentTo(
             """
-            ♖♘♗♕♔♗♘♖
-            ♙♙♙♙♙♙♙♙
-            █░█░█░█░
-            ░█░█░█░█
-            █░█░█░█░
-            ░█░█░█░█
-            ♟♟♟♟♟♟♟♟
-            ♜♞♝♛♚♝♞♜
+            
+             abcdefgh
+            8♖♘♗♕♔♗♘♖
+            7♙♙♙♙♙♙♙♙
+            6█░█░█░█░
+            5░█░█░█░█
+            4█░█░█░█░
+            3░█░█░█░█
+            2♟♟♟♟♟♟♟♟
+            1♜♞♝♛♚♝♞♜
             """);
     }
 }

@@ -13,17 +13,19 @@ public class TextRenderer : IBoardRenderer
 
     public void Render(Board board)
     {
-        var result = new StringBuilder();
-        for (var i = 0; i < 8; i++)
+        var result = new StringBuilder(" abcdefgh" + Environment.NewLine);
+        for (byte rank = 8; rank >= 1; rank--)
         {
-            for (var j = 0; j < 8; j++)
+            result.Append(rank);
+
+            for (var file = 'a'; file <= 'h'; file++)
             {
-                char square = PieceChar(j, i, board);
+                char square = PieceChar(file, rank, board);
 
                 result.Append(square);
             }
 
-            if (i < 7) // Don't append newline on the last line
+            if (rank > 1) // Don't append newline on the last line
             {
                 result.AppendLine();
             }
@@ -32,15 +34,13 @@ public class TextRenderer : IBoardRenderer
         LastRender = result.ToString();
     }
 
-    private static char PieceChar(int j, int i, Board board)
+    private static char PieceChar(char file, byte rank, Board board)
     {
-        var piece = board.Cells[j, 7-i].Piece;
-        if (piece != null)
+        if (board.Pieces.TryGetPiece(new Coordinate(file, rank), out var piece))
             return DisplayChar(piece);
 
-        bool isOddSquare = (i + j) % 2 == 0;
-        
-        return isOddSquare ? WhiteSquare : BlackSquare;
+        bool isOddSquare = (rank + file) % 2 == 0;
+        return isOddSquare ? BlackSquare : WhiteSquare;
     }
 
     private static char DisplayChar(Piece piece)

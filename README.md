@@ -40,9 +40,9 @@ My initial goals are for it to be:
 
 ## Refactor the board to be a collection of pieces rather than a 2D array of cells
 
-- [ ] Create a `Piece` base abstract class that holds the piece type and colour (eventually it will contain the rules and other things specific to that piece).
-- [ ] Refactor the `Board` class to store pieces and their positions.
-- [ ] Update the display logic to show pieces on the board.
+- [X] Create a `Piece` base abstract class that holds the piece type and colour (eventually it will contain the rules and other things specific to that piece).
+- [X] Refactor the `Board` class to store pieces and their positions.
+- [X] Update the display logic to show pieces on the board.
 
 ## Allow a piece to be moved
 
