@@ -44,6 +44,10 @@ My initial goals are for it to be:
 - [X] Refactor the `Board` class to store pieces and their positions.
 - [X] Update the display logic to show pieces on the board.
 
+## Refactor to make use flyweight pattern for pieces
+- [ ] Create an object pool for pieces that returns objects rather than structs, but still uses structs for the board.
+- [ ] Refactor the board to use the object pool.
+
 ## Allow a piece to be moved
 
 - [ ] Add a method on the piece base class to move by coordinate.
