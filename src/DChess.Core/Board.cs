@@ -1,5 +1,6 @@
-using static DChess.Core.PieceColour;
-using static DChess.Core.PieceType;
+using static DChess.Core.Piece;
+using static DChess.Core.Piece.PieceColour;
+using static DChess.Core.Piece.PieceType;
 
 namespace DChess.Core;
 

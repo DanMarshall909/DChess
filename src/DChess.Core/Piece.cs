@@ -10,7 +10,7 @@ public class PiecePool
     // used recently are likely to be still in the CPU cache, making their reuse faster
     private readonly Stack<Piece> _pool = new();
 
-    public Piece GetPiece(PieceType type, PieceColour colour, Coordinate position)
+    public Piece GetPiece(Piece.PieceType type, Piece.PieceColour colour, Coordinate position)
     {
         if (_pool.Count <= 0) return new Piece(type, colour, position);
 
@@ -47,20 +47,21 @@ public class Piece
         Colour = colour;
         Coordinate = position;
     }
+    
+    public enum PieceType
+    {
+        Pawn,
+        Rook,
+        Knight,
+        Bishop,
+        Queen,
+        King
+    }
+
+    public enum PieceColour
+    {
+        White,
+        Black
+    }
 }
 
-public enum PieceType
-{
-    Pawn,
-    Rook,
-    Knight,
-    Bishop,
-    Queen,
-    King
-}
-
-public enum PieceColour
-{
-    White,
-    Black
-}

@@ -1,6 +1,6 @@
 ﻿using DChess.Core;
-using static DChess.Core.PieceColour;
-using static DChess.Core.PieceType;
+using static DChess.Core.Piece.PieceColour;
+using static DChess.Core.Piece.PieceType;
 
 namespace DChess.Test.Unit;
 
@@ -102,7 +102,7 @@ public class BoardTests
     }
 
     [Theory(DisplayName = "Board can be created with a standard piece layout")]
-    [InlineData("a8", Rook, Black)]
+    [InlineData("a8", Piece.PieceType.Rook, Black)]
     [InlineData("b8", Knight, Black)]
     [InlineData("c8", Bishop, Black)]
     [InlineData("d8", Queen, Black)]
@@ -134,7 +134,7 @@ public class BoardTests
     [InlineData("f1", Bishop, White)]
     [InlineData("g1", Knight, White)]
     [InlineData("h1", Rook, White)]
-    public void board_can_be_created_with_a_standard_piece_layout(string coordinateString, PieceType type, PieceColour colour)
+    public void board_can_be_created_with_a_standard_piece_layout(string coordinateString, Piece.PieceType type, Piece.PieceColour colour)
     {
         // Arrange
         var board = new Board();

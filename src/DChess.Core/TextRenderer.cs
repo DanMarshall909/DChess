@@ -1,5 +1,6 @@
 ﻿using System.Text;
-using static DChess.Core.PieceType;
+using static DChess.Core.Piece.PieceColour;
+using static DChess.Core.Piece.PieceType;
 
 namespace DChess.Core;
 
@@ -46,7 +47,7 @@ public class TextRenderer : IBoardRenderer
     {
         return piece.Colour switch
         {
-            PieceColour.Black => piece.Type switch
+            Black => piece.Type switch
             {
                 Pawn => '♙',
                 Rook => '♖',
