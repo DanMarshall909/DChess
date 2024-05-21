@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using static DChess.Core.Piece.PieceColour;
-using static DChess.Core.Piece.PieceType;
+using static DChess.Core.PieceProperties;
+using static DChess.Core.PieceProperties.PieceColour;
 
 namespace DChess.Core;
 
@@ -43,29 +43,29 @@ public class TextRenderer : IBoardRenderer
         return isOddSquare ? BlackSquare : WhiteSquare;
     }
 
-    private static char DisplayChar(Piece piece)
+    private static char DisplayChar(PieceProperties pieceProperties)
     {
-        return piece.Colour switch
+        return pieceProperties.Colour switch
         {
-            Black => piece.Type switch
+            Black => pieceProperties.Type switch
             {
-                Pawn => '♙',
-                Rook => '♖',
-                Knight => '♘',
-                Bishop => '♗',
-                Queen => '♕',
-                King => '♔',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), piece.Type, "Unknown piece type")
+                PieceType.Pawn => '♙',
+                PieceType.Rook => '♖',
+                PieceType.Knight => '♘',
+                PieceType.Bishop => '♗',
+                PieceType.Queen => '♕',
+                PieceType.King => '♔',
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceProperties.Type, "Unknown piece type")
             },
-            _ => piece.Type switch
+            _ => pieceProperties.Type switch
             {
-                Pawn => '♟',
-                Rook => '♜',
-                Knight => '♞',
-                Bishop => '♝',
-                Queen => '♛',
-                King => '♚',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), piece.Type, "Unknown piece type")
+                PieceType.Pawn => '♟',
+                PieceType.Rook => '♜',
+                PieceType.Knight => '♞',
+                PieceType.Bishop => '♝',
+                PieceType.Queen => '♛',
+                PieceType.King => '♚',
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceProperties.Type, "Unknown piece type")
             }
         };
     }

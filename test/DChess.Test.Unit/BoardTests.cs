@@ -1,14 +1,13 @@
 ﻿using DChess.Core;
 using static DChess.Core.Coordinate;
-using static DChess.Core.Piece.PieceColour;
-using static DChess.Core.Piece.PieceType;
+using static DChess.Core.PieceProperties;
 
 namespace DChess.Test.Unit;
 
 public class BoardTests
 {
-    private Piece WhitePawn(Coordinate coordinate) => new(Pawn, White, coordinate);
-    private Piece WhitePawn(string coordinateString) => new(Pawn, White, coordinateString);
+    private PieceProperties WhitePawn(Coordinate coordinate) => new(PieceType.Pawn, PieceColour.White, coordinate);
+    private PieceProperties WhitePawn(string coordinateString) => new(PieceType.Pawn, PieceColour.White, coordinateString);
 
     [Theory(DisplayName = "An invalid position should throw an exception")]
     [InlineData("a")]
@@ -96,47 +95,47 @@ public class BoardTests
     }
 
     [Theory(DisplayName = "Board can be created with a standard piece layout")]
-    [InlineData("a8", Piece.PieceType.Rook, Black)]
-    [InlineData("b8", Knight, Black)]
-    [InlineData("c8", Bishop, Black)]
-    [InlineData("d8", Queen, Black)]
-    [InlineData("e8", King, Black)]
-    [InlineData("f8", Bishop, Black)]
-    [InlineData("g8", Knight, Black)]
-    [InlineData("h8", Rook, Black)]
-    [InlineData("a7", Pawn, Black)]
-    [InlineData("b7", Pawn, Black)]
-    [InlineData("c7", Pawn, Black)]
-    [InlineData("d7", Pawn, Black)]
-    [InlineData("e7", Pawn, Black)]
-    [InlineData("f7", Pawn, Black)]
-    [InlineData("g7", Pawn, Black)]
-    [InlineData("h7", Pawn, Black)]
-    [InlineData("a2", Pawn, White)]
-    [InlineData("b2", Pawn, White)]
-    [InlineData("c2", Pawn, White)]
-    [InlineData("d2", Pawn, White)]
-    [InlineData("e2", Pawn, White)]
-    [InlineData("f2", Pawn, White)]
-    [InlineData("g2", Pawn, White)]
-    [InlineData("h2", Pawn, White)]
-    [InlineData("a1", Rook, White)]
-    [InlineData("b1", Knight, White)]
-    [InlineData("c1", Bishop, White)]
-    [InlineData("d1", Queen, White)]
-    [InlineData("e1", King, White)]
-    [InlineData("f1", Bishop, White)]
-    [InlineData("g1", Knight, White)]
-    [InlineData("h1", Rook, White)]
-    public void board_can_be_created_with_a_standard_piece_layout(string coordinateString, Piece.PieceType type,
-        Piece.PieceColour colour)
+    [InlineData("a8", PieceType.Rook, PieceColour.Black)]
+    [InlineData("b8", PieceType.Knight, PieceColour.Black)]
+    [InlineData("c8", PieceType.Bishop, PieceColour.Black)]
+    [InlineData("d8", PieceType.Queen, PieceColour.Black)]
+    [InlineData("e8", PieceType.King, PieceColour.Black)]
+    [InlineData("f8", PieceType.Bishop, PieceColour.Black)]
+    [InlineData("g8", PieceType.Knight, PieceColour.Black)]
+    [InlineData("h8", PieceType.Rook, PieceColour.Black)]
+    [InlineData("a7", PieceType.Pawn, PieceColour.Black)]
+    [InlineData("b7", PieceType.Pawn, PieceColour.Black)]
+    [InlineData("c7", PieceType.Pawn, PieceColour.Black)]
+    [InlineData("d7", PieceType.Pawn, PieceColour.Black)]
+    [InlineData("e7", PieceType.Pawn, PieceColour.Black)]
+    [InlineData("f7", PieceType.Pawn, PieceColour.Black)]
+    [InlineData("g7", PieceType.Pawn, PieceColour.Black)]
+    [InlineData("h7", PieceType.Pawn, PieceColour.Black)]
+    [InlineData("a2", PieceType.Pawn, PieceColour.White)]
+    [InlineData("b2", PieceType.Pawn, PieceColour.White)]
+    [InlineData("c2", PieceType.Pawn, PieceColour.White)]
+    [InlineData("d2", PieceType.Pawn, PieceColour.White)]
+    [InlineData("e2", PieceType.Pawn, PieceColour.White)]
+    [InlineData("f2", PieceType.Pawn, PieceColour.White)]
+    [InlineData("g2", PieceType.Pawn, PieceColour.White)]
+    [InlineData("h2", PieceType.Pawn, PieceColour.White)]
+    [InlineData("a1", PieceType.Rook, PieceColour.White)]
+    [InlineData("b1", PieceType.Knight, PieceColour.White)]
+    [InlineData("c1", PieceType.Bishop, PieceColour.White)]
+    [InlineData("d1", PieceType.Queen, PieceColour.White)]
+    [InlineData("e1", PieceType.King, PieceColour.White)]
+    [InlineData("f1", PieceType.Bishop, PieceColour.White)]
+    [InlineData("g1", PieceType.Knight, PieceColour.White)]
+    [InlineData("h1", PieceType.Rook, PieceColour.White)]
+    public void board_can_be_created_with_a_standard_piece_layout(string coordinateString, PieceType type,
+        PieceColour colour)
     {
         // Arrange
         var board = new Board();
         Board.SetStandardLayout(board);
 
         // Assert
-        board[coordinateString].Should().BeEquivalentTo(new Piece(type, colour, coordinateString));
+        board[coordinateString].Should().BeEquivalentTo(new PieceProperties(type, colour, coordinateString));
     }
 
     [Fact(DisplayName = "A piece can be added to the board")]

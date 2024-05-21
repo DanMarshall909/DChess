@@ -2,22 +2,22 @@
 
 public class PieceCollection
 {
-    private readonly Dictionary<Coordinate, Piece> _pieces = new();
+    private readonly Dictionary<Coordinate, PieceProperties> _pieces = new();
 
-    public void Add(Piece piece)
+    public void Add(PieceProperties pieceProperties)
     {
         if (_pieces.Count >= Board.MaxPieces)
         {
             throw new InvalidOperationException("Cannot add more pieces to the board");
         }
 
-        _pieces[piece.Coordinate] = piece;
+        _pieces[pieceProperties.Coordinate] = pieceProperties;
     }
 
-    public bool TryGetPiece(Coordinate coordinate, out Piece piece) =>
-        _pieces.TryGetValue(coordinate, out piece);
+    public bool TryGetPiece(Coordinate coordinate, out PieceProperties pieceProperties) =>
+        _pieces.TryGetValue(coordinate, out pieceProperties);
 
-    public Piece this[Coordinate coordinate]
+    public PieceProperties this[Coordinate coordinate]
     {
         get
         {

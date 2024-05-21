@@ -1,17 +1,17 @@
 ﻿namespace DChess.Core;
 
-public struct Piece
+public struct PieceProperties
 {
     public PieceType Type { get; private set; }
     public PieceColour Colour { get; private set; }
     public Coordinate Coordinate { get; private set; }
 
-    public Piece(PieceType type, PieceColour colour, Coordinate position)
+    public PieceProperties(PieceType type, PieceColour colour, Coordinate position)
     {
         Initialize(type, colour, position);
     }
 
-    public Piece(PieceType type, PieceColour colour, string coordinateString)
+    public PieceProperties(PieceType type, PieceColour colour, string coordinateString)
     {
         Initialize(type, colour, new Coordinate(coordinateString));
     }

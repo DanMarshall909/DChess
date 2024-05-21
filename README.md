@@ -45,8 +45,8 @@ My initial goals are for it to be:
 - [X] Update the display logic to show pieces on the board.
 
 ## Refactor to make use flyweight pattern for pieces
-- [ ] Create an object pool for pieces that returns objects rather than structs, but still uses structs for the board.
-- [ ] Refactor the board to use the object pool.
+- [X] Create an object pool for pieces that returns objects rather than structs, but still uses structs for the board.
+- [X] Refactor the board to use the object pool.
 
 ## Allow a piece to be moved
 
