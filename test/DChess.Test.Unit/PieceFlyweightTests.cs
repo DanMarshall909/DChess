@@ -8,7 +8,7 @@ public class PieceFlyweightTests
 {
 // tests in this class
 // # Allow a piece to be moved
-// - [ ] Add a method on the piece base class to move by coordinate.
+// - [X] Add a method on the piece base class to move by coordinate.
 // - [ ] Add a method to check if the move is generally valid.
 // - [ ] Disallow taking your own piece.
 // - [ ] Disallow taking your own piece.
@@ -25,10 +25,28 @@ public class PieceFlyweightTests
 
         // Act
         var pieceFlyweight = board.PieceFlyweights[a1];
-        pieceFlyweight.Move(a3);
+        pieceFlyweight.Move(b1);
 
         // Assert
-        board.PieceFlyweights[a3].Should().BeEquivalentTo(new PawnFlyweight(piece, a3, board), "the piece should be moved");
+        board.PieceFlyweights[b1].Should()
+            .BeEquivalentTo(new PawnFlyweight(piece, b1, board), "the piece should be moved");
         board.PieceFlyweights.Count.Should().Be(1, "the piece should be moved, not duplicated");
+    }
+
+    [Fact(DisplayName = "Invalid move should not be allowed")]
+    public void invalid_move_should_not_be_allowed()
+    {
+        // Arrange
+        var board = new Board();
+        var piece = new Piece(PieceType.Pawn, PieceColour.White);
+        board[a1] = piece;
+
+        // Act
+        var pieceFlyweight = board.PieceFlyweights[a1];
+        var act = () => pieceFlyweight.Move(a2);
+
+        // Assert
+        act.Should().Throw<InvalidMoveException>();
+        board.PieceFlyweights.Count.Should().Be(1, "pawns can only move forward");
     }
 }

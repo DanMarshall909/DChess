@@ -18,7 +18,7 @@ public class Board
     public Dictionary<Coordinate, PieceFlyweight> PieceFlyweights => _piecesByCoordinate
         .ToDictionary(kvp => kvp.Key, kvp => _pool.Get(kvp.Key, kvp.Value));
 
-    public bool TryGetValue(Coordinate coordinate, out Piece piece) 
+    public bool TryGetValue(Coordinate coordinate, out Piece piece)
         => _piecesByCoordinate.TryGetValue(coordinate, out piece);
 
     public Piece this[Coordinate coordinate]
@@ -26,6 +26,7 @@ public class Board
         get => _piecesByCoordinate[coordinate];
         set => _piecesByCoordinate[coordinate] = value;
     }
+
     public Piece this[string coordinateString] => this[new Coordinate(coordinateString)];
 
     private readonly Dictionary<Coordinate, Piece> _piecesByCoordinate;
@@ -86,16 +87,11 @@ public class Board
     }
 }
 
-public class InvalidMoveException : Exception
+public class InvalidMoveException(Coordinate from, Coordinate to, string? message = null) : Exception
 {
-    public InvalidMoveException(Coordinate from, Coordinate to, string message)
-    {
-        From = from;
-        To = to;
-        Message = $"Invalid move from {from}, to: {to} - {message}";
-    }
+    public Coordinate To { get; } = to;
+    public Coordinate From { get; } = from;
 
-    public Coordinate To { get; }
-    public Coordinate From { get; }
-    public override string Message { get; }
+    public override string Message { get; } =
+        $"Invalid move from {from}, to: {to}" + (message is not null ? $": {message}" : "");
 }
