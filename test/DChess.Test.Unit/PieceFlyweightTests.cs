@@ -19,16 +19,16 @@ public class PieceFlyweightTests
         // Arrange
         var board = new Board();
         var piece = new Piece(PieceType.Pawn, PieceColour.White);
-        
+
         board[a1] = piece;
-        board.PieceFlyweights.Count().Should().Be(1);
+        board.PieceFlyweights.Count.Should().Be(1);
 
         // Act
         var pieceFlyweight = board.PieceFlyweights[a1];
         pieceFlyweight.Move(a3);
-        board.PieceFlyweights.Count().Should().Be(1);
 
         // Assert
-        board.PieceFlyweights.Should().BeEquivalentTo(new[] { pieceFlyweight with{ Coordinate = a3 }});
+        board.PieceFlyweights[a3].Should().BeEquivalentTo(new PawnFlyweight(piece, a3, board), "the piece should be moved");
+        board.PieceFlyweights.Count.Should().Be(1, "the piece should be moved, not duplicated");
     }
 }
