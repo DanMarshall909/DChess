@@ -1,29 +1,36 @@
 using static DChess.Core.Coordinate;
-using static DChess.Core.PieceProperties;
-using static DChess.Core.PieceProperties.PieceColour;
+using static DChess.Core.Piece;
+using static DChess.Core.Piece.PieceColour;
 
 namespace DChess.Core;
 
-public class Board(PieceCollection? pieces = null)
+public class Board
 {
     public const int MaxPieces = 32;
-    public readonly PieceCollection Pieces = pieces ?? new PieceCollection();
+    private readonly PieceFlyweightPool _pool;
 
-    public PieceProperties this[Coordinate coordinate]
+    public Board(Dictionary<Coordinate, Piece>? piecesByCoordinate = null)
     {
-        get => Pieces[coordinate];
-        set => Pieces[coordinate] = value;
+        _piecesByCoordinate = piecesByCoordinate ?? new Dictionary<Coordinate, Piece>();
+        _pool = new PieceFlyweightPool(this);
     }
 
-    public bool HasPieceAt(Coordinate coordinate) => Pieces.TryGetPiece(coordinate, out _);
+    public Dictionary<Coordinate, PieceFlyweight> PieceFlyweights => _piecesByCoordinate
+        .ToDictionary(kvp => kvp.Key, kvp => _pool.Get(kvp.Key, kvp.Value));
 
-    public PieceProperties this[string coordinateString] => Pieces[new Coordinate(coordinateString)];
+    public bool TryGetValue(Coordinate coordinate, out Piece piece) 
+        => _piecesByCoordinate.TryGetValue(coordinate, out piece);
 
-    public PieceProperties this[char file, byte rank]
+    public Piece this[Coordinate coordinate]
     {
-        get => Pieces[new(file, rank)];
-        set => Pieces[new(file, rank)] = value;
+        get => _piecesByCoordinate[coordinate];
+        set => _piecesByCoordinate[coordinate] = value;
     }
+    public Piece this[string coordinateString] => this[new Coordinate(coordinateString)];
+
+    private readonly Dictionary<Coordinate, Piece> _piecesByCoordinate;
+
+    public bool HasPieceAt(Coordinate coordinate) => _piecesByCoordinate.TryGetValue(coordinate, out _);
 
     public static void SetStandardLayout(Board board)
     {
@@ -66,7 +73,29 @@ public class Board(PieceCollection? pieces = null)
 
         void Place(Coordinate coordinate, PieceType type, PieceColour colour)
         {
-            board.Pieces.Add(new PieceProperties(type, colour, coordinate));
+            board._piecesByCoordinate[coordinate] = new Piece(type, colour);
         }
     }
+
+    public void Move(Coordinate from, Coordinate to)
+    {
+        if (!_piecesByCoordinate.TryGetValue(from, out var pieceStruct))
+            throw new InvalidMoveException(from, to, $"No piece exists at {from}");
+        _piecesByCoordinate.Remove(from);
+        _piecesByCoordinate[to] = pieceStruct;
+    }
+}
+
+public class InvalidMoveException : Exception
+{
+    public InvalidMoveException(Coordinate from, Coordinate to, string message)
+    {
+        From = from;
+        To = to;
+        Message = $"Invalid move from {from}, to: {to} - {message}";
+    }
+
+    public Coordinate To { get; }
+    public Coordinate From { get; }
+    public override string Message { get; }
 }

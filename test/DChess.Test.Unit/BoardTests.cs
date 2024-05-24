@@ -1,13 +1,12 @@
 ﻿using DChess.Core;
 using static DChess.Core.Coordinate;
-using static DChess.Core.PieceProperties;
+using static DChess.Core.Piece;
 
 namespace DChess.Test.Unit;
 
 public class BoardTests
 {
-    private PieceProperties WhitePawn(Coordinate coordinate) => new(PieceType.Pawn, PieceColour.White, coordinate);
-    private PieceProperties WhitePawn(string coordinateString) => new(PieceType.Pawn, PieceColour.White, coordinateString);
+    private static Piece WhitePawn => new(PieceType.Pawn, PieceColour.White);
 
     [Theory(DisplayName = "An invalid position should throw an exception")]
     [InlineData("a")]
@@ -46,14 +45,14 @@ public class BoardTests
         // Arrange
         var board = new Board();
 
-        board[a1] = WhitePawn(a1);
+        board[a1] = WhitePawn;
 
         // Assert
-        board[a1].Should().BeEquivalentTo(WhitePawn(a1));
+        board[a1].Should().BeEquivalentTo(WhitePawn);
         board.HasPieceAt(a2).Should().BeFalse();
     }
 
-    [Fact(DisplayName = "If there are no pieces on the board, a cell's piece is null")]
+    [Fact(DisplayName = "If there are no piece on the board, a cell's piece is null")]
     public void if_there_are_no_pieces_on_the_board_a_cells_piece_is_null()
     {
         // Arrange
@@ -77,7 +76,7 @@ public class BoardTests
         var board = new Board();
 
         // Act
-        Action act = () => board[column, row] = WhitePawn(new Coordinate(column, row));
+        Action act = () => board[new Coordinate(column, row)] = WhitePawn;
 
         // Assert
         act.Should().Throw<ArgumentOutOfRangeException>();
@@ -88,10 +87,10 @@ public class BoardTests
     {
         // Arrange
         var board = new Board();
-        board[a1] = WhitePawn(a1);
+        board[a1] = WhitePawn;
 
         // Assert
-        board["a1"].Should().BeEquivalentTo(WhitePawn(a1));
+        board["a1"].Should().BeEquivalentTo(WhitePawn);
     }
 
     [Theory(DisplayName = "Board can be created with a standard piece layout")]
@@ -135,16 +134,16 @@ public class BoardTests
         Board.SetStandardLayout(board);
 
         // Assert
-        board[coordinateString].Should().BeEquivalentTo(new PieceProperties(type, colour, coordinateString));
+        board[coordinateString].Should().BeEquivalentTo(new Piece(type, colour));
     }
 
     [Fact(DisplayName = "A piece can be added to the board")]
     public void a_piece_can_be_added_to_the_board()
     {
         var board = new Board();
-        var whitePawn = WhitePawn("a1");
-        board.Pieces.Add(whitePawn);
+        var whitePawn = WhitePawn;
+        board[a1] =whitePawn;
 
-        board["a1"].Should().Be(whitePawn);
+        board[a1].Should().Be(whitePawn);
     }
 }

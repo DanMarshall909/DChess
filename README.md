@@ -52,9 +52,9 @@ My initial goals are for it to be:
 
 - [ ] Add a method on the piece base class to move by coordinate.
 - [ ] Add a method to check if the move is generally valid.
+- [ ] Add a virtual method to check if a move for the particular piece type is valid.  
 - [ ] Disallow taking your own pieces.
 - [X] ~~Disallow moving off the board. Already handled by Coordinate validation~~
-## Add a virtual method to check if a move for the particular piece type is valid.  
 
 ### Pawn
 

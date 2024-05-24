@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using static DChess.Core.PieceProperties;
-using static DChess.Core.PieceProperties.PieceColour;
+using static DChess.Core.Piece;
+using static DChess.Core.Piece.PieceColour;
 
 namespace DChess.Core;
 
@@ -36,18 +36,18 @@ public class TextRenderer : IBoardRenderer
 
     private static char PieceChar(char file, byte rank, Board board)
     {
-        if (board.Pieces.TryGetPiece(new Coordinate(file, rank), out var piece))
-            return DisplayChar(piece);
+        if (board.TryGetValue(new Coordinate(file, rank), out var flyweight))
+            return DisplayChar(flyweight!);
 
         bool isOddSquare = (rank + file) % 2 == 0;
         return isOddSquare ? BlackSquare : WhiteSquare;
     }
 
-    private static char DisplayChar(PieceProperties pieceProperties)
+    private static char DisplayChar(Piece piece)
     {
-        return pieceProperties.Colour switch
+        return piece.Colour switch
         {
-            Black => pieceProperties.Type switch
+            Black => piece.Type switch
             {
                 PieceType.Pawn => '♙',
                 PieceType.Rook => '♖',
@@ -55,9 +55,9 @@ public class TextRenderer : IBoardRenderer
                 PieceType.Bishop => '♗',
                 PieceType.Queen => '♕',
                 PieceType.King => '♔',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceProperties.Type, "Unknown piece type")
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), piece.Type, "Unknown piece type")
             },
-            _ => pieceProperties.Type switch
+            _ => piece.Type switch
             {
                 PieceType.Pawn => '♟',
                 PieceType.Rook => '♜',
@@ -65,7 +65,7 @@ public class TextRenderer : IBoardRenderer
                 PieceType.Bishop => '♝',
                 PieceType.Queen => '♛',
                 PieceType.King => '♚',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceProperties.Type, "Unknown piece type")
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), piece.Type, "Unknown piece type")
             }
         };
     }

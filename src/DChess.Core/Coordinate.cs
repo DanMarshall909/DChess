@@ -9,7 +9,7 @@ public readonly record struct Coordinate
     {
         if (positionName.Length != 2)
         {
-            throw new ArgumentException("Position must be 2 characters long");
+            throw new ArgumentException("Position name must be 2 characters long");
         }
 
         File = positionName[0];
@@ -44,7 +44,7 @@ public readonly record struct Coordinate
         {
             if (value is < 1 or > 8)
             {
-                throw new ArgumentOutOfRangeException(nameof(value), "Rank must be between 1 and 8");
+                throw new ArgumentOutOfRangeException(nameof(value), $"Rank must be between 1 and 8 but found {value}");
             }
             _rank = value;
         }
