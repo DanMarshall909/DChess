@@ -78,20 +78,17 @@ public class Board
         }
     }
 
-    public void Move(Coordinate from, Coordinate to)
+    internal void Move(Move move)
     {
-        if (!_piecesByCoordinate.TryGetValue(from, out var pieceStruct))
-            throw new InvalidMoveException(from, to, $"No piece exists at {from}");
-        _piecesByCoordinate.Remove(from);
-        _piecesByCoordinate[to] = pieceStruct;
+        if (!_piecesByCoordinate.TryGetValue(move.From, out var fromPiece))
+            throw new InvalidMoveException(move, $"No piece exists at {move.From}");
+
+        _piecesByCoordinate.Remove(move.From);
+        _piecesByCoordinate[move.To] = fromPiece;
     }
-}
 
-public class InvalidMoveException(Coordinate from, Coordinate to, string? message = null) : Exception
-{
-    public Coordinate To { get; } = to;
-    public Coordinate From { get; } = from;
-
-    public override string Message { get; } =
-        $"Invalid move from {from}, to: {to}" + (message is not null ? $": {message}" : "");
+    public void HandleInvalidMove(Move move, string? message)
+    {
+        throw new InvalidMoveException(move, message);
+    }
 }

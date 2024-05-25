@@ -7,11 +7,11 @@ public record PawnFlyweight : PieceFlyweight
     {
     }
 
-    protected override (bool IsValid, string ReasonInvalid) IsValidMove(Coordinate coordinate, Coordinate to)
+    protected override MoveResult IsValidMove(Move move)
     {
-        if (to.Rank != coordinate.Rank)
-            return (false, "Pawns can only move forward");
+        if (move.To.Rank != move.From.Rank)
+            return new(false, move, "Pawns can only move forward");
 
-        return (true, null);
+        return new(true, move, string.Empty);
     }
 }
