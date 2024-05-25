@@ -50,16 +50,20 @@ My initial goals are for it to be:
 
 ## Allow a piece to be moved
 
-- [ ] Add a method on the piece base class to move by coordinate.
-- [ ] Add a method to check if the move is generally valid.
-- [ ] Add a virtual method to check if a move for the particular piece type is valid.  
-- [ ] Disallow taking your own pieces.
+- [X] Add a method on the piece base class to move by coordinate.
+- [X] Add a method to check if the move is generally valid.
+- [X] Add a virtual method to check if a move for the particular piece type is valid.  
+- [X] Disallow taking your own pieces.
 - [X] ~~Disallow moving off the board. Already handled by Coordinate validation~~
+
+## Specific Piece Movement Rules
 
 ### Pawn
 
+- [X] Pawns can only move forward.
 - [ ] Pawns cannot move backwards.
 - [ ] Pawns can only move forward two squares on their first move and one square otherwise.
+- [ ] Pawns can take diagonally.
 
 ### Knight
 
@@ -141,4 +145,4 @@ My initial goals are for it to be:
 
 # Optimisation 
 - [ ] Use bitboards to represent the board state
-- [ ] Use the flyweight pattern to reduce memory usage
+- [X] Use the flyweight pattern to reduce memory usage

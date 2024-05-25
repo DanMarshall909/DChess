@@ -27,7 +27,7 @@ public class RenderingTests
             """);
     }
 
-    [Fact(DisplayName = "A standard  board should be displayed correctly with piece")]
+    [Fact(DisplayName = "A standard  board should be displayed correctly with pieceStruct")]
     public void a_standard_board_should_be_displayed_correctly_with_pieces()
     {
         // Arrange

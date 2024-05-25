@@ -1,12 +1,12 @@
 ﻿using DChess.Core;
 using static DChess.Core.Coordinate;
-using static DChess.Core.Piece;
+using static DChess.Core.PieceStruct;
 
 namespace DChess.Test.Unit;
 
 public class BoardTests
 {
-    private static Piece WhitePawn => new(PieceType.Pawn, PieceColour.White);
+    private static PieceStruct WhitePawn => new(PieceType.Pawn, PieceColour.White);
 
     [Theory(DisplayName = "An invalid position should throw an exception")]
     [InlineData("a")]
@@ -134,7 +134,7 @@ public class BoardTests
         Board.SetStandardLayout(board);
 
         // Assert
-        board[coordinateString].Should().BeEquivalentTo(new Piece(type, colour));
+        board[coordinateString].Should().BeEquivalentTo(new PieceStruct(type, colour));
     }
 
     [Fact(DisplayName = "A piece can be added to the board")]

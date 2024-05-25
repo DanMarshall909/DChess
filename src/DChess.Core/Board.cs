@@ -1,35 +1,35 @@
 using static DChess.Core.Coordinate;
-using static DChess.Core.Piece;
-using static DChess.Core.Piece.PieceColour;
+using static DChess.Core.PieceStruct;
+using static DChess.Core.PieceStruct.PieceColour;
 
 namespace DChess.Core;
 
 public class Board
 {
     public const int MaxPieces = 32;
-    private readonly PieceFlyweightPool _pool;
+    private readonly PiecePool _pool;
 
-    public Board(Dictionary<Coordinate, Piece>? piecesByCoordinate = null)
+    public Board(Dictionary<Coordinate, PieceStruct>? piecesByCoordinate = null)
     {
-        _piecesByCoordinate = piecesByCoordinate ?? new Dictionary<Coordinate, Piece>();
-        _pool = new PieceFlyweightPool(this);
+        _piecesByCoordinate = piecesByCoordinate ?? new Dictionary<Coordinate, PieceStruct>();
+        _pool = new PiecePool(this);
     }
 
-    public Dictionary<Coordinate, PieceFlyweight> PieceFlyweights => _piecesByCoordinate
+    public Dictionary<Coordinate, Piece> Pieces => _piecesByCoordinate
         .ToDictionary(kvp => kvp.Key, kvp => _pool.Get(kvp.Key, kvp.Value));
 
-    public bool TryGetValue(Coordinate coordinate, out Piece piece)
-        => _piecesByCoordinate.TryGetValue(coordinate, out piece);
+    public bool TryGetValue(Coordinate coordinate, out PieceStruct pieceStruct)
+        => _piecesByCoordinate.TryGetValue(coordinate, out pieceStruct);
 
-    public Piece this[Coordinate coordinate]
+    public PieceStruct this[Coordinate coordinate]
     {
         get => _piecesByCoordinate[coordinate];
         set => _piecesByCoordinate[coordinate] = value;
     }
 
-    public Piece this[string coordinateString] => this[new Coordinate(coordinateString)];
+    public PieceStruct this[string coordinateString] => this[new Coordinate(coordinateString)];
 
-    private readonly Dictionary<Coordinate, Piece> _piecesByCoordinate;
+    private readonly Dictionary<Coordinate, PieceStruct> _piecesByCoordinate;
 
     public bool HasPieceAt(Coordinate coordinate) => _piecesByCoordinate.TryGetValue(coordinate, out _);
 
@@ -74,7 +74,7 @@ public class Board
 
         void Place(Coordinate coordinate, PieceType type, PieceColour colour)
         {
-            board._piecesByCoordinate[coordinate] = new Piece(type, colour);
+            board._piecesByCoordinate[coordinate] = new PieceStruct(type, colour);
         }
     }
 
