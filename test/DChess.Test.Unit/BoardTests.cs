@@ -6,6 +6,7 @@ namespace DChess.Test.Unit;
 
 public class BoardTests
 {
+    private TestInvalidMoveHandler _invalidMoveHandler = new();
     private static PieceStruct WhitePawn => new(PieceType.Pawn, PieceColour.White);
 
     [Theory(DisplayName = "An invalid position should throw an exception")]
@@ -43,7 +44,8 @@ public class BoardTests
     public void a_piece_can_be_placed_on_the_board()
     {
         // Arrange
-        var board = new Board();
+        IInvalidMoveHandler a = new TestInvalidMoveHandler();
+        var board = new Board(a);
 
         board[a1] = WhitePawn;
 
@@ -56,7 +58,7 @@ public class BoardTests
     public void if_there_are_no_pieces_on_the_board_a_cells_piece_is_null()
     {
         // Arrange
-        var board = new Board();
+        var board = new Board(_invalidMoveHandler);
 
         // Act
 
@@ -73,7 +75,7 @@ public class BoardTests
     public void a_piece_cannot_be_placed_outside_the_board(char column, byte row)
     {
         // Arrange
-        var board = new Board();
+        var board = new Board(_invalidMoveHandler);
 
         // Act
         Action act = () => board[new Coordinate(column, row)] = WhitePawn;
@@ -86,7 +88,8 @@ public class BoardTests
     public void cell_shorthand_can_be_used_to_get_a_cell()
     {
         // Arrange
-        var board = new Board();
+        var testHandlier = new TestInvalidMoveHandler();
+        var board = new Board(_invalidMoveHandler);
         board[a1] = WhitePawn;
 
         // Assert
@@ -130,7 +133,7 @@ public class BoardTests
         PieceColour colour)
     {
         // Arrange
-        var board = new Board();
+        var board = new Board(_invalidMoveHandler);
         Board.SetStandardLayout(board);
 
         // Assert
@@ -140,9 +143,9 @@ public class BoardTests
     [Fact(DisplayName = "A piece can be added to the board")]
     public void a_piece_can_be_added_to_the_board()
     {
-        var board = new Board();
+        var board = new Board(_invalidMoveHandler);
         var whitePawn = WhitePawn;
-        board[a1] =whitePawn;
+        board[a1] = whitePawn;
 
         board[a1].Should().Be(whitePawn);
     }

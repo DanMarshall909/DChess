@@ -2,8 +2,8 @@
 
 public record Pawn : Piece
 {
-    public Pawn(PieceStruct pieceStruct, Coordinate coordinate, Board board) 
-        : base(pieceStruct, coordinate, board)
+    public Pawn(Arguments arguments) 
+        : base(arguments)
     {
     }
 

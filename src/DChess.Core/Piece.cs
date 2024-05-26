@@ -2,29 +2,40 @@
 
 public abstract record Piece
 {
-    protected Piece(PieceStruct PieceStruct, Coordinate Coordinate, Board Board)
+    protected Piece(Arguments arguments)
     {
-        this.PieceStruct = PieceStruct;
-        this.Coordinate = Coordinate;
-        this.Board = Board;
+        PieceStruct = arguments.PieceStruct;
+        Coordinate = arguments.Coordinate;
+        Board = arguments.Board;
+        InvalidMoveHandler = arguments.InvalidMoveHandler;
     }
+
+    public IInvalidMoveHandler InvalidMoveHandler { get; set; }
 
     public void MoveTo(Coordinate to)
     {
+        
         var move = new Move(Coordinate, to);
-        var generalMoveResult = IsGenerallyValid(move);
-        
-        if (generalMoveResult.Valid != true)
-            Board.HandleInvalidMove(move, generalMoveResult.Message);
-        
-        var isValidMove = ValidateMove(move);
+        var result = CheckMoveTo(move);
+        if (!result.Valid)
+            InvalidMoveHandler.HandleInvalidMove(move, result.Message);
 
-        if(isValidMove.Valid != true)
-            Board.HandleInvalidMove(move, isValidMove.Message);
-        
         Board.Move(move);
     }
+
     
+    public MoveResult CheckMoveTo(Move move)
+    {
+        var generalMoveResult = IsGenerallyValid(move);
+
+        if (generalMoveResult.Valid != true)
+            return generalMoveResult;
+
+        var isValidMove = ValidateMove(move);
+
+        return isValidMove.Valid ? generalMoveResult : isValidMove;
+    }
+
     private MoveResult IsGenerallyValid(Move move)
     {
         if (move.From == move.To)
@@ -38,7 +49,7 @@ public abstract record Piece
 
         return new(true, move, null);
     }
-    
+
     protected MoveResult ReportInvalidMove(Move move, string message)
     {
         throw new InvalidMoveException(move, message);
@@ -51,7 +62,9 @@ public abstract record Piece
 
     public void Deconstruct(out PieceStruct pieceStruct, out Coordinate coordinate)
     {
-        pieceStruct = this.PieceStruct;
-        coordinate = this.Coordinate;
+        pieceStruct = PieceStruct;
+        coordinate = Coordinate;
     }
+
+    public record Arguments(PieceStruct PieceStruct, Coordinate Coordinate, Board Board, IInvalidMoveHandler InvalidMoveHandler);
 }

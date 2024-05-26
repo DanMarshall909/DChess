@@ -6,13 +6,16 @@ namespace DChess.Core;
 
 public class Board
 {
+    private readonly IInvalidMoveHandler _invalidMoveHandler;
     public const int MaxPieces = 32;
     private readonly PiecePool _pool;
 
-    public Board(Dictionary<Coordinate, PieceStruct>? piecesByCoordinate = null)
+    public Board(IInvalidMoveHandler invalidMoveHandler,
+        Dictionary<Coordinate, PieceStruct>? piecesByCoordinate = null)
     {
+        _invalidMoveHandler = invalidMoveHandler;
         _piecesByCoordinate = piecesByCoordinate ?? new Dictionary<Coordinate, PieceStruct>();
-        _pool = new PiecePool(this);
+        _pool = new PiecePool(this, invalidMoveHandler);
     }
 
     public Dictionary<Coordinate, Piece> Pieces => _piecesByCoordinate
@@ -85,10 +88,5 @@ public class Board
 
         _piecesByCoordinate.Remove(move.From);
         _piecesByCoordinate[move.To] = fromPiece;
-    }
-
-    public void HandleInvalidMove(Move move, string? message)
-    {
-        throw new InvalidMoveException(move, message);
     }
 }
