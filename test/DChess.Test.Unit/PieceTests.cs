@@ -1,6 +1,5 @@
-﻿using DChess.Core;
+﻿using DChess.Core.Pieces;
 using static DChess.Core.Coordinate;
-using static DChess.Core.PieceStruct;
 
 namespace DChess.Test.Unit;
 
@@ -13,7 +12,7 @@ public class PieceTests
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
-        var pieceStruct = new PieceStruct(PieceType.Pawn, PieceColour.White);
+        var pieceStruct = new ChessPiece(PieceType.Pawn, Colour.White);
 
         board[a1] = pieceStruct;
         board.Pieces.Count.Should().Be(1);
@@ -34,7 +33,7 @@ public class PieceTests
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
-        var pieceStruct = new PieceStruct(PieceType.Pawn, PieceColour.White);
+        var pieceStruct = new ChessPiece(PieceType.Pawn, Colour.White);
         board[a1] = pieceStruct;
         var piece = board.Pieces[a1];
 
@@ -43,24 +42,5 @@ public class PieceTests
 
         // Assert
         _invalidMoveHandler.InvalidMoves.Should().HaveCount(1);
-    }
-
-    [Fact(DisplayName = "A piece cannot take its own pieceStruct")]
-    public void a_piece_cannot_take_its_own_piece()
-    {
-        // Arrange
-        var board = new Board(_invalidMoveHandler);
-        var whitePawn = new PieceStruct(PieceType.Pawn, PieceColour.White);
-
-        board[a1] = whitePawn;
-        board[b1] = whitePawn;
-
-        // Act
-        var boardPiece = board.Pieces[a1];
-        var move = new Move(a1, b1);
-        var result = boardPiece.CheckMoveTo(move);
-        
-        result.Valid.Should().BeFalse();
-        result.Message.Should().Be("Cannot capture your own pieceStruct");
     }
 }

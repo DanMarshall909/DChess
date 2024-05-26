@@ -1,6 +1,6 @@
 ﻿using System.Text;
-using static DChess.Core.PieceStruct;
-using static DChess.Core.PieceStruct.PieceColour;
+using DChess.Core.Pieces;
+using static DChess.Core.Pieces.Colour;
 
 namespace DChess.Core;
 
@@ -43,11 +43,11 @@ public class TextRenderer : IBoardRenderer
         return isOddSquare ? BlackSquare : WhiteSquare;
     }
 
-    private static char DisplayChar(PieceStruct pieceStruct)
+    private static char DisplayChar(ChessPiece chessPiece)
     {
-        return pieceStruct.Colour switch
+        return chessPiece.Colour switch
         {
-            Black => pieceStruct.Type switch
+            Black => chessPiece.Type switch
             {
                 PieceType.Pawn => '♙',
                 PieceType.Rook => '♖',
@@ -55,9 +55,9 @@ public class TextRenderer : IBoardRenderer
                 PieceType.Bishop => '♗',
                 PieceType.Queen => '♕',
                 PieceType.King => '♔',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceStruct.Type, "Unknown piece type")
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), chessPiece.Type, "Unknown piece type")
             },
-            _ => pieceStruct.Type switch
+            _ => chessPiece.Type switch
             {
                 PieceType.Pawn => '♟',
                 PieceType.Rook => '♜',
@@ -65,7 +65,7 @@ public class TextRenderer : IBoardRenderer
                 PieceType.Bishop => '♝',
                 PieceType.Queen => '♛',
                 PieceType.King => '♚',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceStruct.Type, "Unknown piece type")
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), chessPiece.Type, "Unknown piece type")
             }
         };
     }

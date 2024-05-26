@@ -1,10 +1,12 @@
-﻿namespace DChess.Core;
+﻿using DChess.Core.Moves;
+
+namespace DChess.Core.Pieces;
 
 public abstract record Piece
 {
     protected Piece(Arguments arguments)
     {
-        PieceStruct = arguments.PieceStruct;
+        ChessPiece = arguments.ChessPiece;
         Coordinate = arguments.Coordinate;
         Board = arguments.Board;
         InvalidMoveHandler = arguments.InvalidMoveHandler;
@@ -43,8 +45,8 @@ public abstract record Piece
 
         if (Board.Pieces.TryGetValue(move.To, out var piece))
         {
-            if (piece.PieceStruct.Colour == PieceStruct.Colour)
-                return new(false, move, "Cannot capture your own pieceStruct");
+            if (piece.ChessPiece.Colour == ChessPiece.Colour)
+                return new(false, move, "Cannot capture your own piece");
         }
 
         return new(true, move, null);
@@ -56,15 +58,18 @@ public abstract record Piece
     }
 
     protected abstract MoveResult ValidateMove(Move move);
-    public PieceStruct PieceStruct { get; init; }
+    public ChessPiece ChessPiece { get; init; }
     public Coordinate Coordinate { get; init; }
+    public Colour Colour => ChessPiece.Colour;
+    public PieceType Type => ChessPiece.Type;
+    
     protected Board Board { get; init; }
 
-    public void Deconstruct(out PieceStruct pieceStruct, out Coordinate coordinate)
+    public void Deconstruct(out ChessPiece chessPiece, out Coordinate coordinate)
     {
-        pieceStruct = PieceStruct;
+        chessPiece = ChessPiece;
         coordinate = Coordinate;
     }
 
-    public record Arguments(PieceStruct PieceStruct, Coordinate Coordinate, Board Board, IInvalidMoveHandler InvalidMoveHandler);
+    public record Arguments(ChessPiece ChessPiece, Coordinate Coordinate, Board Board, IInvalidMoveHandler InvalidMoveHandler);
 }

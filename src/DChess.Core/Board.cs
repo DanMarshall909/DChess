@@ -1,38 +1,43 @@
+using DChess.Core.Moves;
+using DChess.Core.Pieces;
 using static DChess.Core.Coordinate;
-using static DChess.Core.PieceStruct;
-using static DChess.Core.PieceStruct.PieceColour;
+using static DChess.Core.Pieces.Colour;
 
 namespace DChess.Core;
 
-public class Board
+public class Board : IDisposable
 {
+    public void Dispose()
+    {
+    }
+
     private readonly IInvalidMoveHandler _invalidMoveHandler;
     public const int MaxPieces = 32;
     private readonly PiecePool _pool;
 
     public Board(IInvalidMoveHandler invalidMoveHandler,
-        Dictionary<Coordinate, PieceStruct>? piecesByCoordinate = null)
+        Dictionary<Coordinate, ChessPiece>? piecesByCoordinate = null)
     {
         _invalidMoveHandler = invalidMoveHandler;
-        _piecesByCoordinate = piecesByCoordinate ?? new Dictionary<Coordinate, PieceStruct>();
+        _piecesByCoordinate = piecesByCoordinate ?? new Dictionary<Coordinate, ChessPiece>();
         _pool = new PiecePool(this, invalidMoveHandler);
     }
 
     public Dictionary<Coordinate, Piece> Pieces => _piecesByCoordinate
         .ToDictionary(kvp => kvp.Key, kvp => _pool.Get(kvp.Key, kvp.Value));
 
-    public bool TryGetValue(Coordinate coordinate, out PieceStruct pieceStruct)
-        => _piecesByCoordinate.TryGetValue(coordinate, out pieceStruct);
+    public bool TryGetValue(Coordinate coordinate, out ChessPiece chessPiece)
+        => _piecesByCoordinate.TryGetValue(coordinate, out chessPiece);
 
-    public PieceStruct this[Coordinate coordinate]
+    public ChessPiece this[Coordinate coordinate]
     {
         get => _piecesByCoordinate[coordinate];
         set => _piecesByCoordinate[coordinate] = value;
     }
 
-    public PieceStruct this[string coordinateString] => this[new Coordinate(coordinateString)];
+    public ChessPiece this[string coordinateString] => this[new Coordinate(coordinateString)];
 
-    private readonly Dictionary<Coordinate, PieceStruct> _piecesByCoordinate;
+    private readonly Dictionary<Coordinate, ChessPiece> _piecesByCoordinate;
 
     public bool HasPieceAt(Coordinate coordinate) => _piecesByCoordinate.TryGetValue(coordinate, out _);
 
@@ -75,9 +80,9 @@ public class Board
         Place(h1, PieceType.Rook, White);
         return;
 
-        void Place(Coordinate coordinate, PieceType type, PieceColour colour)
+        void Place(Coordinate coordinate, PieceType type, Colour colour)
         {
-            board._piecesByCoordinate[coordinate] = new PieceStruct(type, colour);
+            board._piecesByCoordinate[coordinate] = new ChessPiece(type, colour);
         }
     }
 

@@ -1,7 +1,6 @@
-﻿using DChess.Core;
+﻿using DChess.Core.Pieces;
 using static DChess.Core.Coordinate;
-using static DChess.Core.PieceStruct;
-using static DChess.Core.PieceStruct.PieceColour;
+using static DChess.Core.Pieces.Colour;
 
 namespace DChess.Test.Unit;
 
@@ -9,12 +8,12 @@ public class PiecePoolTests
 {
     private TestInvalidMoveHandler _invalidMoveHandler = new();
 
-    [Fact(DisplayName = "A pieceStruct can be retrieved from the pool")]
+    [Fact(DisplayName = "A piece can be retrieved from the pool")]
     public void a_piece_can_be_retrieved_from_the_pool()
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
-        var pieceStruct = new PieceStruct(PieceType.Pawn, White);
+        var pieceStruct = new ChessPiece(PieceType.Pawn, White);
 
         // Act
         var pool = new PiecePool(board, _invalidMoveHandler);

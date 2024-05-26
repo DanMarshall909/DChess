@@ -1,13 +1,13 @@
-﻿using DChess.Core;
+﻿using DChess.Core.Moves;
+using DChess.Core.Pieces;
 using static DChess.Core.Coordinate;
-using static DChess.Core.PieceStruct;
 
 namespace DChess.Test.Unit;
 
 public class BoardTests
 {
     private TestInvalidMoveHandler _invalidMoveHandler = new();
-    private static PieceStruct WhitePawn => new(PieceType.Pawn, PieceColour.White);
+    private static ChessPiece WhitePawn => new(PieceType.Pawn, Colour.White);
 
     [Theory(DisplayName = "An invalid position should throw an exception")]
     [InlineData("a")]
@@ -97,47 +97,47 @@ public class BoardTests
     }
 
     [Theory(DisplayName = "Board can be created with a standard piece layout")]
-    [InlineData("a8", PieceType.Rook, PieceColour.Black)]
-    [InlineData("b8", PieceType.Knight, PieceColour.Black)]
-    [InlineData("c8", PieceType.Bishop, PieceColour.Black)]
-    [InlineData("d8", PieceType.Queen, PieceColour.Black)]
-    [InlineData("e8", PieceType.King, PieceColour.Black)]
-    [InlineData("f8", PieceType.Bishop, PieceColour.Black)]
-    [InlineData("g8", PieceType.Knight, PieceColour.Black)]
-    [InlineData("h8", PieceType.Rook, PieceColour.Black)]
-    [InlineData("a7", PieceType.Pawn, PieceColour.Black)]
-    [InlineData("b7", PieceType.Pawn, PieceColour.Black)]
-    [InlineData("c7", PieceType.Pawn, PieceColour.Black)]
-    [InlineData("d7", PieceType.Pawn, PieceColour.Black)]
-    [InlineData("e7", PieceType.Pawn, PieceColour.Black)]
-    [InlineData("f7", PieceType.Pawn, PieceColour.Black)]
-    [InlineData("g7", PieceType.Pawn, PieceColour.Black)]
-    [InlineData("h7", PieceType.Pawn, PieceColour.Black)]
-    [InlineData("a2", PieceType.Pawn, PieceColour.White)]
-    [InlineData("b2", PieceType.Pawn, PieceColour.White)]
-    [InlineData("c2", PieceType.Pawn, PieceColour.White)]
-    [InlineData("d2", PieceType.Pawn, PieceColour.White)]
-    [InlineData("e2", PieceType.Pawn, PieceColour.White)]
-    [InlineData("f2", PieceType.Pawn, PieceColour.White)]
-    [InlineData("g2", PieceType.Pawn, PieceColour.White)]
-    [InlineData("h2", PieceType.Pawn, PieceColour.White)]
-    [InlineData("a1", PieceType.Rook, PieceColour.White)]
-    [InlineData("b1", PieceType.Knight, PieceColour.White)]
-    [InlineData("c1", PieceType.Bishop, PieceColour.White)]
-    [InlineData("d1", PieceType.Queen, PieceColour.White)]
-    [InlineData("e1", PieceType.King, PieceColour.White)]
-    [InlineData("f1", PieceType.Bishop, PieceColour.White)]
-    [InlineData("g1", PieceType.Knight, PieceColour.White)]
-    [InlineData("h1", PieceType.Rook, PieceColour.White)]
+    [InlineData("a8", PieceType.Rook, Colour.Black)]
+    [InlineData("b8", PieceType.Knight, Colour.Black)]
+    [InlineData("c8", PieceType.Bishop, Colour.Black)]
+    [InlineData("d8", PieceType.Queen, Colour.Black)]
+    [InlineData("e8", PieceType.King, Colour.Black)]
+    [InlineData("f8", PieceType.Bishop, Colour.Black)]
+    [InlineData("g8", PieceType.Knight, Colour.Black)]
+    [InlineData("h8", PieceType.Rook, Colour.Black)]
+    [InlineData("a7", PieceType.Pawn, Colour.Black)]
+    [InlineData("b7", PieceType.Pawn, Colour.Black)]
+    [InlineData("c7", PieceType.Pawn, Colour.Black)]
+    [InlineData("d7", PieceType.Pawn, Colour.Black)]
+    [InlineData("e7", PieceType.Pawn, Colour.Black)]
+    [InlineData("f7", PieceType.Pawn, Colour.Black)]
+    [InlineData("g7", PieceType.Pawn, Colour.Black)]
+    [InlineData("h7", PieceType.Pawn, Colour.Black)]
+    [InlineData("a2", PieceType.Pawn, Colour.White)]
+    [InlineData("b2", PieceType.Pawn, Colour.White)]
+    [InlineData("c2", PieceType.Pawn, Colour.White)]
+    [InlineData("d2", PieceType.Pawn, Colour.White)]
+    [InlineData("e2", PieceType.Pawn, Colour.White)]
+    [InlineData("f2", PieceType.Pawn, Colour.White)]
+    [InlineData("g2", PieceType.Pawn, Colour.White)]
+    [InlineData("h2", PieceType.Pawn, Colour.White)]
+    [InlineData("a1", PieceType.Rook, Colour.White)]
+    [InlineData("b1", PieceType.Knight, Colour.White)]
+    [InlineData("c1", PieceType.Bishop, Colour.White)]
+    [InlineData("d1", PieceType.Queen, Colour.White)]
+    [InlineData("e1", PieceType.King, Colour.White)]
+    [InlineData("f1", PieceType.Bishop, Colour.White)]
+    [InlineData("g1", PieceType.Knight, Colour.White)]
+    [InlineData("h1", PieceType.Rook, Colour.White)]
     public void board_can_be_created_with_a_standard_piece_layout(string coordinateString, PieceType type,
-        PieceColour colour)
+        Colour colour)
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
         Board.SetStandardLayout(board);
 
         // Assert
-        board[coordinateString].Should().BeEquivalentTo(new PieceStruct(type, colour));
+        board[coordinateString].Should().BeEquivalentTo(new ChessPiece(type, colour));
     }
 
     [Fact(DisplayName = "A piece can be added to the board")]

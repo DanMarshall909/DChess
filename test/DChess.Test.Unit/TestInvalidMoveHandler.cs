@@ -1,4 +1,4 @@
-﻿using DChess.Core;
+﻿using DChess.Core.Moves;
 
 namespace DChess.Test.Unit;
 

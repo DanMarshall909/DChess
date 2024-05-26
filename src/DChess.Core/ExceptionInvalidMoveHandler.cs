@@ -1,4 +1,6 @@
-﻿namespace DChess.Core;
+﻿using DChess.Core.Moves;
+
+namespace DChess.Core;
 
 public class ExceptionInvalidMoveHandler : IInvalidMoveHandler
 {

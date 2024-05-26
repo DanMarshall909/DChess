@@ -1,4 +1,4 @@
-﻿namespace DChess.Core;
+﻿namespace DChess.Core.Moves;
 
 public readonly record struct MoveResult(bool Valid, Move Move, string? Message)
 {

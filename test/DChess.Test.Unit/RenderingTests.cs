@@ -1,6 +1,4 @@
-﻿using DChess.Core;
-
-namespace DChess.Test.Unit;
+﻿namespace DChess.Test.Unit;
 
 public class RenderingTests
 {
