@@ -1,6 +1,5 @@
 ﻿using DChess.Core.Moves;
 using DChess.Core.Pieces;
-using static DChess.Core.Coordinate;
 
 namespace DChess.Test.Unit.Rules;
 

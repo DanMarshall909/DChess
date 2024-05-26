@@ -1,7 +1,6 @@
 using DChess.Core.Moves;
 using DChess.Core.Pieces;
-using static DChess.Core.Coordinate;
-using static DChess.Core.Pieces.Colour;
+using static DChess.Core.Pieces.ChessPiece;
 
 namespace DChess.Core;
 
@@ -43,46 +42,46 @@ public class Board : IDisposable
 
     public static void SetStandardLayout(Board board)
     {
-        Place(a8, PieceType.Rook, Black);
-        Place(b8, PieceType.Knight, Black);
-        Place(c8, PieceType.Bishop, Black);
-        Place(d8, PieceType.Queen, Black);
-        Place(e8, PieceType.King, Black);
-        Place(f8, PieceType.Bishop, Black);
-        Place(g8, PieceType.Knight, Black);
-        Place(h8, PieceType.Rook, Black);
+        Place(a8, BlackRook);
+        Place(b8, BlackKnight);
+        Place(c8, BlackBishop);
+        Place(d8, BlackQueen);
+        Place(e8, BlackKing);
+        Place(f8, BlackBishop);
+        Place(g8, BlackKnight);
+        Place(h8, BlackRook);
 
-        Place(a7, PieceType.Pawn, Black);
-        Place(b7, PieceType.Pawn, Black);
-        Place(c7, PieceType.Pawn, Black);
-        Place(d7, PieceType.Pawn, Black);
-        Place(e7, PieceType.Pawn, Black);
-        Place(f7, PieceType.Pawn, Black);
-        Place(g7, PieceType.Pawn, Black);
-        Place(h7, PieceType.Pawn, Black);
+        Place(a7, BlackPawn);
+        Place(b7, BlackPawn);
+        Place(c7, BlackPawn);
+        Place(d7, BlackPawn);
+        Place(e7, BlackPawn);
+        Place(f7, BlackPawn);
+        Place(g7, BlackPawn);
+        Place(h7, BlackPawn);
 
-        Place(a2, PieceType.Pawn, White);
-        Place(b2, PieceType.Pawn, White);
-        Place(c2, PieceType.Pawn, White);
-        Place(d2, PieceType.Pawn, White);
-        Place(e2, PieceType.Pawn, White);
-        Place(f2, PieceType.Pawn, White);
-        Place(g2, PieceType.Pawn, White);
-        Place(h2, PieceType.Pawn, White);
+        Place(a2, WhitePawn);
+        Place(b2, WhitePawn);
+        Place(c2, WhitePawn);
+        Place(d2, WhitePawn);
+        Place(e2, WhitePawn);
+        Place(f2, WhitePawn);
+        Place(g2, WhitePawn);
+        Place(h2, WhitePawn);
 
-        Place(a1, PieceType.Rook, White);
-        Place(b1, PieceType.Knight, White);
-        Place(c1, PieceType.Bishop, White);
-        Place(d1, PieceType.Queen, White);
-        Place(e1, PieceType.King, White);
-        Place(f1, PieceType.Bishop, White);
-        Place(g1, PieceType.Knight, White);
-        Place(h1, PieceType.Rook, White);
+        Place(a1, WhiteRook);
+        Place(b1, WhiteKnight);
+        Place(c1, WhiteBishop);
+        Place(d1, WhiteQueen);
+        Place(e1, WhiteKing);
+        Place(f1, WhiteBishop);
+        Place(g1, WhiteKnight);
+        Place(h1, WhiteRook);
         return;
 
-        void Place(Coordinate coordinate, PieceType type, Colour colour)
+        void Place(Coordinate coordinate, ChessPiece chessPiece)
         {
-            board._piecesByCoordinate[coordinate] = new ChessPiece(type, colour);
+            board._piecesByCoordinate[coordinate] = new ChessPiece(chessPiece.Type, chessPiece.Colour);
         }
     }
 

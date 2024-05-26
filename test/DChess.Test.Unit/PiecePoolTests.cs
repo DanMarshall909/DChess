@@ -1,5 +1,4 @@
 ﻿using DChess.Core.Pieces;
-using static DChess.Core.Coordinate;
 using static DChess.Core.Pieces.Colour;
 
 namespace DChess.Test.Unit;

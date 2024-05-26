@@ -1,5 +1,4 @@
 ﻿using DChess.Core.Moves;
-using static DChess.Core.Pieces.Colour;
 
 namespace DChess.Core.Pieces;
 
