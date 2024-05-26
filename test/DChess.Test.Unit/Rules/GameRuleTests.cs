@@ -13,12 +13,11 @@ public class GameRuleTests(BoardFixture fixture) : BoardTestBase(fixture)
         var whitePawn = new ChessPiece(PieceType.Pawn, Colour.White);
 
         Fixture.Board[a1] = whitePawn;
-        Fixture.Board[b1] = whitePawn;
+        Fixture.Board[b2] = whitePawn;
 
         // Act
         var boardPiece = Board.Pieces[a1];
-        var move = new Move(a1, b1);
-        var result = boardPiece.CheckMove(move);
+        var result = boardPiece.CheckMove(b2);
         
         result.Valid.Should().BeFalse();
     }

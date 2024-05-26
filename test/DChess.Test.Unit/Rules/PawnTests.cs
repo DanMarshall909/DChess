@@ -19,6 +19,6 @@ public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
         Board[a1] = ChessPiece.WhitePawn;
 
         Board.Pieces[a1].MoveTo(c1);
-        var result = Board.Pieces[c1].CheckMove(c1, e1);
+        var result = Board.Pieces[c1].CheckMove(c1);
     }
 }

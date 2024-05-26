@@ -17,7 +17,7 @@ public abstract record Piece
     public void MoveTo(Coordinate to)
     {
         var move = new Move(Position, to);
-        var result = CheckMove(move);
+        var result = CheckMove(to);
         if (!result.Valid)
             InvalidMoveHandler.HandleInvalidMove(move, result.Message);
 
@@ -25,14 +25,14 @@ public abstract record Piece
     }
 
     
-    public MoveResult CheckMove(Move move)
+    public MoveResult CheckMove(Coordinate to)
     {
-        var generalMoveResult = IsGenerallyValid(move.To);
+        var generalMoveResult = IsGenerallyValid(to);
 
         if (generalMoveResult.Valid != true)
             return generalMoveResult;
 
-        var isValidMove = ValidateMove(move.To);
+        var isValidMove = ValidateMove(to);
 
         return isValidMove.Valid ? generalMoveResult : isValidMove;
     }
@@ -40,7 +40,7 @@ public abstract record Piece
     private MoveResult IsGenerallyValid(Coordinate to)
     {
         if (Position == to)
-            return new(false, new(Position, to), "Cannot move to the same square");
+            return new(false, new(Position, to), "Cannot to to the same square");
 
         if (Board.Pieces.TryGetValue(to, out var piece))
         {
@@ -66,7 +66,4 @@ public abstract record Piece
     }
 
     public record Arguments(ChessPiece ChessPiece, Coordinate Coordinate, Board Board, IInvalidMoveHandler InvalidMoveHandler);
-
-    public MoveResult CheckMove(Coordinate move, Coordinate coordinate) 
-        => CheckMove(new Move(Position, move));
 }
