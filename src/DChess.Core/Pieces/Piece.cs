@@ -7,7 +7,7 @@ public abstract record Piece
     protected Piece(Arguments arguments)
     {
         ChessPiece = arguments.ChessPiece;
-        Coordinate = arguments.Coordinate;
+        Position = arguments.Coordinate;
         Board = arguments.Board;
         InvalidMoveHandler = arguments.InvalidMoveHandler;
     }
@@ -16,9 +16,8 @@ public abstract record Piece
 
     public void MoveTo(Coordinate to)
     {
-        
-        var move = new Move(Coordinate, to);
-        var result = CheckMoveTo(move);
+        var move = new Move(Position, to);
+        var result = CheckMove(move);
         if (!result.Valid)
             InvalidMoveHandler.HandleInvalidMove(move, result.Message);
 
@@ -26,40 +25,35 @@ public abstract record Piece
     }
 
     
-    public MoveResult CheckMoveTo(Move move)
+    public MoveResult CheckMove(Move move)
     {
-        var generalMoveResult = IsGenerallyValid(move);
+        var generalMoveResult = IsGenerallyValid(move.To);
 
         if (generalMoveResult.Valid != true)
             return generalMoveResult;
 
-        var isValidMove = ValidateMove(move);
+        var isValidMove = ValidateMove(move.To);
 
         return isValidMove.Valid ? generalMoveResult : isValidMove;
     }
 
-    private MoveResult IsGenerallyValid(Move move)
+    private MoveResult IsGenerallyValid(Coordinate to)
     {
-        if (move.From == move.To)
-            return new(false, move, "Cannot move to the same square");
+        if (Position == to)
+            return new(false, new(Position, to), "Cannot move to the same square");
 
-        if (Board.Pieces.TryGetValue(move.To, out var piece))
+        if (Board.Pieces.TryGetValue(to, out var piece))
         {
             if (piece.ChessPiece.Colour == ChessPiece.Colour)
-                return new(false, move, "Cannot capture your own piece");
+                return new(false, new(Position, to), "Cannot capture your own piece");
         }
 
-        return new(true, move, null);
+        return new(true, new(Position, to), null);
     }
 
-    protected MoveResult ReportInvalidMove(Move move, string message)
-    {
-        throw new InvalidMoveException(move, message);
-    }
-
-    protected abstract MoveResult ValidateMove(Move move);
+    protected abstract MoveResult ValidateMove(Coordinate to);
     public ChessPiece ChessPiece { get; init; }
-    public Coordinate Coordinate { get; init; }
+    public Coordinate Position { get; init; }
     public Colour Colour => ChessPiece.Colour;
     public PieceType Type => ChessPiece.Type;
     
@@ -68,8 +62,11 @@ public abstract record Piece
     public void Deconstruct(out ChessPiece chessPiece, out Coordinate coordinate)
     {
         chessPiece = ChessPiece;
-        coordinate = Coordinate;
+        coordinate = Position;
     }
 
     public record Arguments(ChessPiece ChessPiece, Coordinate Coordinate, Board Board, IInvalidMoveHandler InvalidMoveHandler);
+
+    public MoveResult CheckMove(Coordinate move, Coordinate coordinate) 
+        => CheckMove(new Move(Position, move));
 }

@@ -9,15 +9,15 @@ public record Pawn : Piece
     {
     }
 
-    protected override MoveResult ValidateMove(Move move)
+    protected override MoveResult ValidateMove(Coordinate to)
     {
-        if (move.To.Rank != move.From.Rank)
-            return new(false, move, "Pawns can only side-step when capturing");
+        if (to.Rank != Position.Rank)
+            return new(false, new(Position, to), "Pawns can only side-step when capturing");
         
-        if ((Colour == White && move.To.File <= move.From.File)
-            || (Colour == Black && move.To.File >= move.From.File))
-            return new(false, move, "Pawns can only move forward");
+        if ((Colour == White && to.File <= Position.File)
+            || (Colour == Black && to.File >= Position.File))
+            return new(false, new(Position, to), "Pawns can only move forward");
 
-        return new(true, move, string.Empty);
+        return new(true, new(Position, to), string.Empty);
     }
 }

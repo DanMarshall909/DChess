@@ -18,7 +18,7 @@ public class GameRuleTests(BoardFixture fixture) : BoardTestBase(fixture)
         // Act
         var boardPiece = Board.Pieces[a1];
         var move = new Move(a1, b1);
-        var result = boardPiece.CheckMoveTo(move);
+        var result = boardPiece.CheckMove(move);
         
         result.Valid.Should().BeFalse();
     }
