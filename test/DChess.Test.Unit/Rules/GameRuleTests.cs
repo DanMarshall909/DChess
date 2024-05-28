@@ -1,5 +1,4 @@
-﻿using DChess.Core.Moves;
-using DChess.Core.Pieces;
+﻿using DChess.Core.Pieces;
 
 namespace DChess.Test.Unit.Rules;
 

@@ -61,8 +61,8 @@ My initial goals are for it to be:
 ### Pawn
 
 - [X] Pawns can only move forward.
-- [ ] Pawns cannot move backwards.
-- [ ] Pawns can only move forward two squares on their first move and one square otherwise.
+- [X] Pawns cannot move backwards.
+- [X] Pawns can only move forward two squares on their first move and one square otherwise.
 - [ ] Pawns can take diagonally.
 
 ### Knight
