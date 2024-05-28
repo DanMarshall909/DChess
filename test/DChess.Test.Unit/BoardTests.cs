@@ -1,11 +1,12 @@
-﻿using DChess.Core.Moves;
+﻿using DChess.Core.Exceptions;
+using DChess.Core.Moves;
 using DChess.Core.Pieces;
 
 namespace DChess.Test.Unit;
 
 public class BoardTests
 {
-    private TestInvalidMoveHandler _invalidMoveHandler = new();
+    private readonly TestInvalidMoveHandler _invalidMoveHandler = new();
     private static ChessPiece WhitePawn => new(PieceType.Pawn, Colour.White);
 
     [Theory(DisplayName = "An invalid position should throw an exception")]
@@ -24,7 +25,7 @@ public class BoardTests
         Action act = () => new Coordinate(positionName);
 #pragma warning restore CA1806
         // Assert
-        act.Should().Throw<ArgumentException>();
+        act.Should().Throw<InvalidCoordinateException>();
     }
 
 
@@ -80,7 +81,7 @@ public class BoardTests
         Action act = () => board[new Coordinate(column, row)] = WhitePawn;
 
         // Assert
-        act.Should().Throw<ArgumentOutOfRangeException>();
+        act.Should().Throw<InvalidCoordinateException>();
     }
 
     [Fact(DisplayName = "Cell shorthand can be used to get a cell")]
@@ -133,7 +134,7 @@ public class BoardTests
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
-        Board.SetStandardLayout(board);
+        board.SetStandardLayout();
 
         // Assert
         board[coordinateString].Should().BeEquivalentTo(new ChessPiece(type, colour));

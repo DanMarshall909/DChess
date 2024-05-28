@@ -66,4 +66,9 @@ public abstract record Piece
     }
 
     public record Arguments(ChessPiece ChessPiece, Coordinate Coordinate, Board Board, IInvalidMoveHandler InvalidMoveHandler);
+
+    public void MoveTo(string coordinateString)
+    {
+        MoveTo(new Coordinate(coordinateString));
+    }
 }

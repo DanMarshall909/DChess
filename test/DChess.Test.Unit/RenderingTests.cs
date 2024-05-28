@@ -2,7 +2,7 @@
 
 public class RenderingTests
 {
-    TestInvalidMoveHandler _invalidMoveHandler = new();
+    readonly TestInvalidMoveHandler _invalidMoveHandler = new();
     
     
     [Fact(DisplayName = "The board should be displayed correctly")]
@@ -33,7 +33,7 @@ public class RenderingTests
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
-        Board.SetStandardLayout(board);
+        board.SetStandardLayout();
         var renderer = new TextRenderer();
 
         renderer.Render(board);

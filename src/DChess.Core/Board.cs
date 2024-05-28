@@ -1,6 +1,6 @@
+using DChess.Core.Exceptions;
 using DChess.Core.Moves;
 using DChess.Core.Pieces;
-using static DChess.Core.Pieces.ChessPiece;
 
 namespace DChess.Core;
 
@@ -40,51 +40,6 @@ public class Board : IDisposable
 
     public bool HasPieceAt(Coordinate coordinate) => _piecesByCoordinate.TryGetValue(coordinate, out _);
 
-    public static void SetStandardLayout(Board board)
-    {
-        Place(a8, BlackRook);
-        Place(b8, BlackKnight);
-        Place(c8, BlackBishop);
-        Place(d8, BlackQueen);
-        Place(e8, BlackKing);
-        Place(f8, BlackBishop);
-        Place(g8, BlackKnight);
-        Place(h8, BlackRook);
-
-        Place(a7, BlackPawn);
-        Place(b7, BlackPawn);
-        Place(c7, BlackPawn);
-        Place(d7, BlackPawn);
-        Place(e7, BlackPawn);
-        Place(f7, BlackPawn);
-        Place(g7, BlackPawn);
-        Place(h7, BlackPawn);
-
-        Place(a2, WhitePawn);
-        Place(b2, WhitePawn);
-        Place(c2, WhitePawn);
-        Place(d2, WhitePawn);
-        Place(e2, WhitePawn);
-        Place(f2, WhitePawn);
-        Place(g2, WhitePawn);
-        Place(h2, WhitePawn);
-
-        Place(a1, WhiteRook);
-        Place(b1, WhiteKnight);
-        Place(c1, WhiteBishop);
-        Place(d1, WhiteQueen);
-        Place(e1, WhiteKing);
-        Place(f1, WhiteBishop);
-        Place(g1, WhiteKnight);
-        Place(h1, WhiteRook);
-        return;
-
-        void Place(Coordinate coordinate, ChessPiece chessPiece)
-        {
-            board._piecesByCoordinate[coordinate] = new ChessPiece(chessPiece.Type, chessPiece.Colour);
-        }
-    }
-
     internal void Move(Move move)
     {
         if (!_piecesByCoordinate.TryGetValue(move.From, out var fromPiece))
@@ -92,5 +47,10 @@ public class Board : IDisposable
 
         _piecesByCoordinate.Remove(move.From);
         _piecesByCoordinate[move.To] = fromPiece;
+    }
+
+    public void Clear()
+    {
+        _piecesByCoordinate.Clear();
     }
 }

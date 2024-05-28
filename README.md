@@ -63,11 +63,12 @@ My initial goals are for it to be:
 - [X] Pawns can only move forward.
 - [X] Pawns cannot move backwards.
 - [X] Pawns can only move forward two squares on their first move and one square otherwise.
-- [ ] Pawns can take diagonally.
+- [X] Pawns can take diagonally.
 
 ### Knight
 
-- [ ] Knights move in an L-shape.
+- [X] Knights move in an L-shape.
+- [ ] Knights can ONLY move in an L-shape.
 - [ ] Knights can jump over other pieces.
 
 ### Bishop

@@ -4,7 +4,7 @@ namespace DChess.Test.Unit;
 
 public class PieceTests
 {
-    private TestInvalidMoveHandler _invalidMoveHandler = new();
+    private readonly TestInvalidMoveHandler _invalidMoveHandler = new();
 
     [Fact(DisplayName = "A piece can be moved")]
     public void a_piece_can_be_moved()

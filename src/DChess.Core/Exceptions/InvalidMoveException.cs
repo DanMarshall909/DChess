@@ -1,6 +1,8 @@
-﻿namespace DChess.Core.Moves;
+﻿using DChess.Core.Moves;
 
-public class InvalidMoveException(Move move, string? message = null) : Exception
+namespace DChess.Core.Exceptions;
+
+public class InvalidMoveException(Move move, string? message = null) : DChessException
 {
     public Move Move { get; } = move;
 

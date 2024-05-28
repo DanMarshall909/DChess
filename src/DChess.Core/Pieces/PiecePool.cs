@@ -31,7 +31,7 @@ public class PiecePool(Board board, IInvalidMoveHandler invalidMoveHandler)
         {
             PieceType.Pawn => new Pawn(arguments),
             Rook => throw new NotImplementedException(),
-            Knight => throw new NotImplementedException(),
+            PieceType.Knight => new Knight(arguments),
             Bishop => throw new NotImplementedException(),
             Queen => throw new NotImplementedException(),
             King => throw new NotImplementedException(),

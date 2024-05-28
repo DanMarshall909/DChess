@@ -1,4 +1,6 @@
-﻿namespace DChess.Core;
+﻿using DChess.Core.Exceptions;
+
+namespace DChess.Core;
 
 public readonly record struct Coordinate
 {
@@ -9,7 +11,7 @@ public readonly record struct Coordinate
     {
         if (positionName.Length != 2)
         {
-            throw new ArgumentException("Position name must be 2 characters long");
+            throw new InvalidCoordinateException("Position name must be 2 characters long");
         }
 
         File = positionName[0];
@@ -31,7 +33,7 @@ public readonly record struct Coordinate
         {
             if (value is < 'a' or > 'h')
             {
-                throw new ArgumentOutOfRangeException(nameof(value),
+                throw new InvalidCoordinateException(_file, _rank,
                     $"File must be between 'a' and 'h' but found {_file.ToString()}");
             }
 
@@ -46,10 +48,12 @@ public readonly record struct Coordinate
         {
             if (value is < 1 or > 8)
             {
-                throw new ArgumentOutOfRangeException(nameof(value), $"Rank must be between 1 and 8 but found {value}");
+                throw new InvalidCoordinateException(_file, _rank, $"Rank must be between 1 and 8 but found {value}");
             }
 
             _rank = value;
         }
     }
+
+    public Coordinate Offset(int df, int dr) => new((char)(File + df), (byte)(Rank + dr));
 }
