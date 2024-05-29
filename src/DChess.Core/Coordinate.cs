@@ -7,17 +7,28 @@ public readonly record struct Coordinate
     private readonly char _file;
     private readonly byte _rank;
 
-    public Coordinate(string positionName)
+    /// <summary>
+    ///  Creates a new Coordinate from a string representation e.g. a1. Note that this is case sensitive
+    /// </summary>
+    /// <param name="coordinateAsString">The string representation of the coordinate</param>
+    /// <exception cref="InvalidCoordinateException">Thrown if the string is not 2 characters long or if the file or rank is out of bounds</exception>
+    public Coordinate(string coordinateAsString)
     {
-        if (positionName.Length != 2)
+        if (coordinateAsString.Length != 2)
         {
             throw new InvalidCoordinateException("Position name must be 2 characters long");
         }
 
-        File = positionName[0];
-        Rank = (byte)(positionName[1] - '0');
+        File = coordinateAsString[0];
+        Rank = (byte)(coordinateAsString[1] - '0');
     }
 
+    /// <summary>
+    ///  Creates a new Coordinate from 
+    /// </summary>
+    /// <param name="File">The file of the coordinate (a-h) running from left to right on a chess board</param>
+    /// <param name="Rank">The rank of the coordinate (1-8) running from bottom to top on a chess board</param>
+    /// <exception cref="InvalidCoordinateException">Thrown if the string is not 2 characters long or if the file or rank is out of bounds</exception>
     public Coordinate(char File, byte Rank)
     {
         this.File = File;
@@ -26,6 +37,10 @@ public readonly record struct Coordinate
 
     public override string ToString() => $"{File}{Rank}";
 
+    /// <summary>
+    /// The file of the coordinate (a-h) running from left to right on a chess board
+    /// </summary>
+    /// <exception cref="InvalidCoordinateException">Thrown if out of bounds</exception>
     public char File
     {
         get => _file;
@@ -41,6 +56,10 @@ public readonly record struct Coordinate
         }
     }
 
+    /// <summary>
+    /// The rank of the coordinate (1-8) running from bottom to top on a chess board
+    /// </summary>
+    /// <exception cref="InvalidCoordinateException">Thrown if out of bounds</exception>
     public byte Rank
     {
         get => (byte)_rank;
@@ -55,5 +74,11 @@ public readonly record struct Coordinate
         }
     }
 
-    public Coordinate Offset(int df, int dr) => new((char)(File + df), (byte)(Rank + dr));
+    /// <summary>
+    /// Returns a new Coordinate that is offset by dFile and dRank cells
+    /// </summary>
+    /// <param name="dFile">The number of files to move</param>
+    /// <param name="dRank">The number of ranks to move</param>
+    /// <returns></returns>
+    public Coordinate Offset(int dFile, int dRank) => new((char)(File + dFile), (byte)(Rank + dRank));
 }
