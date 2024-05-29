@@ -34,17 +34,20 @@ My initial goals are for it to be:
 - [x] Populate the board with initial positions for all pieces.
 
 ## Move text rendering into a separate class
+
 - [X] Provide interface for rendering the board
-  -  [X] Takes in a board and returns a string representation of the board
+    -  [X] Takes in a board and returns a string representation of the board
 - [X] Adjust the display logic to use the new class
 
 ## Refactor the board to be a collection of pieces rather than a 2D array of cells
 
-- [X] Create a `Piece` base abstract class that holds the piece type and colour (eventually it will contain the rules and other things specific to that piece).
+- [X] Create a `Piece` base abstract class that holds the piece type and colour (eventually it will contain the rules
+  and other things specific to that piece).
 - [X] Refactor the `Board` class to store pieces and their positions.
 - [X] Update the display logic to show pieces on the board.
 
 ## Refactor to make use flyweight pattern for pieces
+
 - [X] Create an object pool for pieces that returns objects rather than structs, but still uses structs for the board.
 - [X] Refactor the board to use the object pool.
 
@@ -52,7 +55,7 @@ My initial goals are for it to be:
 
 - [X] Add a method on the piece base class to move by coordinate.
 - [X] Add a method to check if the move is generally valid.
-- [X] Add a virtual method to check if a move for the particular piece type is valid.  
+- [X] Add a virtual method to check if a move for the particular piece type is valid.
 - [X] Disallow taking your own pieces.
 - [X] ~~Disallow moving off the board. Already handled by Coordinate validation~~
 
@@ -68,8 +71,8 @@ My initial goals are for it to be:
 ### Knight
 
 - [X] Knights move in an L-shape.
-- [ ] Knights can ONLY move in an L-shape.
-- [ ] Knights can jump over other pieces.
+- [X] Knights can ONLY move in an L-shape.
+- [X] Knights can jump over other pieces.
 
 ### Bishop
 
@@ -93,19 +96,21 @@ My initial goals are for it to be:
 ## Movement Rules phase 2 (requiring game rules to be implemented)
 
 ### Capturing
+
 - [ ] Ensure pawns can move diagonally only when capturing an opponent’s piece.
 - [ ] Enforce that pawns can be promoted upon reaching the opposite end of the board.
 
 ### Check
+
 - [ ] Implement rules for check (king is under threat).
 - [ ] Implement rules for checkmate (king is in check and no legal moves can remove the threat).
 - [ ] Ensure kings cannot move into check.
 - [ ] Disallow moves that would put the player in check.
- 
+
 - [ ] Enforce that only moves to a square occupied by an opposing piece are captures.
 - [ ] Implement castling rules
-  - The king and rook haven't moved
-  - The squares between them are unoccupied.
+    - The king and rook haven't moved
+    - The squares between them are unoccupied.
 - [ ] Implement en passant capturing rules.
 - [ ] Ensure special moves adhere to the context-specific conditions (like the positions of pieces for castling and en
   passant).
@@ -141,9 +146,11 @@ My initial goals are for it to be:
 
 ## AI
 
-- [ ] Implement a basic AI to play against the user. The AI should be able to make legal moves based on the current board
+- [ ] Implement a basic AI to play against the user. The AI should be able to make legal moves based on the current
+  board
   state.
 
-# Optimisation 
+# Optimisation
+
 - [ ] Use bitboards to represent the board state
 - [X] Use the flyweight pattern to reduce memory usage
