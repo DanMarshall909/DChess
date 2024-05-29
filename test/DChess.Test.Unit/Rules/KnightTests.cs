@@ -6,7 +6,15 @@ public class KnightTests(BoardFixture fixture) : BoardTestBase(fixture)
 {
     private (int, int)[] _validKnightMovementOffsets =
     {
-        (1, -2), (-1, 2), (1, -2), (-1, -2), (-2, 1), (2, -1), (-2, 1), (-2, -1)
+        (1, 2),
+        (1, -2),
+        (-1, 2),
+        (-1, -2),
+
+        (2, 1),
+        (2, -1),
+        (-2, 1),
+        (-2, -1)
     };
 
     [Fact(DisplayName = "Knights can only move in an L shape")]
@@ -43,31 +51,43 @@ public class KnightTests(BoardFixture fixture) : BoardTestBase(fixture)
     public void knights_can_only_move_in_an_L_shape()
     {
         // check every possible starting position from a3 to f5 excluding out of bounds positions
-        for (byte fromRank = 3; fromRank < 6; fromRank++)
+        for (byte fromRank = 1; fromRank < 8; fromRank++)
         {
-            for (var fromFile = 'c'; fromFile < 'f'; fromFile++)
+            for (var fromFile = 'a'; fromFile < 'h'; fromFile++)
             {
                 var from = new Coordinate(fromFile, fromRank);
 
                 Board.Clear();
                 Board[from] = WhiteKnight;
 
-                // check every possible move and make sure it's not invalid except for the offsets specified in _validKnightMovementOffsets
-                for (byte toRank = 1; toRank < 8; toRank++)
-                {
-                    for (var toFile = 'a'; toFile < 'h'; toFile++)
-                    {
-                        int df = from.File - toFile;
-                        int dr = from.Rank - toRank;
-                        
-                        if (_validKnightMovementOffsets.Contains((df, dr)))
-                            continue;
+                // check every possible move and make sure it's not valid except for the offsets specified in _validKnightMovementOffsets
+                TestInvalidMoves(from);
+            }
+        }
+    }
 
-                        var to = from.Offset(df, dr);
-                        Board.Pieces[from].CheckMove(to).Valid
-                            .Should().BeFalse(
-                                $"Knight should not be able to move from {from} to {to})");
-                    }
+    private void TestInvalidMoves(Coordinate from)
+    {
+        for (byte toRank = 1; toRank < 8; toRank++)
+        {
+            for (var toFile = 'a'; toFile < 'h'; toFile++)
+            {
+                try
+                {
+                    int df = from.File - toFile;
+                    int dr = from.Rank - toRank;
+
+                    if (_validKnightMovementOffsets.Contains((df, dr)))
+                        continue;
+
+                    var to = from.Offset(df, dr);
+                    bool valid = Board.Pieces[from].CheckMove(to).Valid;
+
+                    valid.Should().BeFalse($"Knight should not be able to move from {from} to {to})");
+                }
+                catch (InvalidCoordinateException)
+                {
+                    // ignore out of bounds coordinates
                 }
             }
         }

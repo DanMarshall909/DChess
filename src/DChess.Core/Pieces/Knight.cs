@@ -16,27 +16,14 @@ internal record Knight : Piece
 
     private MoveResult MoveMustBeLShape(Coordinate to, Move move)
     {
-        var dx = Math.Abs(to.File - Position.File);
-        var dy = Math.Abs(to.Rank - Position.Rank);
+        int dx = Math.Abs(to.File - Position.File);
+        int dy = Math.Abs(to.Rank - Position.Rank);
 
-        switch (dx)
+        return dx switch
         {
-            case 1:
-            {
-                if (dy == 2)
-                    return move.AsOkResult;
-                break;
-            }
-            case 2:
-            {
-                if (dy == 1)
-                    return move.AsOkResult;
-                break;
-            }
-            default:
-                return move.AsOkResult;
-        }
-
-        return move.AsInvalidResult("Knights can only move in an L shape");
+            1 when dy == 2 => move.AsOkResult,
+            2 when dy == 1 => move.AsOkResult,
+            _ => move.AsInvalidResult("Knights can only move in an L shape")
+        };
     }
 }
