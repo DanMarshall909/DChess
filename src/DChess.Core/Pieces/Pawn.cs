@@ -12,7 +12,7 @@ public record Pawn : Piece
     protected override MoveResult ValidateMove(Coordinate to)
     {
         var move = new Move(Position, to);
-        
+
         if ((Colour == White && to.File <= Position.File)
             || (Colour == Black && to.File >= Position.File))
             return move.AsInvalidResult("Pawns can only move forward");
@@ -36,7 +36,7 @@ public record Pawn : Piece
             > 2 => move.AsInvalidResult("Pawns can only move 1 or 2 squares forward"),
             2 when Position.File != 2 && Position.File != 7 => move.AsInvalidResult(
                 "Pawns can only move 2 squares forward from starting position"),
-            _ => new(true, new(Position, to), string.Empty)
+            _ => new MoveResult(true, new Move(Position, to), string.Empty)
         };
     }
 }

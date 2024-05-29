@@ -23,7 +23,7 @@ public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
         Board.Pieces[f2].MoveTo(d2);
         Board.Pieces[d2].CheckMove(b2).Valid.Should().BeFalse("The pawn has already moved");
     }
-    
+
     [Fact(DisplayName = "Pawns can take pieces diagonally")]
     public void pawns_can_take_pieces_diagonally()
     {

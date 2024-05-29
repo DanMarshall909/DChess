@@ -24,7 +24,7 @@ public abstract record Piece
         Board.Move(move);
     }
 
-    
+
     public MoveResult CheckMove(Coordinate to)
     {
         var generalMoveResult = IsGenerallyValid(to);
@@ -40,15 +40,13 @@ public abstract record Piece
     private MoveResult IsGenerallyValid(Coordinate to)
     {
         if (Position == to)
-            return new(false, new(Position, to), "Cannot to to the same square");
+            return new MoveResult(false, new Move(Position, to), "Cannot to to the same square");
 
         if (Board.Pieces.TryGetValue(to, out var piece))
-        {
             if (piece.ChessPiece.Colour == ChessPiece.Colour)
-                return new(false, new(Position, to), "Cannot capture your own piece");
-        }
+                return new MoveResult(false, new Move(Position, to), "Cannot capture your own piece");
 
-        return new(true, new(Position, to), null);
+        return new MoveResult(true, new Move(Position, to), null);
     }
 
     protected abstract MoveResult ValidateMove(Coordinate to);
@@ -56,7 +54,7 @@ public abstract record Piece
     public Coordinate Position { get; init; }
     public Colour Colour => ChessPiece.Colour;
     public PieceType Type => ChessPiece.Type;
-    
+
     protected Board Board { get; init; }
 
     public void Deconstruct(out ChessPiece chessPiece, out Coordinate coordinate)
@@ -65,7 +63,8 @@ public abstract record Piece
         coordinate = Position;
     }
 
-    public record Arguments(ChessPiece ChessPiece, Coordinate Coordinate, Board Board, IInvalidMoveHandler InvalidMoveHandler);
+    public record Arguments(ChessPiece ChessPiece, Coordinate Coordinate, Board Board,
+        IInvalidMoveHandler InvalidMoveHandler);
 
     public void MoveTo(string coordinateString)
     {

@@ -15,9 +15,7 @@ public readonly record struct Coordinate
     public Coordinate(string coordinateAsString)
     {
         if (coordinateAsString.Length != 2)
-        {
             throw new InvalidCoordinateException("Position name must be 2 characters long");
-        }
 
         File = coordinateAsString[0];
         Rank = (byte)(coordinateAsString[1] - '0');
@@ -47,10 +45,8 @@ public readonly record struct Coordinate
         private init
         {
             if (value is < 'a' or > 'h')
-            {
                 throw new InvalidCoordinateException(_file, _rank,
                     $"File must be between 'a' and 'h' but found {_file.ToString()}");
-            }
 
             _file = value;
         }
@@ -66,9 +62,7 @@ public readonly record struct Coordinate
         private init
         {
             if (value is < 1 or > 8)
-            {
                 throw new InvalidCoordinateException(_file, _rank, $"Rank must be between 1 and 8 but found {value}");
-            }
 
             _rank = value;
         }

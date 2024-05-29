@@ -20,10 +20,9 @@ public class PiecePoolTests
         var secondPieceWithSameDefinition = pool.Get(a1, pieceStruct);
 
         // Assert
-        piece.Should().BeEquivalentTo(new Pawn(new(pieceStruct, a1, board, _invalidMoveHandler)));
+        piece.Should().BeEquivalentTo(new Pawn(new Piece.Arguments(pieceStruct, a1, board, _invalidMoveHandler)));
         piece.Should().Be(secondPieceWithSameDefinition, "the piece should be the same instance");
-        
+
         piece.GetType().Should().Be<Pawn>();
     }
-    
 }

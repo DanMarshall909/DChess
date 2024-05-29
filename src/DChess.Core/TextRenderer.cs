@@ -25,9 +25,7 @@ public class TextRenderer : IBoardRenderer
             }
 
             if (rank > 1) // Don't append newline on the last line
-            {
                 result.AppendLine();
-            }
         }
 
         LastRender = result.ToString();

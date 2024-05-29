@@ -4,7 +4,6 @@ namespace DChess.Test.Unit.Rules;
 
 public class GameRuleTests(BoardFixture fixture) : BoardTestBase(fixture)
 {
-
     [Fact(DisplayName = "A piece cannot take its own piece")]
     public void a_piece_cannot_take_its_own_piece()
     {
@@ -17,7 +16,7 @@ public class GameRuleTests(BoardFixture fixture) : BoardTestBase(fixture)
         // Act
         var boardPiece = Board.Pieces[a1];
         var result = boardPiece.CheckMove(b2);
-        
+
         result.Valid.Should().BeFalse();
     }
 }
