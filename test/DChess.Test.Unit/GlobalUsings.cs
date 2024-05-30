@@ -1,5 +1,4 @@
-global using DChess.Core;
 global using Xunit;
 global using FluentAssertions;
-global using static DChess.Core.NamedCoordinate;
-global using static DChess.Core.Pieces.ChessPiece;
+global using static DChess.Core.Board.NamedCoordinate;
+global using static DChess.Core.Pieces.NamedChessPiece;

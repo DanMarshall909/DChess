@@ -1,4 +1,4 @@
-﻿namespace DChess.Core;
+﻿namespace DChess.Core.Board;
 
 public static class NamedCoordinate
 {

@@ -1,4 +1,4 @@
-﻿namespace DChess.Core.Pieces;
+﻿namespace DChess.Core.Board;
 
 public enum Colour
 {

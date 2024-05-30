@@ -1,4 +1,5 @@
-﻿using DChess.Core.Moves;
+﻿using DChess.Core.Board;
+using DChess.Core.Moves;
 
 namespace DChess.Core.Pieces;
 
@@ -55,7 +56,7 @@ public abstract record Piece
     public Colour Colour => ChessPiece.Colour;
     public PieceType Type => ChessPiece.Type;
 
-    protected Board Board { get; init; }
+    protected Board.Board Board { get; init; }
 
     public void Deconstruct(out ChessPiece chessPiece, out Coordinate coordinate)
     {
@@ -63,7 +64,7 @@ public abstract record Piece
         coordinate = Position;
     }
 
-    public record Arguments(ChessPiece ChessPiece, Coordinate Coordinate, Board Board,
+    public record Arguments(ChessPiece ChessPiece, Coordinate Coordinate, Board.Board Board,
         IInvalidMoveHandler InvalidMoveHandler);
 
     public void MoveTo(string coordinateString)

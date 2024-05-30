@@ -1,4 +1,6 @@
-﻿namespace DChess.Core.Moves;
+﻿using DChess.Core.Board;
+
+namespace DChess.Core.Moves;
 
 public readonly struct Move(Coordinate from, Coordinate to)
 {

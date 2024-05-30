@@ -1,4 +1,4 @@
-﻿namespace DChess.Test.Unit.Rules;
+﻿namespace DChess.Test.Unit.Rules.Pieces;
 
 public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
 {

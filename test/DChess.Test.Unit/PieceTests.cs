@@ -1,4 +1,5 @@
-﻿using DChess.Core.Pieces;
+﻿using DChess.Core.Board;
+using DChess.Core.Pieces;
 
 namespace DChess.Test.Unit;
 

@@ -1,8 +1,8 @@
-﻿using DChess.Core.Pieces;
+﻿using DChess.Core.Board;
 
 namespace DChess.Test.Unit.Rules;
 
-public class GameRuleTests(BoardFixture fixture) : BoardTestBase(fixture)
+public class GeneralGameRuleTests(BoardFixture fixture) : BoardTestBase(fixture)
 {
     [Fact(DisplayName = "A piece cannot take its own piece")]
     public void a_piece_cannot_take_its_own_piece()

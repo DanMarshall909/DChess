@@ -1,4 +1,6 @@
-﻿namespace DChess.Test.Unit;
+﻿using DChess.Core.Board;
+
+namespace DChess.Test.Unit;
 
 public abstract class BoardTestBase(BoardFixture fixture) : IClassFixture<BoardFixture>
 {

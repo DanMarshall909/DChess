@@ -1,14 +1,15 @@
 ﻿using DChess.Core.Moves;
-using static DChess.Core.Pieces.PieceType;
+using DChess.Core.Pieces;
+using static DChess.Core.Board.PieceType;
 
-namespace DChess.Core.Pieces;
+namespace DChess.Core.Board;
 
 /// <summary>
 /// A pool of pieces that can be reused to reduce memory allocation / GC pressure
 /// This allows us to use structs to store the chessPiece internally, but expose classes
 /// to the outside world to allow for polymorphism.
 /// </summary>
-public class PiecePool(Board board, IInvalidMoveHandler invalidMoveHandler)
+public class PiecePool(Core.Board.Board board, IInvalidMoveHandler invalidMoveHandler)
 {
     private readonly Dictionary<(Coordinate, ChessPiece), Piece> _pool = new();
 
@@ -30,7 +31,7 @@ public class PiecePool(Board board, IInvalidMoveHandler invalidMoveHandler)
         return chessPiece.Type switch
         {
             PieceType.Pawn => new Pawn(arguments),
-            Rook => throw new NotImplementedException(),
+            PieceType.Rook => new Rook(arguments),
             PieceType.Knight => new Knight(arguments),
             Bishop => throw new NotImplementedException(),
             Queen => throw new NotImplementedException(),

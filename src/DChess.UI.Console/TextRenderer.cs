@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using DChess.Core.Pieces;
+using DChess.Core.Board;
 
-namespace DChess.Core;
+namespace DChess.UI.Console;
 
 public class TextRenderer : IBoardRenderer
 {
@@ -19,9 +19,9 @@ public class TextRenderer : IBoardRenderer
 
             for (var file = 'a'; file <= 'h'; file++)
             {
-                char square = PieceChar(file, rank, board);
+                char cell = RenderCell(board, file, rank);
 
-                result.Append(square);
+                result.Append(cell);
             }
 
             if (rank > 1) // Don't append newline on the last line
@@ -30,6 +30,8 @@ public class TextRenderer : IBoardRenderer
 
         LastRender = result.ToString();
     }
+
+    private static char RenderCell(Board board, char file, byte rank) => PieceChar(file, rank, board);
 
     private static char PieceChar(char file, byte rank, Board board)
     {

@@ -1,6 +1,7 @@
-﻿using DChess.Core.Exceptions;
+﻿using DChess.Core.Board;
+using DChess.Core.Exceptions;
 
-namespace DChess.Test.Unit.Rules;
+namespace DChess.Test.Unit.Rules.Pieces;
 
 public class KnightTests(BoardFixture fixture) : BoardTestBase(fixture)
 {

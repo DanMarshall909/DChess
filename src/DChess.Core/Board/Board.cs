@@ -2,7 +2,7 @@ using DChess.Core.Exceptions;
 using DChess.Core.Moves;
 using DChess.Core.Pieces;
 
-namespace DChess.Core;
+namespace DChess.Core.Board;
 
 public class Board : IDisposable
 {

@@ -1,6 +1,8 @@
-﻿namespace DChess.Core.Pieces;
+﻿using DChess.Core.Board;
 
-public readonly struct ChessPiece(PieceType type, Colour colour)
+namespace DChess.Core.Pieces;
+
+public static class NamedChessPiece
 {
     public static readonly ChessPiece WhitePawn = new(PieceType.Pawn, White);
     public static readonly ChessPiece WhiteRook = new(PieceType.Rook, White);
@@ -14,7 +16,4 @@ public readonly struct ChessPiece(PieceType type, Colour colour)
     public static readonly ChessPiece BlackBishop = new(PieceType.Bishop, Black);
     public static readonly ChessPiece BlackQueen = new(PieceType.Queen, Black);
     public static readonly ChessPiece BlackKing = new(PieceType.King, Black);
-
-    public PieceType Type { get; private init; } = type;
-    public Colour Colour { get; private init; } = colour;
 }

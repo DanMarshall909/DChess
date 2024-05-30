@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DChess.UI.Console", "src\DChess.UI.Console\DChess.UI.Console.csproj", "{4512A66F-4FB7-4A3A-8E95-413959B6EA8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,5 +31,9 @@ Global
 		{45DC4E6F-9FCC-40DA-940C-598E5D6CC403}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45DC4E6F-9FCC-40DA-940C-598E5D6CC403}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45DC4E6F-9FCC-40DA-940C-598E5D6CC403}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4512A66F-4FB7-4A3A-8E95-413959B6EA8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4512A66F-4FB7-4A3A-8E95-413959B6EA8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4512A66F-4FB7-4A3A-8E95-413959B6EA8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4512A66F-4FB7-4A3A-8E95-413959B6EA8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

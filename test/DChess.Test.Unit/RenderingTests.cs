@@ -1,4 +1,7 @@
-﻿namespace DChess.Test.Unit;
+﻿using DChess.Core.Board;
+using DChess.UI.Console;
+
+namespace DChess.Test.Unit;
 
 public class RenderingTests
 {

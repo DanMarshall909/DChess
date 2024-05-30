@@ -1,6 +1,6 @@
 ﻿using DChess.Core.Exceptions;
 
-namespace DChess.Core;
+namespace DChess.Core.Board;
 
 public readonly record struct Coordinate
 {

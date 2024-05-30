@@ -25,6 +25,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\DChess.Core\DChess.Core.csproj"/>
+        <ProjectReference Include="..\..\src\DChess.UI.Console\DChess.UI.Console.csproj" />
     </ItemGroup>
 
 </Project>
