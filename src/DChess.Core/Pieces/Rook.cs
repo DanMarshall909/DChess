@@ -9,5 +9,13 @@ internal record Rook : Piece
     {
     }
 
-    protected override MoveResult ValidateMove(Coordinate to) => throw new NotImplementedException();
+    protected override MoveResult ValidateMove(Coordinate to)
+    {
+        var move = new Move(Position, to);
+        
+        if (Position.File != to.File && Position.Rank != to.Rank)
+            return move.AsInvalidResult("Rook can only move in a straight line");
+        
+        return move.AsOkResult;
+    }
 }
