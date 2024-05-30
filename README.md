@@ -74,15 +74,15 @@ My initial goals are for it to be:
 - [X] Knights can ONLY move in an L-shape.
 - [X] Knights can jump over other pieces.
 
-### Bishop
-
-- [ ] Bishops move diagonally any number of squares.
-- [ ] Bishops cannot jump over other pieces.
-
 ### Rook
 
 - [ ] Rooks move horizontally or vertically any number of squares.
 - [ ] Rooks cannot jump over other pieces.
+
+### Bishop
+
+- [ ] Bishops move diagonally any number of squares.
+- [ ] Bishops cannot jump over other pieces.
 
 ### Queen
 
@@ -149,6 +149,39 @@ My initial goals are for it to be:
 - [ ] Implement a basic AI to play against the user. The AI should be able to make legal moves based on the current
   board
   state.
+
+## REST API
+- This is a stretch goal, but I'd like to implement a REST API for the game. 
+- The code will run on an Azure Function or AWS Lambda.
+- No game state will be stored on the server, but the server will be able to compute the next move based on current game state passed in the request.
+- Rate limiting will be implemented to prevent abuse.
+- Powershell and bash scripts will be provided to allow the game to be played from the command line without using the API directly. 
+The API will have the following endpoints:
+### Endpoints
+#### GET /
+
+- This endpoint returns a welcome message along with helpful information on how to use the API.
+- Example response:
+```
+Welcome to DChess API!
+- To get started with a new game, use call the /new endpoint.
+```
+
+#### GET /new
+Returns a new game state with the initial board setup a link to the game state.
+
+#### GET /game?bitboard={`bitboards`}&name={`name`}&colour={`black`|`white`}&turn={`black`|`white`}&level={`level`}&render={`true`|`false`}&move={`move`}
+
+This endpoint returns a board with a given game state.
+
+- `bitboard`: A string representation of the bitboards in hexadecimal.
+- `name`: The current player's name.
+- `colour`: The current player's colour, either `black` or `white`.
+- `turn`: The current turn.
+- `level` (optional - defaults to 1): The difficulty level of the AI player.
+- `render` (optional defaults to `true`): If `true`, the board will be rendered as a string. If `false`, the bitboards will be returned.
+- `move` (optional): The move to be made by the player. If the move is valid, the board will be updated with the new move and the AI will make its move. `move` can be specified as a string in algebraic notation (see https://en.wikipedia.org/wiki/Algebraic_notation_(chess)) or as a pair of coordinates e.g. `e2e4`.
+
 
 # Optimisation
 
