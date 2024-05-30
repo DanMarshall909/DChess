@@ -29,7 +29,8 @@ public class KnightTests(BoardFixture fixture) : BoardTestBase(fixture)
             Board.Clear();
             Board[from] = WhiteKnight;
 
-            foreach ((int df, int dr) in _validOffsetsForKnightsFromStartingPosition) KnightShouldBeAbleToMoveByOffset(df, dr);
+            foreach ((int df, int dr) in _validOffsetsForKnightsFromStartingPosition)
+                KnightShouldBeAbleToMoveByOffset(df, dr);
 
             continue;
 
@@ -42,7 +43,7 @@ public class KnightTests(BoardFixture fixture) : BoardTestBase(fixture)
             }
         }
     }
-    
+
     [Fact(DisplayName = "Knights can jump over other pieces")]
     public void knights_can_jump_over_other_pieces()
     {
@@ -55,7 +56,8 @@ public class KnightTests(BoardFixture fixture) : BoardTestBase(fixture)
             Board[from] = WhiteKnight;
             SurroundWithWhitePawns(from);
 
-            foreach ((int df, int dr) in _validOffsetsForKnightsFromStartingPosition) KnightShouldBeAbleToMoveByOffset(df, dr);
+            foreach ((int df, int dr) in _validOffsetsForKnightsFromStartingPosition)
+                KnightShouldBeAbleToMoveByOffset(df, dr);
 
             continue;
 
@@ -68,7 +70,7 @@ public class KnightTests(BoardFixture fixture) : BoardTestBase(fixture)
             }
         }
     }
-    
+
     private void SurroundWithWhitePawns(Coordinate from)
     {
         Board[from.Offset(-1, 1)] = WhitePawn;

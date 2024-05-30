@@ -9,7 +9,7 @@ namespace DChess.Core.Board;
 /// This allows us to use structs to store the chessPiece internally, but expose classes
 /// to the outside world to allow for polymorphism.
 /// </summary>
-public class PiecePool(Core.Board.Board board, IInvalidMoveHandler invalidMoveHandler)
+public class PiecePool(Board board, IInvalidMoveHandler invalidMoveHandler)
 {
     private readonly Dictionary<(Coordinate, ChessPiece), Piece> _pool = new();
 

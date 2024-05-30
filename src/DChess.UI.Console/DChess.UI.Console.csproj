@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DChess.Core\DChess.Core.csproj" />
+        <ProjectReference Include="..\DChess.Core\DChess.Core.csproj"/>
     </ItemGroup>
 
 </Project>
