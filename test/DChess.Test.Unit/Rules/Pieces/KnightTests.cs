@@ -1,11 +1,11 @@
-﻿using DChess.Core.Board;
+using DChess.Core.Board;
 using DChess.Core.Exceptions;
 
 namespace DChess.Test.Unit.Rules.Pieces;
 
 public class KnightTests(BoardFixture fixture) : BoardTestBase(fixture)
 {
-    private (int, int)[] _validKnightMovementOffsets =
+    private (int, int)[] _validOffsetsForKnightsFromStartingPosition =
     {
         (1, 2),
         (1, -2),
@@ -29,7 +29,7 @@ public class KnightTests(BoardFixture fixture) : BoardTestBase(fixture)
             Board.Clear();
             Board[from] = WhiteKnight;
 
-            foreach ((int df, int dr) in _validKnightMovementOffsets) KnightShouldBeAbleToMoveByOffset(df, dr);
+            foreach ((int df, int dr) in _validOffsetsForKnightsFromStartingPosition) KnightShouldBeAbleToMoveByOffset(df, dr);
 
             continue;
 
@@ -55,7 +55,7 @@ public class KnightTests(BoardFixture fixture) : BoardTestBase(fixture)
             Board[from] = WhiteKnight;
             SurroundWithWhitePawns(from);
 
-            foreach ((int df, int dr) in _validKnightMovementOffsets) KnightShouldBeAbleToMoveByOffset(df, dr);
+            foreach ((int df, int dr) in _validOffsetsForKnightsFromStartingPosition) KnightShouldBeAbleToMoveByOffset(df, dr);
 
             continue;
 
@@ -95,7 +95,7 @@ public class KnightTests(BoardFixture fixture) : BoardTestBase(fixture)
             Board.Clear();
             Board[from] = WhiteKnight;
 
-            // check every possible move and make sure it's not valid except for the offsets specified in _validKnightMovementOffsets
+            // check every possible move and make sure it's not valid except for the offsets specified in _validOffsetsForKnightsFromStartingPosition
             TestInvalidMoves(from);
         }
     }
@@ -109,7 +109,7 @@ public class KnightTests(BoardFixture fixture) : BoardTestBase(fixture)
                 int df = from.File - toFile;
                 int dr = from.Rank - toRank;
 
-                if (_validKnightMovementOffsets.Contains((df, dr)))
+                if (_validOffsetsForKnightsFromStartingPosition.Contains((df, dr)))
                     continue;
 
                 var to = from.Offset(df, dr);
