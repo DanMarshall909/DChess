@@ -1,6 +1,5 @@
-﻿using DChess.Core.Moves;
+using DChess.Core.Moves;
 using DChess.Core.Pieces;
-using static DChess.Core.Board.PieceType;
 
 namespace DChess.Core.Board;
 
@@ -34,7 +33,7 @@ public class PiecePool(Board board, IInvalidMoveHandler invalidMoveHandler)
             PieceType.Rook => new Rook(arguments),
             PieceType.Knight => new Knight(arguments),
             PieceType.Bishop => new Bishop(arguments),
-            PieceType.Queen => throw new NotImplementedException(),
+            PieceType.Queen => new Queen(arguments),
             PieceType.King => throw new NotImplementedException(),
             _ => throw new ArgumentOutOfRangeException(nameof(chessPiece.Type), chessPiece.Type, null)
         };

@@ -12,8 +12,7 @@ internal record Bishop : Piece
     protected override MoveResult ValidateMove(Coordinate to)
     {
         var move = new Move(Position, to);
-
-        if (Math.Abs(to.File - Position.File) != Math.Abs(to.Rank - Position.Rank))
+        if (!move.IsDiagonal)
             return move.AsInvalidResult("Bishop can only move diagonally");
         
         return move.AsOkResult;

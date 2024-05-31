@@ -29,7 +29,8 @@ public static class MovementTestingExtensions
         IReadOnlyCollection<MoveOffset> validOffsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
     {
         piece.ShouldBeAbleToMoveTo(validOffsetsFromCurrentPosition, setupBoard);
-        piece.ShouldNotBeAbleToMoveTo(validOffsetsFromCurrentPosition.Inverse().ToList().AsReadOnly(), setupBoard);
+        var invalidOffsetsFromCurrentPosition = validOffsetsFromCurrentPosition.Inverse().ToList().AsReadOnly();
+        piece.ShouldNotBeAbleToMoveTo(invalidOffsetsFromCurrentPosition, setupBoard);
     }
 
     /// <summary>
@@ -122,9 +123,9 @@ public static class MovementTestingExtensions
         var offsets = new List<MoveOffset>();
         int files = movesFromCenter.GetLength(0);
         int ranks = movesFromCenter.GetLength(1);
-        if (files != 17 || ranks != 17)
+        if (files != 15 || ranks != 15)
         {
-            throw new ArgumentException("Matrix must be 17x17");
+            throw new ArgumentException("Matrix must be 15x15");
         }
         for (var i = 0; i < files; i++)
         {
@@ -132,7 +133,7 @@ public static class MovementTestingExtensions
             {
                 if (movesFromCenter[i, j] == LegalPositionValue)
                 {
-                    offsets.Add((i - 8, j - 8));
+                    offsets.Add((i - 7, j - 7));
                 }
             }
         }

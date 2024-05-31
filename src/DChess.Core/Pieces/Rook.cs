@@ -13,7 +13,7 @@ internal record Rook : Piece
     {
         var move = new Move(Position, to);
         
-        if (Position.File != to.File && Position.Rank != to.Rank)
+        if (!(move.IsHorizontal || move.IsVertical))
             return move.AsInvalidResult("Rook can only move in a straight line");
         
         return move.AsOkResult;
