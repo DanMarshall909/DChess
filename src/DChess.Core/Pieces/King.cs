@@ -3,9 +3,9 @@ using DChess.Core.Moves;
 
 namespace DChess.Core.Pieces;
 
-internal record Queen : Piece
+internal record King : Piece
 {
-    public Queen(Arguments arguments) : base(arguments)
+    public King(Arguments arguments) : base(arguments)
     {
     }
 
@@ -14,7 +14,7 @@ internal record Queen : Piece
         var move = new Move(Position, to);
         
         if (!(move.IsDiagonal || move.IsVertical || move.IsHorizontal))
-            return move.AsInvalidResult("Queen can only move diagonally, or in a straight line");
+            return move.AsInvalidResult("King move in any direction but only 1 square at a time");
         
         return move.AsOkResult;
     }
