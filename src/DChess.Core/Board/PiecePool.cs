@@ -34,8 +34,8 @@ public class PiecePool(Board board, IInvalidMoveHandler invalidMoveHandler)
             PieceType.Rook => new Rook(arguments),
             PieceType.Knight => new Knight(arguments),
             PieceType.Bishop => new Bishop(arguments),
-            Queen => throw new NotImplementedException(),
-            King => throw new NotImplementedException(),
+            PieceType.Queen => throw new NotImplementedException(),
+            PieceType.King => throw new NotImplementedException(),
             _ => throw new ArgumentOutOfRangeException(nameof(chessPiece.Type), chessPiece.Type, null)
         };
     }
