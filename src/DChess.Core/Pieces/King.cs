@@ -16,6 +16,9 @@ internal record King : Piece
         if (!(move.IsDiagonal || move.IsVertical || move.IsHorizontal))
             return move.AsInvalidResult("King move in any direction but only 1 square at a time");
         
+        if (move.Distance > 1)
+            return move.AsInvalidResult("King can only move 1 square diagonally");
+        
         return move.AsOkResult;
     }
 }
