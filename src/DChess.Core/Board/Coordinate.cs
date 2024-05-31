@@ -87,7 +87,7 @@ public readonly record struct Coordinate
     /// <returns></returns>
     public bool IsValidOffset(MoveOffset moveOffset) => IsValid((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
     
-    public bool TryOffset(MoveOffset moveOffset, out Coordinate? newCoordinate)
+    public bool TryApplyOffset(MoveOffset moveOffset, out Coordinate? newCoordinate)
     {
         newCoordinate = IsValidOffset(moveOffset) ? OffsetBy(moveOffset) : null;
         return newCoordinate is not null;

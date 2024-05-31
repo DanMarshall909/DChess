@@ -3,20 +3,20 @@
 /// <summary>
 ///  Represents an offset from a position on a chess board
 /// </summary>
-/// <param name="fileOffset"></param>
-/// <param name="rankOffset"></param>
-public readonly struct MoveOffset(int fileOffset, int rankOffset)
+/// <param name="FileOffset"></param>
+/// <param name="RankOffset"></param>
+public readonly record struct MoveOffset(int FileOffset, int RankOffset)
 {
-    public int FileOffset { get; } = fileOffset;
-    public int RankOffset { get; } = rankOffset;
     public override string ToString() => $"File: {FileOffset}, Rank: {RankOffset})";
 
     public static implicit operator MoveOffset((int FileOffset, int RankOffset) tuple) =>
         new(tuple.FileOffset, tuple.RankOffset);
 
-    public void Deconstruct(out int fileOffset, out int rankOffset)
+    public bool IsAdjacent => FileOffset switch
     {
-        fileOffset = FileOffset;
-        rankOffset = RankOffset;
-    }
+        -1 => RankOffset is -1 or 0 or 1,
+        0 => RankOffset is -1 or 1,
+        1 => RankOffset is -1 or 0 or 1,
+        _ => false
+    };
 }

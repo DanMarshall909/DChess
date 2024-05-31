@@ -7,7 +7,7 @@ public class BishopTests(BoardFixture fixture) : BoardTestBase(fixture)
     [Fact(DisplayName = "Bishops can only move vertically or horizontally")]
     public void bishops_can_only_move_vertically_or_horizontally()
     {
-        WhiteBishop.ShouldOnlyBeAbleToMoveTo((new byte[15, 15]
+        WhiteBishop.ShouldOnlyBeAbleToMoveTo(new byte[15, 15]
         {
             { X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X },
             { 0, X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X, 0 },
@@ -24,6 +24,6 @@ public class BishopTests(BoardFixture fixture) : BoardTestBase(fixture)
             { 0, 0, X, 0, 0, 0, 0, 0, 0, 0, 0, 0, X, 0, 0 },
             { 0, X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X, 0 },
             { X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X },
-            }).ToMoveOffsets());
+        }.ToMoveOffsets());
     }
 }

@@ -24,7 +24,7 @@ public static class MovementTestingExtensions
     public static void ShouldNotBeAbleToMoveTo(this ChessPiece piece,
         IReadOnlyCollection<MoveOffset> invalidOffsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
         => AbleToMoveWhenOffsetBy(piece, invalidOffsetsFromCurrentPosition, false, setupBoard);
-    
+
     public static void ShouldOnlyBeAbleToMoveTo(this ChessPiece piece,
         IReadOnlyCollection<MoveOffset> validOffsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
     {
@@ -57,7 +57,7 @@ public static class MovementTestingExtensions
             var pieceAtFrom = board.Pieces[from];
             foreach (var offset in offsetsFromCurrentPosition)
             {
-                if (from.TryOffset(offset, out var to))
+                if (from.TryApplyOffset(offset, out var to))
                 {
                     pieceAtFrom.CheckMove(to!.Value).Valid
                         .Should().Be(shouldBeAbleToMove,
@@ -67,27 +67,49 @@ public static class MovementTestingExtensions
         }
     }
 
-    public static void SurroundWith(this Board board, Coordinate from, ChessPiece chessPiece)
+    public static void SetOffsetPositions(this Board board, Coordinate from, IReadOnlyCollection<MoveOffset> offsets,
+        ChessPiece piece)
     {
-        void TrySet(MoveOffset offset)
+        foreach (var offset in offsets)
         {
-            if (from.TryOffset(offset, out var coordinate))
+            if (from.TryApplyOffset(offset, out var to))
             {
-                board[coordinate!.Value] = chessPiece;
+                board[to!.Value] = piece;
             }
         }
+    }
 
+    /// <summary>
+    /// Sets the positions of the board to be 2 cells away from the given coordinate in all directions.
+    /// </summary>
+    /// <param name="board"></param>
+    /// <param name="coordinate">The coordinate to set the positions around</param>
+    /// <param name="piece"></param>
+    public static void Surround2CellsFrom(this Board board, Coordinate coordinate, ChessPiece piece)
+    {
+        SetOffsetPositions(board, coordinate, new MoveOffset[]
+        {
+            (-2, -2), (-1, -2), (0, -2), (1, -2), (2, -2),
+            (-2, -1), (2, -1),
+            (-2, 0), (2, 0),
+            (-2, 1), (2, 1),
+            (-2, 2), (-1, 2), (0, 2), (1, 2), (2, 2),
+        }, piece);
+    }
 
-        TrySet((-1, 1));
-        TrySet((1, 1));
-        TrySet((1, 1));
-
-        TrySet((-1, 0));
-        TrySet((1, 0));
-
-        TrySet((-1, -1));
-        TrySet((1, -1));
-        TrySet((1, -1));
+    public static void Surround(this Board board, Coordinate coordinate, ChessPiece piece)
+    {
+        SetOffsetPositions(board, coordinate, new MoveOffset[]
+        {
+            (-1, 1),
+            (1, 1),
+            (1, 1),
+            (-1, 0),
+            (1, 0),
+            (-1, -1),
+            (1, -1),
+            (1, -1),
+        }, piece);
     }
 
 
@@ -109,7 +131,7 @@ public static class MovementTestingExtensions
             }
         }
     }
-    
+
     public const int LegalPositionValue = 1;
 
     /// <summary>
@@ -127,6 +149,7 @@ public static class MovementTestingExtensions
         {
             throw new ArgumentException("Matrix must be 15x15");
         }
+
         for (var i = 0; i < files; i++)
         {
             for (var j = 0; j < ranks; j++)
