@@ -23,7 +23,6 @@ public class PiecePool(Board board, IInvalidMoveHandler invalidMoveHandler)
         return piece;
     }
 
-
     private Piece CreatePiece(Coordinate coordinate, ChessPiece chessPiece)
     {
         Piece.Arguments arguments = new(chessPiece, coordinate, board, invalidMoveHandler);

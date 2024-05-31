@@ -86,12 +86,12 @@ My initial goals are for it to be:
 
 ### Queen
 
-- [ ] Queens move horizontally, vertically, or diagonally any number of squares.
+- [X] Queens move horizontally, vertically, or diagonally any number of squares.
 - [ ] Queens cannot jump over other pieces.
 
 ### King
 
-- [ ] Kings move one square in any direction.
+- [X] Kings move one square in any direction.
 
 ## Movement Rules phase 2 (requiring game rules to be implemented)
 
