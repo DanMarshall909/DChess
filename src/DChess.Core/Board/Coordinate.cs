@@ -1,4 +1,5 @@
 ﻿using DChess.Core.Exceptions;
+using DChess.Core.Moves;
 
 namespace DChess.Core.Board;
 
@@ -52,6 +53,8 @@ public readonly record struct Coordinate
         }
     }
 
+    public static bool IsValid(char file, byte rank) => file is >= 'a' and <= 'h' && rank is >= 1 and <= 8;
+
     /// <summary>
     /// The rank of the coordinate (1-8) running from bottom to top on a chess board
     /// </summary>
@@ -69,10 +72,24 @@ public readonly record struct Coordinate
     }
 
     /// <summary>
-    /// Returns a new Coordinate that is offset by dFile and dRank cells
+    /// Returns a new Coordinate that is offset by the given offset
     /// </summary>
-    /// <param name="dFile">The number of files to move</param>
-    /// <param name="dRank">The number of ranks to move</param>
+    /// <param name="offset">the offset to apply</param>
     /// <returns></returns>
-    public Coordinate Offset(int dFile, int dRank) => new((char)(File + dFile), (byte)(Rank + dRank));
+    public Coordinate OffsetBy(Offset offset) => new((char)(File + offset.FileOffset), (byte)(Rank + offset.RankOffset));
+    
+    
+    /// <summary>
+    /// Returns true if the given offset is a valid coordinate on a chess board
+    /// </summary>
+    /// <param name="dFile"></param>
+    /// <param name="dRank"></param>
+    /// <returns></returns>
+    public bool IsValidOffset(Offset offset) => IsValid((char)(File + offset.FileOffset), (byte)(Rank + offset.RankOffset));
+    
+    public bool TryOffset(Offset offset, out Coordinate? newCoordinate)
+    {
+        newCoordinate = IsValidOffset(offset) ? OffsetBy(offset) : null;
+        return newCoordinate is not null;
+    }
 }
