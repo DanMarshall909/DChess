@@ -77,11 +77,11 @@ My initial goals are for it to be:
 ### Rook
 
 - [X] Rooks move horizontally or vertically any number of squares.
-- [X] Rooks cannot jump over other pieces.
+- [ ] Rooks cannot jump over other pieces.
 
 ### Bishop
 
-- [ ] Bishops move diagonally any number of squares.
+- [X] Bishops move diagonally any number of squares.
 - [ ] Bishops cannot jump over other pieces.
 
 ### Queen

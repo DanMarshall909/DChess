@@ -33,7 +33,7 @@ public class PiecePool(Board board, IInvalidMoveHandler invalidMoveHandler)
             PieceType.Pawn => new Pawn(arguments),
             PieceType.Rook => new Rook(arguments),
             PieceType.Knight => new Knight(arguments),
-            Bishop => throw new NotImplementedException(),
+            PieceType.Bishop => new Bishop(arguments),
             Queen => throw new NotImplementedException(),
             King => throw new NotImplementedException(),
             _ => throw new ArgumentOutOfRangeException(nameof(chessPiece.Type), chessPiece.Type, null)
