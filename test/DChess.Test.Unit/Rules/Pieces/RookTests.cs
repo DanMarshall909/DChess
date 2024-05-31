@@ -1,29 +1,30 @@
 ﻿namespace DChess.Test.Unit.Rules.Pieces;
 
-public class BishopTests(BoardFixture fixture) : BoardTestBase(fixture)
+public class RookTests(BoardFixture fixture) : BoardTestBase(fixture)
 {
     private const int X = LegalPositionValue;
 
-    [Fact(DisplayName = "Bishops can only move vertically or horizontally")]
-    public void bishops_can_only_move_vertically_or_horizontally()
+    [Fact(DisplayName = "Rooks can only move vertically or horizontally")]
+    public void rooks_can_only_move_vertically()
     {
-        WhiteBishop.ShouldOnlyBeAbleToMoveTo((new byte[15, 15]
+        var moveOffsets = (new byte[15, 15]
         {
-            { X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X },
-            { 0, X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X, 0 },
-            { 0, 0, X, 0, 0, 0, 0, 0, 0, 0, 0, 0, X, 0, 0 },
-            { 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0 },
-            { 0, 0, 0, 0, X, 0, 0, 0, 0, 0, X, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, X, 0, 0, 0, X, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, X, 0, X, 0, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, X, 0, X, 0, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, X, 0, 0, 0, X, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, X, 0, 0, 0, 0, 0, X, 0, 0, 0, 0 },
-            { 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0 },
-            { 0, 0, X, 0, 0, 0, 0, 0, 0, 0, 0, 0, X, 0, 0 },
-            { 0, X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X, 0 },
-            { X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X },
-            }).ToMoveOffsets());
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { X, X, X, X, X, X, X, 0, X, X, X, X, X, X, X },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+        }).ToMoveOffsets();
+        WhiteRook.ShouldOnlyBeAbleToMoveTo(moveOffsets);
     }
 }
