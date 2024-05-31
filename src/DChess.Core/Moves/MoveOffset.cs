@@ -5,13 +5,13 @@
 /// </summary>
 /// <param name="fileOffset"></param>
 /// <param name="rankOffset"></param>
-public readonly struct Offset(int fileOffset, int rankOffset)
+public readonly struct MoveOffset(int fileOffset, int rankOffset)
 {
     public int FileOffset { get; } = fileOffset;
     public int RankOffset { get; } = rankOffset;
     public override string ToString() => $"File: {FileOffset}, Rank: {RankOffset})";
 
-    public static implicit operator Offset((int FileOffset, int RankOffset) tuple) =>
+    public static implicit operator MoveOffset((int FileOffset, int RankOffset) tuple) =>
         new(tuple.FileOffset, tuple.RankOffset);
 
     public void Deconstruct(out int fileOffset, out int rankOffset)

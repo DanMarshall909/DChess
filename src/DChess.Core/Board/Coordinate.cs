@@ -1,4 +1,4 @@
-﻿using DChess.Core.Exceptions;
+using DChess.Core.Exceptions;
 using DChess.Core.Moves;
 
 namespace DChess.Core.Board;
@@ -76,7 +76,7 @@ public readonly record struct Coordinate
     /// </summary>
     /// <param name="offset">the offset to apply</param>
     /// <returns></returns>
-    public Coordinate OffsetBy(Offset offset) => new((char)(File + offset.FileOffset), (byte)(Rank + offset.RankOffset));
+    public Coordinate OffsetBy(MoveOffset moveOffset) => new((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
     
     
     /// <summary>
@@ -85,11 +85,11 @@ public readonly record struct Coordinate
     /// <param name="dFile"></param>
     /// <param name="dRank"></param>
     /// <returns></returns>
-    public bool IsValidOffset(Offset offset) => IsValid((char)(File + offset.FileOffset), (byte)(Rank + offset.RankOffset));
+    public bool IsValidOffset(MoveOffset moveOffset) => IsValid((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
     
-    public bool TryOffset(Offset offset, out Coordinate? newCoordinate)
+    public bool TryOffset(MoveOffset moveOffset, out Coordinate? newCoordinate)
     {
-        newCoordinate = IsValidOffset(offset) ? OffsetBy(offset) : null;
+        newCoordinate = IsValidOffset(moveOffset) ? OffsetBy(moveOffset) : null;
         return newCoordinate is not null;
     }
 }

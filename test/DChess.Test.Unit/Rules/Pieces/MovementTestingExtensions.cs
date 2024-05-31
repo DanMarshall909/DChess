@@ -11,8 +11,8 @@ public static class MovementTestingExtensions
     /// <param name="piece">The piece that will be evaluated e.g. WhiteKnight</param>
     /// <param name="offsetsFromCurrentPosition">An array of offsets that the piece should be able to move to from its current position. For example A knight would have offsets in an L shape i.e. (1, 2), (1, -2), (-1, 2), (-1, -2), (2, 1), (2, -1), (-2, 1), (-2, -1)</param>
     /// <param name="setupBoard">An optional action that can be used to setup the board before each test. The action takes in the board and the coordinate of the piece being tested</param>
-    public static void ShouldBeAbleToMoveToOffsets(this ChessPiece piece,
-        IReadOnlyCollection<Offset> offsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
+    public static void ShouldBeAbleToMoveTo(this ChessPiece piece,
+        IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
         => AbleToMoveWhenOffsetBy(piece, offsetsFromCurrentPosition, true, setupBoard);
 
     /// <summary>
@@ -22,7 +22,7 @@ public static class MovementTestingExtensions
     /// <param name="invalidOffsetsFromCurrentPosition"></param>
     /// <param name="setupBoard"></param>
     public static void ShouldNotBeAbleToMoveTo(this ChessPiece piece,
-        IReadOnlyCollection<Offset> invalidOffsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
+        IReadOnlyCollection<MoveOffset> invalidOffsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
         => AbleToMoveWhenOffsetBy(piece, invalidOffsetsFromCurrentPosition, false, setupBoard);
 
     /// <summary>
@@ -33,7 +33,7 @@ public static class MovementTestingExtensions
     /// <param name="shouldBeAbleToMove"></param>
     /// <param name="setupBoard"></param>
     private static void AbleToMoveWhenOffsetBy(this ChessPiece piece,
-        IReadOnlyCollection<Offset> offsetsFromCurrentPosition, bool shouldBeAbleToMove,
+        IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, bool shouldBeAbleToMove,
         Action<Board, Coordinate>? setupBoard = null)
     {
         var board = new Board(new TestInvalidMoveHandler());
@@ -61,7 +61,7 @@ public static class MovementTestingExtensions
 
     public static void SurroundWith(this Board board, Coordinate from, ChessPiece chessPiece)
     {
-        void TrySet(Offset offset)
+        void TrySet(MoveOffset offset)
         {
             if (from.TryOffset(offset, out var coordinate))
             {
@@ -88,17 +88,48 @@ public static class MovementTestingExtensions
     /// </summary>
     /// <param name="offsets">a collection of offsets</param>
     /// <returns></returns>
-    public static IEnumerable<Offset> Inverse(this IReadOnlyCollection<Offset> offsets)
+    public static IEnumerable<MoveOffset> Inverse(this IReadOnlyCollection<MoveOffset> offsets)
     {
         for (int df = -8; df <= 8; df++)
         {
             for (int dr = -8; dr <= 8; dr++)
             {
-                if (offsets.Contains(new Offset(dr, df)))
+                if (offsets.Contains(new MoveOffset(dr, df)))
                     continue;
 
-                yield return new Offset(df, dr);
+                yield return new MoveOffset(df, dr);
             }
         }
+    }
+    
+    public const int LegalPositionValue = 1;
+
+    /// <summary>
+    ///  Converts a 17x17 matrix of bytes to an array of MoveOffsets. The matrix should be centered at the center of the matrix i.e. (8, 8). The matrix should be 17x17.
+    /// </summary>
+    /// <param name="movesFromCenter"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    public static MoveOffset[] ToMoveOffsets(this byte[,] movesFromCenter)
+    {
+        var offsets = new List<MoveOffset>();
+        int files = movesFromCenter.GetLength(0);
+        int ranks = movesFromCenter.GetLength(1);
+        if (files != 17 || ranks != 17)
+        {
+            throw new ArgumentException("Matrix must be 17x17");
+        }
+        for (var i = 0; i < files; i++)
+        {
+            for (var j = 0; j < ranks; j++)
+            {
+                if (movesFromCenter[i, j] == LegalPositionValue)
+                {
+                    offsets.Add((i - 8, j - 8));
+                }
+            }
+        }
+
+        return offsets.ToArray();
     }
 }
