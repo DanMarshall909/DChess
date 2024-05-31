@@ -24,6 +24,13 @@ public static class MovementTestingExtensions
     public static void ShouldNotBeAbleToMoveTo(this ChessPiece piece,
         IReadOnlyCollection<MoveOffset> invalidOffsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
         => AbleToMoveWhenOffsetBy(piece, invalidOffsetsFromCurrentPosition, false, setupBoard);
+    
+    public static void ShouldOnlyBeAbleToMoveTo(this ChessPiece piece,
+        IReadOnlyCollection<MoveOffset> validOffsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
+    {
+        piece.ShouldBeAbleToMoveTo(validOffsetsFromCurrentPosition, setupBoard);
+        piece.ShouldNotBeAbleToMoveTo(validOffsetsFromCurrentPosition.Inverse().ToList().AsReadOnly(), setupBoard);
+    }
 
     /// <summary>
     /// Tests if a piece can move to a given set of offsets from its current position. Offsets resulting in invalid coordinates are ignored.

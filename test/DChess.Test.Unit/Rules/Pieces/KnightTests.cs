@@ -28,23 +28,15 @@ public class KnightTests(BoardFixture fixture) : BoardTestBase(fixture)
     }).ToMoveOffsets();
 
     [Fact(DisplayName = "Knights can only move in an L shape")]
-    public void knights_can_move_in_an_L_shape()
+    public void knights_can_only_move_in_an_L_shape()
     {
-        WhiteKnight.ShouldBeAbleToMoveTo(LegalOffsets);
+        WhiteKnight.ShouldOnlyBeAbleToMoveTo(LegalOffsets);
     }
 
     [Fact(DisplayName = "Knights can jump over other pieces")]
     public void knights_can_jump_over_other_pieces()
     {
-        WhiteKnight.ShouldBeAbleToMoveTo(LegalOffsets,
+        WhiteKnight.ShouldOnlyBeAbleToMoveTo(LegalOffsets,
             (board, coordinate) => board.SurroundWith(coordinate, WhitePawn));
-    }
-
-
-    [Fact(DisplayName = "Knights cannot move outside of an L shape")]
-    public void knights_can_only_move_in_an_L_shape()
-    {
-        var invalidOffsets = LegalOffsets.Inverse().ToList().AsReadOnly();
-        WhiteKnight.ShouldNotBeAbleToMoveTo(invalidOffsets);
     }
 }
