@@ -4,8 +4,8 @@ public class RookTests(BoardFixture fixture) : BoardTestBase(fixture)
 {
     private const int X = LegalPositionValue;
 
-    [Fact(DisplayName = "Rooks can move vertically")]
-    public void rooks_can_only_move_vertically()
+    [Fact(DisplayName = "Rooks can only move vertically or horizontally")]
+    public void rooks_can_only_move_vertically_or_horizontally()
     {
         WhiteRook.ShouldOnlyBeAbleToMoveTo((new byte[17, 17]
         {

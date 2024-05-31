@@ -76,8 +76,8 @@ My initial goals are for it to be:
 
 ### Rook
 
-- [ ] Rooks move horizontally or vertically any number of squares.
-- [ ] Rooks cannot jump over other pieces.
+- [X] Rooks move horizontally or vertically any number of squares.
+- [X] Rooks cannot jump over other pieces.
 
 ### Bishop
 
