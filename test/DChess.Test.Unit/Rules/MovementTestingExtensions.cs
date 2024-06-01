@@ -1,7 +1,7 @@
 ﻿using DChess.Core.Board;
 using DChess.Core.Moves;
 
-namespace DChess.Test.Unit.Rules.Pieces;
+namespace DChess.Test.Unit.Rules;
 
 public static class MovementTestingExtensions
 {
@@ -16,7 +16,7 @@ public static class MovementTestingExtensions
         => AbleToMoveWhenOffsetBy(piece, offsetsFromCurrentPosition, true, setupBoard);
 
     /// <summary>
-    /// Tests that every offset in  invalidOffsetsFromCurrentPosition array results in an invalid move.  Offsets resulting in invalid coordinates are ignored.
+    /// Tests that every offset in invalidOffsetsFromCurrentPosition array results in an invalid move.  Offsets resulting in invalid coordinates are ignored.
     /// </summary>
     /// <param name="piece"></param>
     /// <param name="invalidOffsetsFromCurrentPosition"></param>

@@ -1,6 +1,6 @@
 ﻿using DChess.Core.Moves;
 
-namespace DChess.Test.Unit.Rules.Pieces;
+namespace DChess.Test.Unit;
 
 public class PathFinderTests
 {

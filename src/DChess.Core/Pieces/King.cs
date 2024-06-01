@@ -10,7 +10,7 @@ internal record King : Piece, IIgnorePathCheck
     public override string PieceName => "King";
     protected override MoveResult ValidateMove(Coordinate to)
     {
-        var move = new Move(current, to);
+        var move = new Move(Current, to);
         
         if(!move.IsAdjacent)
             return move.AsInvalidResult("King can only move 1 square at a time");

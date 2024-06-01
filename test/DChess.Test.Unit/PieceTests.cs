@@ -33,12 +33,11 @@ public class PieceTests
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
-        var pieceStruct = new ChessPiece(PieceType.Pawn, Colour.White);
-        board[a1] = pieceStruct;
+        board[a1] = new ChessPiece(PieceType.Pawn, Colour.White);
         var piece = board.Pieces[a1];
 
         // Act
-        piece.MoveTo(a2);
+        piece.MoveTo(a6);
 
         // Assert
         _invalidMoveHandler.InvalidMoves.Should().HaveCount(1);

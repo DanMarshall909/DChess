@@ -19,7 +19,7 @@ public readonly record struct Coordinate
     public Coordinate(string coordinateAsString)
     {
         if (coordinateAsString.Length != 2)
-            throw new InvalidCoordinateException("current name must be 2 characters long");
+            throw new InvalidCoordinateException("Coordinate name must be 2 characters long");
 
         File = coordinateAsString[0];
         Rank = (byte)(coordinateAsString[1] - '0');

@@ -7,7 +7,7 @@ public abstract record Piece
     protected Piece(Arguments arguments)
     {
         ChessPiece = arguments.ChessPiece;
-        current = arguments.Coordinate;
+        Current = arguments.Coordinate;
         Board = arguments.Board;
         InvalidMoveHandler = arguments.InvalidMoveHandler;
     }
@@ -16,7 +16,7 @@ public abstract record Piece
 
     public void MoveTo(Coordinate to)
     {
-        var move = new Move(current, to);
+        var move = new Move(Current, to);
         var result = CheckMove(to);
         if (!result.Valid)
             InvalidMoveHandler.HandleInvalidMove(move, result.Message);
@@ -39,16 +39,16 @@ public abstract record Piece
 
     private MoveResult IsGenerallyValid(Coordinate to)
     {
-        if (current == to)
-            return new MoveResult(false, new Move(current, to), "Cannot to to the same square");
+        if (Current == to)
+            return new MoveResult(false, new Move(Current, to), "Cannot to to the same square");
 
         if (Board.Pieces.TryGetValue(to, out var piece))
             if (piece.ChessPiece.Colour == ChessPiece.Colour)
-                return new MoveResult(false, new Move(current, to), "Cannot capture your own piece");
+                return new MoveResult(false, new Move(Current, to), "Cannot capture your own piece");
         
         if (this is not IIgnorePathCheck)
         {
-            var move = new Move(current, to);
+            var move = new Move(Current, to);
             
             // Check if there are any pieces between the current position and the destination
             foreach (var coordinate in move.Path)
@@ -58,12 +58,12 @@ public abstract record Piece
             }
         }
 
-        return new MoveResult(true, new Move(current, to), null);
+        return new MoveResult(true, new Move(Current, to), null);
     }
 
     protected abstract MoveResult ValidateMove(Coordinate to);
     public ChessPiece ChessPiece { get; init; }
-    public Coordinate current { get; init; }
+    public Coordinate Current { get; init; }
     public Colour Colour => ChessPiece.Colour;
     public PieceType Type => ChessPiece.Type;
 
@@ -72,7 +72,7 @@ public abstract record Piece
     public void Deconstruct(out ChessPiece chessPiece, out Coordinate coordinate)
     {
         chessPiece = ChessPiece;
-        coordinate = current;
+        coordinate = Current;
     }
 
     public record Arguments(ChessPiece ChessPiece, Coordinate Coordinate, Board.Board Board,

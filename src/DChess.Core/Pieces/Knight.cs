@@ -12,14 +12,14 @@ internal record Knight : Piece, IIgnorePathCheck
 
     protected override MoveResult ValidateMove(Coordinate to)
     {
-        var move = new Move(current, to);
+        var move = new Move(Current, to);
         return MoveMustBeLShape(to, move);
     }
 
     private MoveResult MoveMustBeLShape(Coordinate to, Move move)
     {
-        int dx = Math.Abs(to.File - current.File);
-        int dy = Math.Abs(to.Rank - current.Rank);
+        int dx = Math.Abs(to.File - Current.File);
+        int dy = Math.Abs(to.Rank - Current.Rank);
 
         return dx switch
         {

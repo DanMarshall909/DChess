@@ -19,11 +19,11 @@ public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
 
         Board.Pieces[b1].MoveTo(c1);
         Board.Pieces[c1].MoveTo(d1);
-        Board.Pieces[d1].CheckMove(f1).Valid.Should().BeFalse("The pawn has already moved");
+        Board.Pieces[d1].CheckMove(f1).Message.Should().BeNull("the pawn has already moved");
 
         Board[f2] = BlackPawn;
         Board.Pieces[f2].MoveTo(d2);
-        Board.Pieces[d2].CheckMove(b2).Valid.Should().BeFalse("The pawn has already moved");
+        Board.Pieces[d2].CheckMove(b2).Message.Should().BeNull("the pawn has already moved");
     }
 
     [Fact(DisplayName = "Pawns can take pieces diagonally")]
@@ -34,10 +34,10 @@ public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
         Board[d3] = BlackPawn;
         Board.Pieces[a1].MoveTo(b2);
         // cannot move diagonally without a piece to take
-        Board.Pieces[b2].CheckMove(c3).Valid.Should().BeFalse("There is no piece to take");
+        Board.Pieces[b2].CheckMove(c3).Message.Should().NotBeEmpty("there is no piece to take");
         // cannot move more than 1 square horizontally while taking a piece
         var moveResult = Board.Pieces[b2].CheckMove(d3);
-        moveResult.Valid.Should().BeFalse("Can only move one square diagonally");
+        moveResult.Message.Should().BeNull("pawns can only move 1 square diagonally when capturing");
     }
     
     [Fact(DisplayName = "White pawns can be promoted upon reaching the opposite end of the board")]
@@ -51,8 +51,8 @@ public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
             Board[from] = WhitePawn;
             Board.Pieces[from].MoveTo(to);
             var chessPiece = Board[to];
-            chessPiece.Type.Should().Be(PieceType.Queen, "White pawns are promoted to Queens");
-            chessPiece.Colour.Should().Be(Colour.White, "White pawns are promoted to Queens of the same colour");
+            chessPiece.Type.Should().Be(PieceType.Queen, "white pawns are promoted to Queens");
+            chessPiece.Colour.Should().Be(Colour.White, "white pawns are promoted to Queens of the same colour");
             
             from = new Coordinate(file, 2);
             to = new Coordinate(file, 1);
@@ -60,8 +60,8 @@ public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
             Board[from] = BlackPawn;
             Board.Pieces[from].MoveTo(to);
             chessPiece = Board[to];
-            chessPiece.Type.Should().Be(PieceType.Queen, "Black pawns are promoted to Queens");
-            chessPiece.Colour.Should().Be(Colour.Black, "Black pawns are promoted to Queens of the same colour");
+            chessPiece.Type.Should().Be(PieceType.Queen, "black pawns are promoted to Queens");
+            chessPiece.Colour.Should().Be(Colour.Black, "black pawns are promoted to Queens of the same colour");
         }
     }
 }
