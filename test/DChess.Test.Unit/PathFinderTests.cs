@@ -2,7 +2,7 @@
 
 namespace DChess.Test.Unit.Rules.Pieces;
 
-public class MoveTests
+public class PathFinderTests
 {
     [Theory(DisplayName = "A vertical move has a path")]
     [InlineData("a1", "a4", 2)]

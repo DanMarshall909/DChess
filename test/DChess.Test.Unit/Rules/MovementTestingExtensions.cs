@@ -61,7 +61,7 @@ public static class MovementTestingExtensions
                 {
                     pieceAtFrom.CheckMove(to!.Value).Valid
                         .Should().Be(shouldBeAbleToMove,
-                            $"{pieceAtFrom.GetType()} should {(shouldBeAbleToMove ? "" : "not ")}be able to move from {from} to {to})");
+                            $"{pieceAtFrom.ChessPiece} should {(shouldBeAbleToMove ? "" : "not ")}be able to move from {from} to {to})");
                 }
             }
         }

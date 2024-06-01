@@ -1,24 +1,25 @@
-﻿using DChess.Core.Board;
-using DChess.Core.Moves;
+﻿using DChess.Core.Moves;
 
 namespace DChess.Core.Pieces;
 
-internal record Knight : Piece
+internal record Knight : Piece, IIgnorePathCheck
 {
     public Knight(Arguments arguments) : base(arguments)
     {
     }
 
+    public override string PieceName => "Knight";
+
     protected override MoveResult ValidateMove(Coordinate to)
     {
-        var move = new Move(Position, to);
+        var move = new Move(current, to);
         return MoveMustBeLShape(to, move);
     }
 
     private MoveResult MoveMustBeLShape(Coordinate to, Move move)
     {
-        int dx = Math.Abs(to.File - Position.File);
-        int dy = Math.Abs(to.Rank - Position.Rank);
+        int dx = Math.Abs(to.File - current.File);
+        int dy = Math.Abs(to.Rank - current.Rank);
 
         return dx switch
         {

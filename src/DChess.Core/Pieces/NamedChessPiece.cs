@@ -1,6 +1,4 @@
-﻿using DChess.Core.Board;
-
-namespace DChess.Core.Pieces;
+﻿namespace DChess.Core.Pieces;
 
 public static class NamedChessPiece
 {

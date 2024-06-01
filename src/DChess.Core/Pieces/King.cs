@@ -1,17 +1,16 @@
-﻿using DChess.Core.Board;
-using DChess.Core.Moves;
+﻿using DChess.Core.Moves;
 
 namespace DChess.Core.Pieces;
 
-internal record King : Piece
+internal record King : Piece, IIgnorePathCheck
 {
     public King(Arguments arguments) : base(arguments)
     {
     }
-
+    public override string PieceName => "King";
     protected override MoveResult ValidateMove(Coordinate to)
     {
-        var move = new Move(Position, to);
+        var move = new Move(current, to);
         
         if(!move.IsAdjacent)
             return move.AsInvalidResult("King can only move 1 square at a time");
