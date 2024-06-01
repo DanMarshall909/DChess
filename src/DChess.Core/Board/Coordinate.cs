@@ -1,8 +1,11 @@
+using System.Diagnostics;
+using System.Text;
 using DChess.Core.Exceptions;
 using DChess.Core.Moves;
 
 namespace DChess.Core.Board;
 
+[DebuggerDisplay("{ToString()} {AsBoard}")]
 public readonly record struct Coordinate
 {
     private readonly char _file;
@@ -76,20 +79,52 @@ public readonly record struct Coordinate
     /// </summary>
     /// <param name="offset">the offset to apply</param>
     /// <returns></returns>
-    public Coordinate OffsetBy(MoveOffset moveOffset) => new((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
-    
-    
+    public Coordinate OffsetBy(MoveOffset moveOffset) =>
+        new((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
+
+
     /// <summary>
     /// Returns true if the given offset is a valid coordinate on a chess board
     /// </summary>
     /// <param name="dFile"></param>
     /// <param name="dRank"></param>
     /// <returns></returns>
-    public bool IsValidOffset(MoveOffset moveOffset) => IsValid((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
-    
+    public bool IsValidOffset(MoveOffset moveOffset) =>
+        IsValid((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
+
     public bool TryApplyOffset(MoveOffset moveOffset, out Coordinate? newCoordinate)
     {
         newCoordinate = IsValidOffset(moveOffset) ? OffsetBy(moveOffset) : null;
         return newCoordinate is not null;
+    }
+
+    public string AsBoard
+    {
+        get
+        {
+            const char WhiteSquare = '\u2588';
+            const char BlackSquare = '\u2591';
+
+            var sb = new StringBuilder();
+
+            for (byte r = 8; r > 0; r--)
+            {
+                for (var file = 'a'; file <= 'h'; file++)
+                {
+                    var coordinates = new Coordinate(file, r);
+                    if (coordinates == this)
+                        sb.Append($"X");
+                    else
+                    {
+                        bool isOddSquare = (r + file) % 2 == 0;
+                        sb.Append(isOddSquare ? BlackSquare : WhiteSquare);
+                    }
+                }
+
+                sb.AppendLine();
+            }
+
+            return sb.ToString();
+        }
     }
 }

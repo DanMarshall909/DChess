@@ -70,5 +70,4 @@ public abstract record Piece
     public void MoveTo(string coordinateString)
     {
         MoveTo(new Coordinate(coordinateString));
-    }
-}
+    }}

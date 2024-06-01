@@ -18,4 +18,6 @@ internal record Queen : Piece
         
         return move.AsOkResult;
     }
+
+    public IEnumerable<Coordinate> GetPath(Move move) => throw new NotImplementedException();
 }
