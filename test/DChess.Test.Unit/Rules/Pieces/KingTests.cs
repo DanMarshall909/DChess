@@ -1,4 +1,6 @@
-﻿namespace DChess.Test.Unit.Rules.Pieces;
+﻿using DChess.Core.Pieces;
+
+namespace DChess.Test.Unit.Rules.Pieces;
 
 public class KingTests(BoardFixture fixture) : BoardTestBase(fixture)
 {
@@ -25,5 +27,22 @@ public class KingTests(BoardFixture fixture) : BoardTestBase(fixture)
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
         }.ToMoveOffsets());
+    }
+
+    [Fact(DisplayName = "A piece cannot move such that the king is in check")]
+    public void a_piece_cannot_move_such_that_the_king_is_in_check()
+    {
+        // Arrange
+        var board = Fixture.Board;
+        
+        board[a1] = WhiteKing;
+        board[a2] = WhiteBishop;
+        board[a8] = BlackRook;
+
+        // Act
+        var result = Board.Pieces[a2].CheckMove(b3);
+
+        // Assert
+        result.Valid.Should().BeFalse();
     }
 }
