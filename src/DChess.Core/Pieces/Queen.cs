@@ -2,7 +2,7 @@
 
 namespace DChess.Core.Pieces;
 
-internal record Queen : Piece
+public record Queen : Piece
 {
     public Queen(Arguments arguments) : base(arguments)
     {

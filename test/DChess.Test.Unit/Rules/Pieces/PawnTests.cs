@@ -1,4 +1,6 @@
-﻿namespace DChess.Test.Unit.Rules.Pieces;
+﻿using DChess.Core.Board;
+
+namespace DChess.Test.Unit.Rules.Pieces;
 
 public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
 {
@@ -36,5 +38,30 @@ public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
         // cannot move more than 1 square horizontally while taking a piece
         var moveResult = Board.Pieces[b2].CheckMove(d3);
         moveResult.Valid.Should().BeFalse("Can only move one square diagonally");
+    }
+    
+    [Fact(DisplayName = "White pawns can be promoted upon reaching the opposite end of the board")]
+    public void pawns_can_be_promoted_upon_reaching_the_opposite_end_of_the_board()
+    {
+        foreach (char file in Board.Files)
+        {
+            var from = new Coordinate(file, 7);
+            var to = new Coordinate(file, 8);
+            
+            Board[from] = WhitePawn;
+            Board.Pieces[from].MoveTo(to);
+            var chessPiece = Board[to];
+            chessPiece.Type.Should().Be(PieceType.Queen, "White pawns are promoted to Queens");
+            chessPiece.Colour.Should().Be(Colour.White, "White pawns are promoted to Queens of the same colour");
+            
+            from = new Coordinate(file, 2);
+            to = new Coordinate(file, 1);
+            
+            Board[from] = BlackPawn;
+            Board.Pieces[from].MoveTo(to);
+            chessPiece = Board[to];
+            chessPiece.Type.Should().Be(PieceType.Queen, "Black pawns are promoted to Queens");
+            chessPiece.Colour.Should().Be(Colour.Black, "Black pawns are promoted to Queens of the same colour");
+        }
     }
 }

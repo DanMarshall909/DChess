@@ -21,6 +21,9 @@ public class Board : IDisposable
         _piecesByCoordinate = piecesByCoordinate ?? new Dictionary<Coordinate, ChessPiece>();
         _pool = new PiecePool(this, invalidMoveHandler);
     }
+    
+    public char[] Files => new[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
+    public byte[] Ranks => new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
 
     public Dictionary<Coordinate, Piece> Pieces => _piecesByCoordinate
         .ToDictionary(kvp => kvp.Key, kvp => _pool.Get(kvp.Key, kvp.Value));

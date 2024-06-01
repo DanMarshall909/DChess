@@ -97,7 +97,7 @@ My initial goals are for it to be:
 
 ### Capturing
 
-- [ ] Ensure pawns can move diagonally only when capturing an opponent’s piece.
+- [X] Ensure pawns can move diagonally only when capturing an opponent’s piece.
 - [ ] Enforce that pawns can be promoted upon reaching the opposite end of the board.
 
 ### Check
