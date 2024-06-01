@@ -4,9 +4,9 @@ using DChess.Core.Pieces;
 namespace DChess.Core.Board;
 
 /// <summary>
-/// A pool of pieces that can be reused to reduce memory allocation / GC pressure
-/// This allows us to use structs to store the chessPiece internally, but expose classes
-/// to the outside world to allow for polymorphism.
+///     A pool of pieces that can be reused to reduce memory allocation / GC pressure
+///     This allows us to use structs to store the chessPiece internally, but expose classes
+///     to the outside world to allow for polymorphism.
 /// </summary>
 public class PiecePool(Board board, IInvalidMoveHandler invalidMoveHandler)
 {

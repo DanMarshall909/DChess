@@ -13,10 +13,10 @@ public class BoardFixture : IDisposable
 
     public IInvalidMoveHandler InvalidMoveHandler { get; set; }
 
+    public Board Board { get; }
+
     public void Dispose()
     {
         Board.Dispose();
     }
-
-    public Board Board { get; }
 }

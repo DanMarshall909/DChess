@@ -25,7 +25,7 @@ public class PieceTests
         var args = new Piece.Arguments(chessPiece, b3, board, _invalidMoveHandler);
         board.Pieces[b3].Should()
             .BeEquivalentTo(new Pawn(args), "the piece should be moved");
-        
+
         board.Pieces.Count.Should().Be(1, "the piece should be moved, not duplicated");
     }
 

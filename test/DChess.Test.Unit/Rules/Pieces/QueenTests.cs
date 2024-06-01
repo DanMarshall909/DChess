@@ -23,7 +23,7 @@ public class QueenTests(BoardFixture fixture) : BoardTestBase(fixture)
             { 0, 0, 0, X, 0, 0, 0, X, 0, 0, 0, X, 0, 0, 0 },
             { 0, 0, X, 0, 0, 0, 0, X, 0, 0, 0, 0, X, 0, 0 },
             { 0, X, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, X, 0 },
-            { X, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, X },
+            { X, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, X }
         }.ToMoveOffsets());
     }
 
@@ -46,7 +46,7 @@ public class QueenTests(BoardFixture fixture) : BoardTestBase(fixture)
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
         }.ToMoveOffsets(), (board, coordinate) =>
             board.Surround2CellsFrom(coordinate, WhitePawn));
     }

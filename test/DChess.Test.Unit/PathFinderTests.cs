@@ -1,4 +1,5 @@
-﻿using DChess.Core.Moves;
+﻿using DChess.Core.Board;
+using DChess.Core.Moves;
 
 namespace DChess.Test.Unit;
 
@@ -10,7 +11,7 @@ public class PathFinderTests
     [InlineData("a1", "a2", 0)]
     public void a_vertical_move_has_a_path(string from, string to, int expectedLength)
     {
-        var move = new Move(new(from), new(to));
+        var move = new Move(new Coordinate(from), new Coordinate(to));
         var path = move.Path.ToList();
 
         Assert.Equal(expectedLength, path.Count());
@@ -22,7 +23,7 @@ public class PathFinderTests
     [InlineData("a1", "b1", 0)]
     public void a_horizontal_move_has_a_path(string from, string to, int expectedLength)
     {
-        var move = new Move(new(from), new(to));
+        var move = new Move(new Coordinate(from), new Coordinate(to));
         var path = move.Path.ToList();
 
         Assert.Equal(expectedLength, path.Count());
@@ -34,7 +35,7 @@ public class PathFinderTests
     [InlineData("a1", "b2", 0)]
     public void a_diagonal_move_has_a_path(string from, string to, int expectedLength)
     {
-        var move = new Move(new(from), new(to));
+        var move = new Move(new Coordinate(from), new Coordinate(to));
         var path = move.Path.ToList();
 
         Assert.Equal(expectedLength, path.Count());

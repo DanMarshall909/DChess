@@ -6,12 +6,11 @@ namespace DChess.Core.Board;
 
 public class Board : IDisposable
 {
-    public void Dispose()
-    {
-    }
+    public const int MaxPieces = 32;
 
     private readonly IInvalidMoveHandler _invalidMoveHandler;
-    public const int MaxPieces = 32;
+
+    private readonly Dictionary<Coordinate, ChessPiece> _piecesByCoordinate;
     private readonly PiecePool _pool;
 
     public Board(IInvalidMoveHandler invalidMoveHandler,
@@ -23,20 +22,17 @@ public class Board : IDisposable
     }
 
     /// <summary>
-    /// The horizontal files (columns) of the board, from a to h
+    ///     The horizontal files (columns) of the board, from a to h
     /// </summary>
     public char[] Files => new[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
-    
+
     /// <summary>
-    /// The vertical ranks (rows) of the board, from 1 to 8
+    ///     The vertical ranks (rows) of the board, from 1 to 8
     /// </summary>
     public byte[] Ranks => new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
 
     public Dictionary<Coordinate, Piece> Pieces => _piecesByCoordinate
         .ToDictionary(kvp => kvp.Key, kvp => _pool.Get(kvp.Key, kvp.Value));
-
-    public bool TryGetValue(Coordinate coordinate, out ChessPiece chessPiece)
-        => _piecesByCoordinate.TryGetValue(coordinate, out chessPiece);
 
     public ChessPiece this[Coordinate coordinate]
     {
@@ -46,16 +42,21 @@ public class Board : IDisposable
 
     public ChessPiece this[string coordinateString] => this[new Coordinate(coordinateString)];
 
-    private readonly Dictionary<Coordinate, ChessPiece> _piecesByCoordinate;
+    public void Dispose()
+    {
+    }
+
+    public bool TryGetValue(Coordinate coordinate, out ChessPiece chessPiece)
+        => _piecesByCoordinate.TryGetValue(coordinate, out chessPiece);
 
     public bool HasPieceAt(Coordinate coordinate) => _piecesByCoordinate.TryGetValue(coordinate, out _);
 
     internal void Move(Move move)
     {
-        if (!_piecesByCoordinate.TryGetValue(move.From, out ChessPiece fromPiece))
+        if (!_piecesByCoordinate.TryGetValue(move.From, out var fromPiece))
             throw new InvalidMoveException(move, $"No piece exists at {move.From}");
 
-        bool pawnIsPromoted = (fromPiece.Type == PieceType.Pawn) && move.To.File == 'a' || move.To.File == 'h';
+        bool pawnIsPromoted = (fromPiece.Type == PieceType.Pawn && move.To.File == 'a') || move.To.File == 'h';
         var toPiece = pawnIsPromoted
             ? new ChessPiece(PieceType.Queen, fromPiece.Colour)
             : fromPiece;

@@ -12,10 +12,13 @@ public readonly record struct Coordinate
     private readonly byte _rank;
 
     /// <summary>
-    ///  Creates a new Coordinate from a string representation e.g. a1. Note that this is case sensitive
+    ///     Creates a new Coordinate from a string representation e.g. a1. Note that this is case sensitive
     /// </summary>
     /// <param name="coordinateAsString">The string representation of the coordinate</param>
-    /// <exception cref="InvalidCoordinateException">Thrown if the string is not 2 characters long or if the file or rank is out of bounds</exception>
+    /// <exception cref="InvalidCoordinateException">
+    ///     Thrown if the string is not 2 characters long or if the file or rank is
+    ///     out of bounds
+    /// </exception>
     public Coordinate(string coordinateAsString)
     {
         if (coordinateAsString.Length != 2)
@@ -26,21 +29,22 @@ public readonly record struct Coordinate
     }
 
     /// <summary>
-    ///  Creates a new Coordinate from 
+    ///     Creates a new Coordinate from
     /// </summary>
     /// <param name="File">The file of the coordinate (a-h) running from left to right on a chess board</param>
     /// <param name="Rank">The rank of the coordinate (1-8) running from bottom to top on a chess board</param>
-    /// <exception cref="InvalidCoordinateException">Thrown if the string is not 2 characters long or if the file or rank is out of bounds</exception>
+    /// <exception cref="InvalidCoordinateException">
+    ///     Thrown if the string is not 2 characters long or if the file or rank is
+    ///     out of bounds
+    /// </exception>
     public Coordinate(char File, byte Rank)
     {
         this.File = File;
         this.Rank = Rank;
     }
 
-    public override string ToString() => $"{File}{Rank}";
-
     /// <summary>
-    /// The file of the coordinate (a-h) running from left to right on a chess board
+    ///     The file of the coordinate (a-h) running from left to right on a chess board
     /// </summary>
     /// <exception cref="InvalidCoordinateException">Thrown if out of bounds</exception>
     public char File
@@ -56,15 +60,13 @@ public readonly record struct Coordinate
         }
     }
 
-    public static bool IsValid(char file, byte rank) => file is >= 'a' and <= 'h' && rank is >= 1 and <= 8;
-
     /// <summary>
-    /// The rank of the coordinate (1-8) running from bottom to top on a chess board
+    ///     The rank of the coordinate (1-8) running from bottom to top on a chess board
     /// </summary>
     /// <exception cref="InvalidCoordinateException">Thrown if out of bounds</exception>
     public byte Rank
     {
-        get => (byte)_rank;
+        get => _rank;
         private init
         {
             if (value is < 1 or > 8)
@@ -72,30 +74,6 @@ public readonly record struct Coordinate
 
             _rank = value;
         }
-    }
-
-    /// <summary>
-    /// Returns a new Coordinate that is offset by the given offset
-    /// </summary>
-    /// <param name="offset">the offset to apply</param>
-    /// <returns></returns>
-    public Coordinate OffsetBy(MoveOffset moveOffset) =>
-        new((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
-
-
-    /// <summary>
-    /// Returns true if the given offset is a valid coordinate on a chess board
-    /// </summary>
-    /// <param name="dFile"></param>
-    /// <param name="dRank"></param>
-    /// <returns></returns>
-    public bool IsValidOffset(MoveOffset moveOffset) =>
-        IsValid((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
-
-    public bool TryApplyOffset(MoveOffset moveOffset, out Coordinate? newCoordinate)
-    {
-        newCoordinate = IsValidOffset(moveOffset) ? OffsetBy(moveOffset) : null;
-        return newCoordinate is not null;
     }
 
     public string AsBoard
@@ -113,7 +91,9 @@ public readonly record struct Coordinate
                 {
                     var coordinates = new Coordinate(file, r);
                     if (coordinates == this)
-                        sb.Append($"X");
+                    {
+                        sb.Append("X");
+                    }
                     else
                     {
                         bool isOddSquare = (r + file) % 2 == 0;
@@ -126,5 +106,33 @@ public readonly record struct Coordinate
 
             return sb.ToString();
         }
+    }
+
+    public override string ToString() => $"{File}{Rank}";
+
+    public static bool IsValid(char file, byte rank) => file is >= 'a' and <= 'h' && rank is >= 1 and <= 8;
+
+    /// <summary>
+    ///     Returns a new Coordinate that is offset by the given offset
+    /// </summary>
+    /// <param name="offset">the offset to apply</param>
+    /// <returns></returns>
+    public Coordinate OffsetBy(MoveOffset moveOffset) =>
+        new((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
+
+
+    /// <summary>
+    ///     Returns true if the given offset is a valid coordinate on a chess board
+    /// </summary>
+    /// <param name="dFile"></param>
+    /// <param name="dRank"></param>
+    /// <returns></returns>
+    public bool IsValidOffset(MoveOffset moveOffset) =>
+        IsValid((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
+
+    public bool TryApplyOffset(MoveOffset moveOffset, out Coordinate? newCoordinate)
+    {
+        newCoordinate = IsValidOffset(moveOffset) ? OffsetBy(moveOffset) : null;
+        return newCoordinate is not null;
     }
 }

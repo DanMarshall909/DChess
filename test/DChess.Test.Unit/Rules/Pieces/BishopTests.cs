@@ -23,12 +23,10 @@ public class BishopTests(BoardFixture fixture) : BoardTestBase(fixture)
             { 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0 },
             { 0, 0, X, 0, 0, 0, 0, 0, 0, 0, 0, 0, X, 0, 0 },
             { 0, X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X, 0 },
-            { X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X },
+            { X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X }
         }.ToMoveOffsets());
     }
-    
-    
-    
+
     [Fact(DisplayName = "Bishops cannot jump over other pieces")]
     public void bishops_cannot_jump_over_other_pieces()
     {
@@ -48,7 +46,7 @@ public class BishopTests(BoardFixture fixture) : BoardTestBase(fixture)
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
         }.ToMoveOffsets(), (board, coordinate) =>
             board.Surround2CellsFrom(coordinate, WhitePawn));
     }

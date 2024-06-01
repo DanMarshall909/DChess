@@ -25,8 +25,8 @@ public static class PathFinder
 
     private static IEnumerable<Coordinate> HorizontalPath(Move move)
     {
-        char step = (char)Math.Sign(move.To.File - move.From.File);
-        for (char f = (char)(move.From.File + step); f != move.To.File; f += step)
+        var step = (char)Math.Sign(move.To.File - move.From.File);
+        for (var f = (char)(move.From.File + step); f != move.To.File; f += step)
             yield return new Coordinate(f, move.From.Rank);
     }
 
@@ -34,8 +34,8 @@ public static class PathFinder
     {
         int stepFile = Math.Sign(move.To.File - move.From.File);
         int stepRank = Math.Sign(move.To.Rank - move.From.Rank);
-        char f = (char)(move.From.File + stepFile);
-        byte r = (byte)(move.From.Rank + stepRank);
+        var f = (char)(move.From.File + stepFile);
+        var r = (byte)(move.From.Rank + stepRank);
 
         while (f != move.To.File && r != move.To.Rank)
         {

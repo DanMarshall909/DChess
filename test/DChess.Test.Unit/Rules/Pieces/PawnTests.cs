@@ -39,7 +39,7 @@ public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
         var moveResult = Board.Pieces[b2].CheckMove(d3);
         moveResult.Message.Should().BeNull("pawns can only move 1 square diagonally when capturing");
     }
-    
+
     [Fact(DisplayName = "White pawns can be promoted upon reaching the opposite end of the board")]
     public void pawns_can_be_promoted_upon_reaching_the_opposite_end_of_the_board()
     {
@@ -47,16 +47,16 @@ public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
         {
             var from = new Coordinate('g', rank);
             var to = new Coordinate('h', rank);
-            
+
             Board[from] = WhitePawn;
             Board.Pieces[from].MoveTo(to);
             var chessPiece = Board[to];
             chessPiece.Type.Should().Be(PieceType.Queen, "white pawns are promoted to Queens");
             chessPiece.Colour.Should().Be(Colour.White, "white pawns are promoted to Queens of the same colour");
-            
+
             from = new Coordinate('b', rank);
             to = new Coordinate('a', rank);
-            
+
             Board[from] = BlackPawn;
             Board.Pieces[from].MoveTo(to);
             chessPiece = Board[to];

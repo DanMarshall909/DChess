@@ -23,7 +23,7 @@ public class RookTests(BoardFixture fixture) : BoardTestBase(fixture)
             { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, 0 }
         }.ToMoveOffsets();
         WhiteRook.ShouldOnlyBeAbleToMoveTo(moveOffsets);
     }
@@ -47,7 +47,7 @@ public class RookTests(BoardFixture fixture) : BoardTestBase(fixture)
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
         }.ToMoveOffsets(), (board, coordinate) =>
             board.Surround2CellsFrom(coordinate, WhitePawn));
     }
