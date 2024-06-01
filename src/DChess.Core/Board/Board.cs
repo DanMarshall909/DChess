@@ -21,8 +21,15 @@ public class Board : IDisposable
         _piecesByCoordinate = piecesByCoordinate ?? new Dictionary<Coordinate, ChessPiece>();
         _pool = new PiecePool(this, invalidMoveHandler);
     }
-    
+
+    /// <summary>
+    /// The horizontal files (columns) of the board, from a to h
+    /// </summary>
     public char[] Files => new[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
+    
+    /// <summary>
+    /// The vertical ranks (rows) of the board, from 1 to 8
+    /// </summary>
     public byte[] Ranks => new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
 
     public Dictionary<Coordinate, Piece> Pieces => _piecesByCoordinate
@@ -45,11 +52,16 @@ public class Board : IDisposable
 
     internal void Move(Move move)
     {
-        if (!_piecesByCoordinate.TryGetValue(move.From, out var fromPiece))
+        if (!_piecesByCoordinate.TryGetValue(move.From, out ChessPiece fromPiece))
             throw new InvalidMoveException(move, $"No piece exists at {move.From}");
 
+        bool pawnIsPromoted = (fromPiece.Type == PieceType.Pawn) && move.To.File == 'a' || move.To.File == 'h';
+        var toPiece = pawnIsPromoted
+            ? new ChessPiece(PieceType.Queen, fromPiece.Colour)
+            : fromPiece;
+
         _piecesByCoordinate.Remove(move.From);
-        _piecesByCoordinate[move.To] = fromPiece;
+        _piecesByCoordinate[move.To] = toPiece;
     }
 
     public void Clear()

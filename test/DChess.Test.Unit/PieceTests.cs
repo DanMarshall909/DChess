@@ -14,17 +14,18 @@ public class PieceTests
         var board = new Board(_invalidMoveHandler);
         var pieceStruct = new ChessPiece(PieceType.Pawn, Colour.White);
 
-        board[a1] = pieceStruct;
+        board[a2] = pieceStruct;
         board.Pieces.Count.Should().Be(1);
 
         // Act
-        var piece = board.Pieces[a1];
-        piece.MoveTo(b1);
+        var piece = board.Pieces[a2];
+        piece.MoveTo(b3);
 
         // Assert
-        var args = new Piece.Arguments(pieceStruct, b1, board, _invalidMoveHandler);
-        board.Pieces[b1].Should()
+        var args = new Piece.Arguments(pieceStruct, b3, board, _invalidMoveHandler);
+        board.Pieces[b3].Should()
             .BeEquivalentTo(new Pawn(args), "the piece should be moved");
+        
         board.Pieces.Count.Should().Be(1, "the piece should be moved, not duplicated");
     }
 

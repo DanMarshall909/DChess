@@ -28,9 +28,9 @@ public record Pawn : Piece, IIgnorePathCheck
                 : move.AsInvalidResult("Pawns can only move 1 square diagonally when capturing");
         }
 
-        var verticalDistance = move.VerticalDistance;
+        int verticalDistance = move.VerticalDistance;
 
-        var isFirstMove = Current.File != 2 && Colour == White || Current.File != 7 && Colour == Black;
+        bool isFirstMove = Current.File != 2 && Colour == White || Current.File != 7 && Colour == Black;
         
         if (verticalDistance > 2)
             return move.AsInvalidResult("Pawns can only move 1 or 2 squares forward");
@@ -40,9 +40,6 @@ public record Pawn : Piece, IIgnorePathCheck
 
         if (verticalDistance == 2 && (!isFirstMove))
             return move.AsInvalidResult("Pawns can only move 2 squares forward from starting position");
-
-        if (to.File == 8 || to.File == 1)
-            Board[to] = new ChessPiece(PieceType.Queen, Colour);
 
         return new MoveResult(true, new Move(Current, to), string.Empty);
     }
