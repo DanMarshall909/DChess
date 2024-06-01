@@ -13,15 +13,15 @@ public class PiecePoolTests
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
-        var pieceStruct = new ChessPiece(PieceType.Pawn, White);
+        var chessPiece = new ChessPiece(PieceType.Pawn, White);
 
         // Act
         var pool = new PiecePool(board, _invalidMoveHandler);
-        var piece = pool.Get(a1, pieceStruct);
-        var secondPieceWithSameDefinition = pool.Get(a1, pieceStruct);
+        var piece = pool.Get(a1, chessPiece);
+        var secondPieceWithSameDefinition = pool.Get(a1, chessPiece);
 
         // Assert
-        piece.Should().BeEquivalentTo(new Pawn(new Piece.Arguments(pieceStruct, a1, board, _invalidMoveHandler)));
+        piece.Should().BeEquivalentTo(new Pawn(new Piece.Arguments(chessPiece, a1, board, _invalidMoveHandler)));
         piece.Should().Be(secondPieceWithSameDefinition, "the piece should be the same instance");
 
         piece.GetType().Should().Be<Pawn>();

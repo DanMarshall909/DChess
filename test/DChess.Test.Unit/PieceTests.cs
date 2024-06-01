@@ -12,9 +12,9 @@ public class PieceTests
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
-        var pieceStruct = new ChessPiece(PieceType.Pawn, Colour.White);
+        var chessPiece = new ChessPiece(PieceType.Pawn, Colour.White);
 
-        board[a2] = pieceStruct;
+        board[a2] = chessPiece;
         board.Pieces.Count.Should().Be(1);
 
         // Act
@@ -22,7 +22,7 @@ public class PieceTests
         piece.MoveTo(b3);
 
         // Assert
-        var args = new Piece.Arguments(pieceStruct, b3, board, _invalidMoveHandler);
+        var args = new Piece.Arguments(chessPiece, b3, board, _invalidMoveHandler);
         board.Pieces[b3].Should()
             .BeEquivalentTo(new Pawn(args), "the piece should be moved");
         
