@@ -2,10 +2,8 @@ using DChess.Core.Board;
 
 namespace DChess.Core.Moves;
 
-public readonly record struct Move(Coordinate from, Coordinate to)
+public readonly record struct Move(Coordinate From, Coordinate To)
 {
-    public readonly Coordinate From = from;
-    public readonly Coordinate To = to;
     public override string ToString() => $"{From} -> {To}";
     public MoveOffset Offset => new MoveOffset(To.File - From.File, To.Rank - From.Rank);
     public bool IsDiagonal => Math.Abs(To.File - From.File) == Math.Abs(To.Rank - From.Rank);
@@ -43,33 +41,29 @@ public readonly record struct Move(Coordinate from, Coordinate to)
     private static IEnumerable<Coordinate> VerticalPath(Move move)
     {
         int step = Math.Sign(move.To.Rank - move.From.Rank);
-        for (int r = (move.From.Rank + step); r != move.To.Rank; r += step)
-            yield return new Coordinate(move.From.File, (byte)(move.From.Rank + r));
+        for (int r = move.From.Rank + step; r != move.To.Rank; r += step)
+            yield return new Coordinate(move.From.File, (byte)r);
     }
 
     private static IEnumerable<Coordinate> HorizontalPath(Move move)
     {
-        char from = move.From.File;
-        char to = move.To.File;
-        int step = Math.Sign(to - from);
-
-        for (int file = from + step; file != to; file += step)
-            yield return new Coordinate((char)(file), move.From.Rank);
+        char step = (char)Math.Sign(move.To.File - move.From.File);
+        for (char f = (char)(move.From.File + step); f != move.To.File; f += step)
+            yield return new Coordinate(f, move.From.Rank);
     }
 
     private static IEnumerable<Coordinate> DiagonalPath(Move move)
     {
-        int stepF = Math.Sign(move.To.File - move.From.File);
-        int stepR = Math.Sign(move.To.Rank - move.From.Rank);
-
-        var f = (byte)(move.From.File + stepF);
-        var r = (byte)(move.From.Rank + stepR);
+        int stepFile = Math.Sign(move.To.File - move.From.File);
+        int stepRank = Math.Sign(move.To.Rank - move.From.Rank);
+        char f = (char)(move.From.File + stepFile);
+        byte r = (byte)(move.From.Rank + stepRank);
 
         while (f != move.To.File && r != move.To.Rank)
         {
-            yield return new Coordinate((char)f, r);
-            f += (byte)stepF;
-            r += (byte)stepR;
+            yield return new Coordinate(f, r);
+            f += (char)stepFile;
+            r += (byte)stepRank;
         }
     }
 }
