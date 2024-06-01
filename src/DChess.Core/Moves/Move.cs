@@ -11,18 +11,13 @@ public readonly record struct Move(Coordinate From, Coordinate To)
     public bool IsForward(Colour colour) => colour == White
         ? To.Rank > From.Rank
         : To.Rank < From.Rank;
-    
     public bool IsBackwards(Colour colour) => colour == White
         ? To.Rank < From.Rank
         : To.Rank > From.Rank;
-    
     public MoveResult AsOkResult => new(true, this, null);
     public MoveResult AsInvalidResult(string because) => new(false, this, because);
-
-    
     public int VerticalDistance => Math.Abs(To.Rank - From.Rank);
     public int HorizontalDistance => Math.Abs(To.File - From.File);
     public int TotalDistance => (int)Math.Floor(Math.Sqrt(HorizontalDistance + VerticalDistance));
-
     public IEnumerable<Coordinate> Path => PathFinder.GetPath(this);
 }
