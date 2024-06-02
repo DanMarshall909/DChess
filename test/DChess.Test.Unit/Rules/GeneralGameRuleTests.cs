@@ -17,6 +17,6 @@ public class GeneralGameRuleTests(BoardFixture fixture) : BoardTestBase(fixture)
         var boardPiece = Board.Pieces[a1];
         var result = boardPiece.CheckMove(b2);
 
-        result.Valid.Should().BeFalse();
+        result.IsValid.Should().BeFalse();
     }
 }

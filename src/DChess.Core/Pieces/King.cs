@@ -15,8 +15,8 @@ internal record King : Piece, IIgnorePathCheck
         var move = new Move(Current, to);
 
         if (!move.IsAdjacent)
-            return move.AsInvalidResult("King can only move 1 square at a time");
+            return move.InvalidResult(KingCanOnlyMove1SquareAtATime);
 
-        return move.AsOkResult;
+        return move.OkResult();
     }
 }

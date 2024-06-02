@@ -1,4 +1,5 @@
-﻿using DChess.Core.Pieces;
+﻿using DChess.Core.Moves;
+using DChess.Core.Pieces;
 
 namespace DChess.Test.Unit.Rules.Pieces;
 
@@ -43,6 +44,6 @@ public class KingTests(BoardFixture fixture) : BoardTestBase(fixture)
         var result = Board.Pieces[a2].CheckMove(b3);
 
         // Assert
-        result.Valid.Should().BeFalse();
+        result.Validity.Should().Be(MoveValidity.Ok);
     }
 }

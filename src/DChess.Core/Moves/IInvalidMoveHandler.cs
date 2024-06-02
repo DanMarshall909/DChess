@@ -2,5 +2,5 @@
 
 public interface IInvalidMoveHandler
 {
-    public void HandleInvalidMove(Move move, string? message);
+    void HandleInvalidMove(MoveResult result);
 }

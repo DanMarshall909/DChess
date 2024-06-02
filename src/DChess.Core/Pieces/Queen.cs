@@ -14,10 +14,9 @@ public record Queen : Piece
     {
         var move = new Move(Current, to);
 
-        if (!(move.IsDiagonal || move.IsVertical || move.IsHorizontal))
-            return move.AsInvalidResult("Queen can only move diagonally, or in a straight line");
-
-        return move.AsOkResult;
+        return move.IsDiagonal || move.IsVertical || move.IsHorizontal
+            ? move.OkResult()
+            : move.InvalidResult(QueenCanOnlyMoveDiagonallyOrInAStraightLine);
     }
 
     public IEnumerable<Coordinate> GetPath(Move move) => throw new NotImplementedException();

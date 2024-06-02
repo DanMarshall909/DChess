@@ -15,8 +15,8 @@ internal record Rook : Piece
         var move = new Move(Current, to);
 
         if (!(move.IsHorizontal || move.IsVertical))
-            return move.AsInvalidResult("Rook can only move in a straight line");
+            return move.InvalidResult(RookCanOnlyMoveInAStraightLine);
 
-        return move.AsOkResult;
+        return move.OkResult();
     }
 }

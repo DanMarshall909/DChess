@@ -16,16 +16,16 @@ public record Pawn : Piece, IIgnorePathCheck
         var move = new Move(Current, to);
 
         if (move.IsBackwards(Colour))
-            return move.AsInvalidResult("Pawns can only move forward");
+            return move.InvalidResult(PawnsCanOnlyMoveForward);
 
         if (move.IsDiagonal)
         {
             if (!Board.HasPieceAt(to))
-                return move.AsInvalidResult("Pawns can only side-step when capturing");
+                return move.InvalidResult(PawnsCanOnlySideStepWhenCapturing);
 
             return move.HorizontalDistance == 1
-                ? move.AsOkResult
-                : move.AsInvalidResult("Pawns can only move 1 square diagonally when capturing");
+                ? move.OkResult()
+                : move.InvalidResult(PawnsCanOnlySideStepWhenCapturing);
         }
 
         int verticalDistance = move.VerticalDistance;
@@ -34,14 +34,14 @@ public record Pawn : Piece, IIgnorePathCheck
                            (Current.File != 7 && Colour == Black);
 
         if (verticalDistance > 2)
-            return move.AsInvalidResult("Pawns can only move 1 or 2 squares forward");
+            return move.InvalidResult(PawnsCanOnlyMove1Or2SquaresForward);
 
         if (move.HorizontalDistance > 2)
-            return move.AsInvalidResult("Pawns can only move 1 square horizontally and only when taking a piece");
-
+            return move.InvalidResult(PawnsCanOnlyMove1SquareHorizontallyAndOnlyWhenTakingAPiece);
+        
         if (verticalDistance == 2 && !isFirstMove)
-            return move.AsInvalidResult("Pawns can only move 2 squares forward from starting position");
+            return move.InvalidResult(PawnsCanOnlyMove2SquaresForwardFromStartingPosition);
 
-        return new MoveResult(true, new Move(Current, to), string.Empty);
+        return move.OkResult();
     }
 }

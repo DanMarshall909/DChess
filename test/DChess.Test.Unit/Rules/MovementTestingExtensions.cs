@@ -69,7 +69,7 @@ public static class MovementTestingExtensions
             var pieceAtFrom = board.Pieces[from];
             foreach (var offset in offsetsFromCurrentPosition)
                 if (from.TryApplyOffset(offset, out var to))
-                    pieceAtFrom.CheckMove(to!.Value).Valid
+                    pieceAtFrom.CheckMove(to!.Value).IsValid
                         .Should().Be(shouldBeAbleToMove,
                             $"{pieceAtFrom.ChessPiece} should {(shouldBeAbleToMove ? "" : "not ")}be able to move from {from} to {to})");
         }

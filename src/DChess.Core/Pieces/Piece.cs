@@ -25,8 +25,8 @@ public abstract record Piece
     {
         var move = new Move(Current, to);
         var result = CheckMove(to);
-        if (!result.Valid)
-            InvalidMoveHandler.HandleInvalidMove(move, result.Message);
+        if (!result.IsValid)
+            InvalidMoveHandler.HandleInvalidMove(result);
 
         Board.Move(move);
     }
@@ -36,34 +36,30 @@ public abstract record Piece
     {
         var generalMoveResult = IsGenerallyValid(to);
 
-        if (generalMoveResult.Valid != true)
+        if (!generalMoveResult.IsValid)
             return generalMoveResult;
 
         var isValidMove = ValidateMove(to);
 
-        return isValidMove.Valid ? generalMoveResult : isValidMove;
+        return isValidMove.IsValid ? generalMoveResult : isValidMove;
     }
 
     private MoveResult IsGenerallyValid(Coordinate to)
     {
+        var move = new Move(Current, to);
+        
         if (Current == to)
-            return new MoveResult(false, new Move(Current, to), "Cannot to to the same square");
+            return move.InvalidResult(CannotMoveToSameCell);
 
         if (Board.Pieces.TryGetValue(to, out var piece))
             if (piece.ChessPiece.Colour == ChessPiece.Colour)
-                return new MoveResult(false, new Move(Current, to), "Cannot capture your own piece");
+                return move.InvalidResult(CannotCaptureOwnPiece);
 
-        if (this is not IIgnorePathCheck)
-        {
-            var move = new Move(Current, to);
 
-            // Check if there are any pieces between the current position and the destination
-            foreach (var coordinate in move.Path)
-                if (Board.HasPieceAt(coordinate))
-                    return move.AsInvalidResult($"{PieceName} cannot jump over other pieces");
-        }
+        if (this is not IIgnorePathCheck && move.Path.Any(coordinate => Board.HasPieceAt(coordinate)))
+            return move.InvalidResult(CannotJumpOverOtherPieces);
 
-        return new MoveResult(true, new Move(Current, to), null);
+        return move.OkResult();
     }
 
     protected abstract MoveResult ValidateMove(Coordinate to);

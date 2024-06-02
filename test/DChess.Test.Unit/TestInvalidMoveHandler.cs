@@ -6,8 +6,8 @@ public class TestInvalidMoveHandler : IInvalidMoveHandler
 {
     public readonly List<MoveResult> InvalidMoves = new();
 
-    public void HandleInvalidMove(Move move, string? message)
+    public void HandleInvalidMove(MoveResult result)
     {
-        InvalidMoves.Add(new MoveResult(false, move, message));
+        InvalidMoves.Add(result);
     }
 }

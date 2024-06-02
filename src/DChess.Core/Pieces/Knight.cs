@@ -23,9 +23,9 @@ internal record Knight : Piece, IIgnorePathCheck
 
         return dx switch
         {
-            1 when dy == 2 => move.AsOkResult,
-            2 when dy == 1 => move.AsOkResult,
-            _ => move.AsInvalidResult("Knights can only move in an L shape")
+            1 when dy == 2 => move.OkResult(),
+            2 when dy == 1 => move.OkResult(),
+            _ => move.InvalidResult(KnightsCanOnlyMoveInAnLShape)
         };
     }
 }

@@ -7,7 +7,6 @@ public readonly record struct Move(Coordinate From, Coordinate To)
     public bool IsVertical => From.File == To.File;
     public bool IsHorizontal => From.Rank == To.Rank;
     public bool IsAdjacent => Offset.IsAdjacent;
-    public MoveResult AsOkResult => new(true, this, null);
     public Distance Distance => new Memo<Move, Distance>(move => new Distance(move)).Execute(this);
     public int VerticalDistance => Distance.Vertical;
     public int HorizontalDistance => Distance.Horizontal;
@@ -22,6 +21,4 @@ public readonly record struct Move(Coordinate From, Coordinate To)
     public bool IsBackwards(Colour colour) => colour == White
         ? To.Rank < From.Rank
         : To.Rank > From.Rank;
-
-    public MoveResult AsInvalidResult(string because) => new(false, this, because);
 }

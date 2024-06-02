@@ -19,11 +19,11 @@ public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
 
         Board.Pieces[b1].MoveTo(c1);
         Board.Pieces[c1].MoveTo(d1);
-        Board.Pieces[d1].CheckMove(f1).Message.Should().BeNull("the pawn has already moved");
+        Board.Pieces[d1].CheckMove(f1).Validity.Should().Be(Ok, "the pawn has already moved");
 
         Board[f2] = BlackPawn;
         Board.Pieces[f2].MoveTo(d2);
-        Board.Pieces[d2].CheckMove(b2).Message.Should().BeNull("the pawn has already moved");
+        Board.Pieces[d2].CheckMove(b2).Validity.Should().Be(Ok, "the pawn has already moved");
     }
 
     [Fact(DisplayName = "Pawns can take pieces diagonally")]
@@ -34,10 +34,10 @@ public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
         Board[d3] = BlackPawn;
         Board.Pieces[a1].MoveTo(b2);
         // cannot move diagonally without a piece to take
-        Board.Pieces[b2].CheckMove(c3).Message.Should().NotBeEmpty("there is no piece to take");
+        Board.Pieces[b2].CheckMove(c3).Validity.Should().NotBe(Ok, "there is no piece to take");
         // cannot move more than 1 square horizontally while taking a piece
         var moveResult = Board.Pieces[b2].CheckMove(d3);
-        moveResult.Message.Should().BeNull("pawns can only move 1 square diagonally when capturing");
+        moveResult.Validity.Should().Be(Ok, "pawns can only move 1 square diagonally when capturing");
     }
 
     [Fact(DisplayName = "White pawns can be promoted upon reaching the opposite end of the board")]

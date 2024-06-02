@@ -1,6 +1,9 @@
 ﻿namespace DChess.Core.Moves;
 
-public readonly record struct MoveResult(bool Valid, Move Move, string? Message)
+public readonly record struct MoveResult(Move Move, MoveValidity Validity)
 {
-    public override string ToString() => Valid ? $"Valid move {Move}" : $"Invalid move {Move}: {Message}";
+    public bool IsValid => Validity == Ok;
+
+    public override string ToString() =>
+        IsValid ? $"Validity move {Move}" : $"Invalid move {Move}: {Validity.Message()}";
 }

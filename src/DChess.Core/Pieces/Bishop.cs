@@ -14,8 +14,8 @@ internal record Bishop : Piece
     {
         var move = new Move(Current, to);
         if (!move.IsDiagonal)
-            return move.AsInvalidResult("Bishop can only move diagonally");
+            return move.InvalidResult(BishopCanOnlyMoveDiagonally);
 
-        return move.AsOkResult;
+        return move.OkResult();
     }
 }
