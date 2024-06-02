@@ -16,5 +16,6 @@ public enum MoveValidity
     RookCanOnlyMoveInAStraightLine,
     CannotJumpOverOtherPieces,
     CannotMoveToSameCell,
-    CannotCaptureOwnPiece
+    CannotCaptureOwnPiece,
+    CannotMoveIntoCheck
 }

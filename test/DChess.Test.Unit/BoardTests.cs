@@ -1,6 +1,5 @@
 ﻿using DChess.Core.Board;
 using DChess.Core.Exceptions;
-using DChess.Core.Moves;
 
 namespace DChess.Test.Unit;
 

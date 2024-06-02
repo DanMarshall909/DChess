@@ -26,6 +26,7 @@ public static class MoveValidityExtensions
             CannotJumpOverOtherPieces => "Cannot jump over other pieces",
             CannotMoveToSameCell => "Cannot move to the same cell",
             CannotCaptureOwnPiece => "Cannot capture own piece",
+            CannotMoveIntoCheck => "Cannot move into check",
             _ => throw new ArgumentOutOfRangeException(nameof(validity), validity, null)
         };
     }

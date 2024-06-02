@@ -39,6 +39,6 @@ public class KingTests(BoardFixture fixture) : BoardTestBase(fixture)
         var result = Board.Pieces[a2].CheckMove(b3);
 
         // Assert
-        result.Validity.Should().Be(Ok);
+        result.Validity.Should().Be(CannotMoveIntoCheck);
     }
 }

@@ -1,5 +1,3 @@
-using DChess.Core.Moves;
-
 namespace DChess.Test.Unit;
 
 public class MoveValidityTests
@@ -13,8 +11,13 @@ public class MoveValidityTests
         {
             string message = value.Message();
 
-            Assert.NotNull(message);
-            Assert.NotEmpty(message);
+            message.Should().NotBeNullOrWhiteSpace();
         }
+    }
+    
+    [Fact(DisplayName = "OK Message is OK")]
+    public void OkMessageIsOk()
+    {
+        Ok.Message().Should().Be("OK");
     }
 }
