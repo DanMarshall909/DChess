@@ -108,8 +108,17 @@ public readonly record struct Coordinate
         }
     }
 
+    /// <summary>
+    /// The byte representation of the coordinate. The first 3 bits are the rank and the last 3 bits are the file
+    /// </summary>
+    public byte AsByte => (byte)((Rank - 1) + (File - 'a') << 3);
+    /// <summary>
+    /// Creates a new Coordinate from a byte representation
+    /// </summary>
+    /// <param name="byteCoordinate">The byte representation of the coordinate</param>
+    /// <returns></returns>
+    public static Coordinate From(byte byteCoordinate) => new((char)('a' + (byteCoordinate & 0b111)), (byte)((byteCoordinate >> 3) + 1));
     public override string ToString() => $"{File}{Rank}";
-
     public static bool IsValid(char file, byte rank) => file is >= 'a' and <= 'h' && rank is >= 1 and <= 8;
 
     /// <summary>
