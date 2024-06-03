@@ -1,21 +1,10 @@
-# DCHESS
-
-```
-D♘C♗H♕E♗S♘S♖
-♜D♞C♝H♛E♝S♞S 
-S♖D♘C♗H♕E♗S♘ 
-♞S♜D♞C♝H♛E♝S
-S♘S♖D♘C♗H♕E♗ 
-♝S♞S♜D♞C♝H♛E 
-E♗S♘S♖D♘C♗H♕ 
-♛E♝S♞S♜D♞C♝H
-```
+# ♜🄳♞🄲♝🄷♛🄴♝🅂♞🅂♜
 
 Making chess nerdier
 
 # What it is
 
-DCHESS is a chess engine designed to be:
+DChess is a chess engine designed to be:
 - a playable chess game
 - modular and extensible
 - a demonstration of TDD
