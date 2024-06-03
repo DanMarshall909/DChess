@@ -87,7 +87,6 @@ public class BoardTests
     public void cell_shorthand_can_be_used_to_get_a_cell()
     {
         // Arrange
-        var testHandlier = new TestInvalidMoveHandler();
         var board = new Board(_invalidMoveHandler);
         board[a1] = WhitePawn;
 

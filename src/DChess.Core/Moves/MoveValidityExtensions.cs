@@ -13,6 +13,7 @@ public static class MoveValidityExtensions
             BishopCanOnlyMoveDiagonally => "Bishop can only move diagonally",
             KingCanOnlyMove1SquareAtATime => "King can only move 1 square at a time",
             KnightsCanOnlyMoveInAnLShape => "Knights can only move in an L shape",
+            PawnsCannotMoveHorizontally => "Pawns cannot move horizontally",
             PawnsCanOnlyMove1Or2SquaresForward => "Pawns can only move 1 or 2 squares forward",
             PawnsCanOnlyMove1SquareDiagonallyWhenCapturing => "Pawns can only move 1 square diagonally when capturing",
             PawnsCanOnlyMove1SquareHorizontallyAndOnlyWhenTakingAPiece =>

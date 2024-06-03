@@ -12,7 +12,7 @@ internal record Rook : Piece
 
     protected override MoveResult ValidateMove(Coordinate to)
     {
-        var move = new Move(Current, to);
+        var move = new Move(Coordinate, to);
 
         if (!(move.IsHorizontal || move.IsVertical))
             return move.InvalidResult(RookCanOnlyMoveInAStraightLine);

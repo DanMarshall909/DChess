@@ -13,8 +13,11 @@ public record Pawn : Piece, IIgnorePathCheck
 
     protected override MoveResult ValidateMove(Coordinate to)
     {
-        var move = new Move(Current, to);
+        var move = new Move(Coordinate, to);
 
+        if (move.IsHorizontal)
+            return move.InvalidResult(PawnsCannotMoveHorizontally);
+        
         if (move.IsBackwards(Colour))
             return move.InvalidResult(PawnsCanOnlyMoveForward);
 
@@ -30,8 +33,8 @@ public record Pawn : Piece, IIgnorePathCheck
 
         int verticalDistance = move.VerticalDistance;
 
-        bool isFirstMove = (Current.File != 2 && Colour == White) ||
-                           (Current.File != 7 && Colour == Black);
+        bool isFirstMove = (Coordinate.Rank == 2 && Colour == White) ||
+                           (Coordinate.Rank == 7 && Colour == Black);
 
         if (verticalDistance > 2)
             return move.InvalidResult(PawnsCanOnlyMove1Or2SquaresForward);

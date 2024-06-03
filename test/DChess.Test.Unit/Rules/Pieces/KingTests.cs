@@ -1,6 +1,6 @@
 ﻿namespace DChess.Test.Unit.Rules.Pieces;
 
-public class KingTests(BoardFixture fixture) : BoardTestBase(fixture)
+public class KingTests: BoardTestBase
 {
     private const int X = LegalPositionValue;
 

@@ -37,4 +37,9 @@ public class PiecePool(Board board, IInvalidMoveHandler invalidMoveHandler)
             _ => throw new ArgumentOutOfRangeException(nameof(chessPiece.Type), chessPiece.Type, null)
         };
     }
+
+    public void Dispose()
+    {
+        _pool.Clear();
+    }
 }

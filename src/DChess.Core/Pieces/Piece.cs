@@ -7,7 +7,7 @@ public abstract record Piece
     protected Piece(Arguments arguments)
     {
         ChessPiece = arguments.ChessPiece;
-        Current = arguments.Coordinate;
+        Coordinate = arguments.Coordinate;
         Board = arguments.Board;
         InvalidMoveHandler = arguments.InvalidMoveHandler;
     }
@@ -15,7 +15,7 @@ public abstract record Piece
     public abstract string PieceName { get; }
     public IInvalidMoveHandler InvalidMoveHandler { get; set; }
     public ChessPiece ChessPiece { get; init; }
-    public Coordinate Current { get; init; }
+    public Coordinate Coordinate { get; init; }
     public Colour Colour => ChessPiece.Colour;
     public PieceType Type => ChessPiece.Type;
 
@@ -23,12 +23,12 @@ public abstract record Piece
 
     public void MoveTo(Coordinate to)
     {
-        var move = new Move(Current, to);
+        var move = new Move(Coordinate, to);
         var result = CheckMove(to);
         if (!result.IsValid)
             InvalidMoveHandler.HandleInvalidMove(result);
 
-        Board.Move(move);
+        Board.Make(move);
     }
 
 
@@ -39,40 +39,59 @@ public abstract record Piece
         if (!generalMoveResult.IsValid)
             return generalMoveResult;
 
-        var isValidMove = ValidateMove(to);
+        var validity = ValidateMove(to);
 
-        return isValidMove.IsValid ? generalMoveResult : isValidMove;
+        var moveResult = validity.IsValid ? generalMoveResult : validity;
+        return moveResult;
     }
 
     private MoveResult IsGenerallyValid(Coordinate to)
     {
-        var move = new Move(Current, to);
-        
-        if (Current == to)
+        var move = new Move(Coordinate, to);
+
+        if (Coordinate == to)
             return move.InvalidResult(CannotMoveToSameCell);
 
-        if (Board.Pieces.TryGetValue(to, out var piece))
-            if (piece.ChessPiece.Colour == ChessPiece.Colour)
-                return move.InvalidResult(CannotCaptureOwnPiece);
+        var movedPieceColour = ChessPiece.Colour;
 
+        if (Board.Pieces.TryGetValue(to, out var piece) &&
+            piece.Colour == movedPieceColour) return move.InvalidResult(CannotCaptureOwnPiece);
 
         if (this is not IIgnorePathCheck && move.Path.Any(coordinate => Board.HasPieceAt(coordinate)))
             return move.InvalidResult(CannotJumpOverOtherPieces);
 
+        if (IsInCheck(movedPieceColour, move)) 
+            return move.InvalidResult(CannotMoveIntoCheck);
+
         return move.OkResult();
     }
+
+    private bool IsInCheck(Colour movedPieceColour, Move move)
+    {
+        var kingCoordinate = Board.GetKingCoordinate(movedPieceColour);
+        
+        if (!kingCoordinate.IsValid())
+            return false;
+
+        var newBoard = Board.Clone();
+        newBoard.Make(move);
+        foreach (var (_, p) in newBoard.OpposingPiecesByCoordinate(movedPieceColour))
+        {
+            if (p.CanMoveTo(kingCoordinate))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool CanMoveTo(Coordinate coordinate) => !new Move(Coordinate, coordinate).IsBlocked(Board);
 
     protected abstract MoveResult ValidateMove(Coordinate to);
 
     public void Deconstruct(out ChessPiece chessPiece, out Coordinate coordinate)
     {
         chessPiece = ChessPiece;
-        coordinate = Current;
-    }
-
-    public void MoveTo(string coordinateString)
-    {
-        MoveTo(new Coordinate(coordinateString));
+        coordinate = Coordinate;
     }
 
     public record Arguments(ChessPiece ChessPiece, Coordinate Coordinate, Board.Board Board,

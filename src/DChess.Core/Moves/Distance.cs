@@ -6,7 +6,7 @@ public readonly struct Distance
     {
         Vertical = Math.Abs(move.To.Rank - move.From.Rank);
         Horizontal = Math.Abs(move.To.File - move.From.File);
-        Total = (int)Math.Floor(Math.Sqrt(Horizontal + Vertical));
+        Total = (int)Math.Round(Math.Sqrt(Horizontal + Vertical));
     }
 
     public int Total { get; }

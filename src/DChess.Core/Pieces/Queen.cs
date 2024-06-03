@@ -12,7 +12,7 @@ public record Queen : Piece
 
     protected override MoveResult ValidateMove(Coordinate to)
     {
-        var move = new Move(Current, to);
+        var move = new Move(Coordinate, to);
 
         return move.IsDiagonal || move.IsVertical || move.IsHorizontal
             ? move.OkResult()

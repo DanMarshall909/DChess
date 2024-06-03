@@ -2,7 +2,7 @@
 
 namespace DChess.Test.Unit.Rules.Pieces;
 
-public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
+public class PawnTests : BoardTestBase
 {
     [Fact(DisplayName = "Pawns can move forward one square")]
     public void pawn_can_move_forward_one_square()
@@ -17,27 +17,24 @@ public class PawnTests(BoardFixture fixture) : BoardTestBase(fixture)
     {
         Board[b1] = WhitePawn;
 
-        Board.Pieces[b1].MoveTo(c1);
-        Board.Pieces[c1].MoveTo(d1);
-        Board.Pieces[d1].CheckMove(f1).Validity.Should().Be(Ok, "the pawn has already moved");
+        Board.Pieces[b1].MoveTo(b2);
+        Board.Pieces[b2].MoveTo(b3);
+        Board.Pieces[b3].CheckMove(b5).Validity.Should().Be(PawnsCanOnlyMove2SquaresForwardFromStartingPosition,
+            "the pawn has already moved");
 
-        Board[f2] = BlackPawn;
-        Board.Pieces[f2].MoveTo(d2);
-        Board.Pieces[d2].CheckMove(b2).Validity.Should().Be(Ok, "the pawn has already moved");
+        Board[b6] = BlackPawn;
+        Board.Pieces[b6].MoveTo(b5);
+        Board.Pieces[b5].CheckMove(b3).Validity.Should().Be(PawnsCanOnlyMove2SquaresForwardFromStartingPosition,
+            "the pawn has already moved");
     }
 
-    [Fact(DisplayName = "Pawns can take pieces diagonally")]
-    public void pawns_can_take_pieces_diagonally()
+    [Fact(DisplayName = "Pawns cannot move diagonally")]
+    public void pawns_cannot_move_diagonally()
     {
-        Board[a1] = WhitePawn;
-        Board[b2] = BlackPawn;
-        Board[d3] = BlackPawn;
-        Board.Pieces[a1].MoveTo(b2);
-        // cannot move diagonally without a piece to take
-        Board.Pieces[b2].CheckMove(c3).Validity.Should().NotBe(Ok, "there is no piece to take");
-        // cannot move more than 1 square horizontally while taking a piece
-        var moveResult = Board.Pieces[b2].CheckMove(d3);
-        moveResult.Validity.Should().Be(Ok, "pawns can only move 1 square diagonally when capturing");
+        Board.Pieces.Should().BeEmpty();
+        Board[a3] = WhitePawn;
+
+        Board.Pieces[a3].CheckMove(b3).Validity.Should().Be(PawnsCannotMoveHorizontally);
     }
 
     [Fact(DisplayName = "White pawns can be promoted upon reaching the opposite end of the board")]

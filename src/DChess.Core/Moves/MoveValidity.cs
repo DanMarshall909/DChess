@@ -6,6 +6,7 @@ public enum MoveValidity
     BishopCanOnlyMoveDiagonally,
     KingCanOnlyMove1SquareAtATime,
     KnightsCanOnlyMoveInAnLShape,
+    PawnsCannotMoveHorizontally,
     PawnsCanOnlyMove1Or2SquaresForward,
     PawnsCanOnlyMove1SquareDiagonallyWhenCapturing,
     PawnsCanOnlyMove1SquareHorizontallyAndOnlyWhenTakingAPiece,
@@ -17,5 +18,5 @@ public enum MoveValidity
     CannotJumpOverOtherPieces,
     CannotMoveToSameCell,
     CannotCaptureOwnPiece,
-    CannotMoveIntoCheck
+    CannotMoveIntoCheck,
 }

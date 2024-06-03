@@ -12,7 +12,7 @@ internal record King : Piece, IIgnorePathCheck
 
     protected override MoveResult ValidateMove(Coordinate to)
     {
-        var move = new Move(Current, to);
+        var move = new Move(Coordinate, to);
 
         if (!move.IsAdjacent)
             return move.InvalidResult(KingCanOnlyMove1SquareAtATime);

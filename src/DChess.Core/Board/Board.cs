@@ -4,7 +4,7 @@ using DChess.Core.Pieces;
 
 namespace DChess.Core.Board;
 
-public class Board : IDisposable
+public sealed class Board : IDisposable
 {
     public const int MaxPieces = 32;
 
@@ -31,6 +31,15 @@ public class Board : IDisposable
     /// </summary>
     public byte[] Ranks => new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
 
+    public Dictionary<Coordinate, Piece> Friendly(Colour colour) => _piecesByCoordinate
+        .Where(x => x.Value.Colour == colour)
+        .ToDictionary(kvp => kvp.Key, kvp => _pool.Get(kvp.Key, kvp.Value));
+
+    public Dictionary<Coordinate, Piece> OpposingPiecesByCoordinate(Colour colour) => _piecesByCoordinate
+        .Where(x => x.Value.Colour != colour)
+        .ToDictionary(kvp => kvp.Key, kvp => _pool.Get(kvp.Key, kvp.Value));
+
+
     public Dictionary<Coordinate, Piece> Pieces => _piecesByCoordinate
         .ToDictionary(kvp => kvp.Key, kvp => _pool.Get(kvp.Key, kvp.Value));
 
@@ -44,6 +53,8 @@ public class Board : IDisposable
 
     public void Dispose()
     {
+        _piecesByCoordinate.Clear();
+        _pool.Dispose();
     }
 
     public bool TryGetValue(Coordinate coordinate, out ChessPiece chessPiece)
@@ -51,7 +62,7 @@ public class Board : IDisposable
 
     public bool HasPieceAt(Coordinate coordinate) => _piecesByCoordinate.TryGetValue(coordinate, out _);
 
-    internal void Move(Move move)
+    internal void Make(Move move)
     {
         if (!_piecesByCoordinate.TryGetValue(move.From, out var fromPiece))
             throw new InvalidMoveException(move, $"No piece exists at {move.From}");
@@ -68,5 +79,19 @@ public class Board : IDisposable
     public void Clear()
     {
         _piecesByCoordinate.Clear();
+    }
+
+    public Board Clone()
+    {
+        var pieces = _piecesByCoordinate.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        return new Board(_invalidMoveHandler, pieces);
+    }
+
+    public Coordinate GetKingCoordinate(Colour movedPieceColour)
+    {
+        return _piecesByCoordinate
+            .Where(x => x.Value.Type == PieceType.King && x.Value.Colour == movedPieceColour)
+            .Select(x => x.Key)
+            .FirstOrDefault();
     }
 }

@@ -2,8 +2,9 @@
 
 namespace DChess.Test.Unit;
 
-public abstract class BoardTestBase(BoardFixture fixture) : IClassFixture<BoardFixture>
+public abstract class BoardTestBase
 {
-    protected Board Board => Fixture.Board;
-    public BoardFixture Fixture { get; set; } = fixture;
+    protected BoardTestBase() => Board = new Board(InvalidMoveHandler);
+    protected IInvalidMoveHandler InvalidMoveHandler { get; } = new TestInvalidMoveHandler();
+    protected Board Board { get; init; }
 }

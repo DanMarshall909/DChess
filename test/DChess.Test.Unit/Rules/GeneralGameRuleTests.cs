@@ -2,7 +2,7 @@
 
 namespace DChess.Test.Unit.Rules;
 
-public class GeneralGameRuleTests(BoardFixture fixture) : BoardTestBase(fixture)
+public class GeneralGameRuleTests: BoardTestBase
 {
     [Fact(DisplayName = "A piece cannot take its own piece")]
     public void a_piece_cannot_take_its_own_piece()
@@ -10,8 +10,8 @@ public class GeneralGameRuleTests(BoardFixture fixture) : BoardTestBase(fixture)
         // Arrange
         var whitePawn = new ChessPiece(PieceType.Pawn, Colour.White);
 
-        Fixture.Board[a1] = whitePawn;
-        Fixture.Board[b2] = whitePawn;
+        Board[a1] = whitePawn;
+        Board[b2] = whitePawn;
 
         // Act
         var boardPiece = Board.Pieces[a1];

@@ -68,4 +68,5 @@ public static class NamedCoordinate
     public static readonly Coordinate h6 = new('h', 6);
     public static readonly Coordinate h7 = new('h', 7);
     public static readonly Coordinate h8 = new('h', 8);
+    public static Coordinate NullCoordinate { get; set; }
 }

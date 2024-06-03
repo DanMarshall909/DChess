@@ -5,7 +5,7 @@ using DChess.Core.Moves;
 
 namespace DChess.Core.Board;
 
-[DebuggerDisplay("{ToString()} {AsBoard}")]
+[DebuggerDisplay("$\"{File}{Rank}\" {AsBoard}")]
 public readonly record struct Coordinate
 {
     private readonly char _file;
@@ -120,6 +120,7 @@ public readonly record struct Coordinate
     public static Coordinate From(byte byteCoordinate) => new((char)('a' + (byteCoordinate & 0b111)), (byte)((byteCoordinate >> 3) + 1));
     public override string ToString() => $"{File}{Rank}";
     public static bool IsValid(char file, byte rank) => file is >= 'a' and <= 'h' && rank is >= 1 and <= 8;
+    public bool IsValid() => IsValid(File, Rank);
 
     /// <summary>
     ///     Returns a new Coordinate that is offset by the given offset
