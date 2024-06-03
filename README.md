@@ -15,15 +15,11 @@ Making chess nerdier
 
 # What it is
 
-DCHESS is a coding challenge that I'm setting for myself.
-My initial goals are for it to be:
-
+DCHESS is a chess engine designed to be:
 - a playable chess game
-- console based played by invoking `dc [move]` with `move` in algebraic notation
-- a demonstration of TDD
-- the game should retain state allowing the game to be played over multiple sessions
 - modular and extensible
-- fun
+- a demonstration of TDD
+- lighthearted and fun
 
 # Development Checklist for DCHESS
 
@@ -93,7 +89,7 @@ My initial goals are for it to be:
 
 - [X] Kings move one square in any direction.
 
-## Movement Rules phase 2 (requiring game rules to be implemented)
+## Movement Rules phase 2 (requiring piece specific game rules to be implemented)
 
 ### Capturing
 
@@ -102,18 +98,14 @@ My initial goals are for it to be:
 
 ### Check
 
-- [ ] Implement rules for check (king is under threat).
+- [X] Implement rules for check (king is under threat).
+- [X] Disallow moves that would put the player in check.
 - [ ] Implement rules for checkmate (king is in check and no legal moves can remove the threat).
-- [ ] Ensure kings cannot move into check.
-- [ ] Disallow moves that would put the player in check.
 
-- [ ] Enforce that only moves to a square occupied by an opposing piece are captures.
-- [ ] Implement castling rules
-    - The king and rook haven't moved
-    - The squares between them are unoccupied.
-- [ ] Implement en passant capturing rules.
-- [ ] Ensure special moves adhere to the context-specific conditions (like the positions of pieces for castling and en
-  passant).
+### Miscelaneous rules
+- [ ] Castling: The king and rook haven't moved
+- [ ] Castling: The squares between a king and rook must be unocupied.
+- [ ] En-passant capturing rules.
 
 ## Game Status
 
@@ -144,16 +136,11 @@ My initial goals are for it to be:
 - [ ] Ensure that the error messages are clear and helpful, guiding the user on how to correct their input or explaining
   why a move cannot be made.
 
-## AI
-
-- [ ] Implement a basic AI to play against the user. The AI should be able to make legal moves based on the current
-  board
-  state.
-
 ## REST API
-
-- This is a stretch goal, but I'd like to implement a REST API for the game.
-- The code will run on an Azure Function or AWS Lambda.
+### Design
+- The API will call the Core library and essentially just be a plugin.
+- The game should be fully playable via API calls.
+- The code will run on an Azure Function.
 - No game state will be stored on the server, but the server will be able to compute the next move based on current game
   state passed in the request.
 - Rate limiting will be implemented to prevent abuse.
