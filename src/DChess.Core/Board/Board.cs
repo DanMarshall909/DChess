@@ -43,14 +43,8 @@ public sealed class Board : IDisposable
     public Dictionary<Coordinate, Piece> Pieces => _piecesByCoordinate
         .ToDictionary(kvp => kvp.Key, kvp => _pool.Get(kvp.Key, kvp.Value));
 
-    public ChessPiece this[Coordinate coordinate]
-    {
-        get => _piecesByCoordinate[coordinate];
-        set => _piecesByCoordinate[coordinate] = value;
-    }
-
-    public ChessPiece this[string coordinateString] => this[new Coordinate(coordinateString)];
-
+    public Dictionary<Coordinate, ChessPiece> ChessPieces => _piecesByCoordinate;
+    
     public void Dispose()
     {
         _piecesByCoordinate.Clear();

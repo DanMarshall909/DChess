@@ -14,7 +14,7 @@ public class PieceTests
         var board = new Board(_invalidMoveHandler);
         var chessPiece = new ChessPiece(PieceType.Pawn, Colour.White);
 
-        board[a2] = chessPiece;
+        board.ChessPieces[a2] = chessPiece;
         board.Pieces.Count.Should().Be(1);
 
         // Act
@@ -34,7 +34,7 @@ public class PieceTests
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
-        board[a1] = new ChessPiece(PieceType.Pawn, Colour.White);
+        board.ChessPieces[a1] = new ChessPiece(PieceType.Pawn, Colour.White);
         var piece = board.Pieces[a1];
 
         // Act

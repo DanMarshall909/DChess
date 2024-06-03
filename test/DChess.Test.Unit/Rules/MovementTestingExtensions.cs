@@ -62,7 +62,7 @@ public static class MovementTestingExtensions
             var from = new Coordinate(file, rank);
 
             board.Clear();
-            board[from] = piece;
+            board.ChessPieces[from] = piece;
             setupBoard?.Invoke(board, from);
 
             var pieceAtFrom = board.Pieces[from];
@@ -79,7 +79,7 @@ public static class MovementTestingExtensions
     {
         foreach (var offset in offsets)
             if (from.TryApplyOffset(offset, out var to))
-                board[to!.Value] = piece;
+                board.ChessPieces[to!.Value] = piece;
     }
 
     /// <summary>

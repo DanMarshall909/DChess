@@ -46,10 +46,10 @@ public class BoardTests
         IInvalidMoveHandler a = new TestInvalidMoveHandler();
         var board = new Board(a);
 
-        board[a1] = WhitePawn;
+        board.ChessPieces[a1] = WhitePawn;
 
         // Assert
-        board[a1].Should().BeEquivalentTo(WhitePawn);
+        board.ChessPieces[a1].Should().BeEquivalentTo(WhitePawn);
         board.HasPieceAt(a2).Should().BeFalse();
     }
 
@@ -77,21 +77,10 @@ public class BoardTests
         var board = new Board(_invalidMoveHandler);
 
         // Act
-        Action act = () => board[new Coordinate(column, row)] = WhitePawn;
+        Action act = () => board.ChessPieces[new Coordinate(column, row)] = WhitePawn;
 
         // Assert
         act.Should().Throw<InvalidCoordinateException>();
-    }
-
-    [Fact(DisplayName = "Cell shorthand can be used to get a cell")]
-    public void cell_shorthand_can_be_used_to_get_a_cell()
-    {
-        // Arrange
-        var board = new Board(_invalidMoveHandler);
-        board[a1] = WhitePawn;
-
-        // Assert
-        board["a1"].Should().BeEquivalentTo(WhitePawn);
     }
 
     [Theory(DisplayName = "Board can be created with a standard piece layout")]
@@ -135,7 +124,7 @@ public class BoardTests
         board.SetStandardLayout();
 
         // Assert
-        board[coordinateString].Should().BeEquivalentTo(new ChessPiece(type, colour));
+        board.ChessPieces[new(coordinateString)].Should().BeEquivalentTo(new ChessPiece(type, colour));
     }
 
     [Fact(DisplayName = "A piece can be added to the board")]
@@ -143,8 +132,8 @@ public class BoardTests
     {
         var board = new Board(_invalidMoveHandler);
         var whitePawn = WhitePawn;
-        board[a1] = whitePawn;
+        board.ChessPieces[a1] = whitePawn;
 
-        board[a1].Should().Be(whitePawn);
+        board.ChessPieces[a1].Should().Be(whitePawn);
     }
 }

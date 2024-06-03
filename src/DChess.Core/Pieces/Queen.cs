@@ -18,6 +18,4 @@ public record Queen : Piece
             ? move.OkResult()
             : move.InvalidResult(QueenCanOnlyMoveDiagonallyOrInAStraightLine);
     }
-
-    public IEnumerable<Coordinate> GetPath(Move move) => throw new NotImplementedException();
 }

@@ -10,8 +10,8 @@ public class GeneralGameRuleTests: BoardTestBase
         // Arrange
         var whitePawn = new ChessPiece(PieceType.Pawn, Colour.White);
 
-        Board[a1] = whitePawn;
-        Board[b2] = whitePawn;
+        Board.ChessPieces[a1] = whitePawn;
+        Board.ChessPieces[b2] = whitePawn;
 
         // Act
         var boardPiece = Board.Pieces[a1];

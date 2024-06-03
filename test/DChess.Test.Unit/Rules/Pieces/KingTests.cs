@@ -31,9 +31,9 @@ public class KingTests: BoardTestBase
     public void a_piece_cannot_move_such_that_the_king_is_in_check()
     {
         // Arrange
-        Board[a1] = WhiteKing;
-        Board[a2] = WhiteBishop;
-        Board[a8] = BlackRook;
+        Board.ChessPieces[a1] = WhiteKing;
+        Board.ChessPieces[a2] = WhiteBishop;
+        Board.ChessPieces[a8] = BlackRook;
 
         // Act
         var result = Board.Pieces[a2].CheckMove(b3);

@@ -6,10 +6,11 @@ using DChess.Core.Moves;
 namespace DChess.Core.Board;
 
 [DebuggerDisplay("$\"{File}{Rank}\" {AsBoard}")]
-public readonly record struct Coordinate
+public record struct Coordinate
 {
-    private readonly char _file;
-    private readonly byte _rank;
+    public bool Equals(Coordinate other) => 
+        Value == other.Value;
+    public override int GetHashCode() => AsByte;
 
     /// <summary>
     ///     Creates a new Coordinate from a string representation e.g. a1. Note that this is case sensitive
@@ -43,20 +44,22 @@ public readonly record struct Coordinate
         this.Rank = Rank;
     }
 
+    public Coordinate(byte Value) => this.Value = Value;
+
     /// <summary>
     ///     The file of the coordinate (a-h) running from left to right on a chess board
     /// </summary>
     /// <exception cref="InvalidCoordinateException">Thrown if out of bounds</exception>
     public char File
     {
-        get => _file;
+        get => (char)('a' + (Value & 0b111));
         private init
         {
             if (value is < 'a' or > 'h')
-                throw new InvalidCoordinateException(_file, _rank,
-                    $"File must be between 'a' and 'h' but found {_file.ToString()}");
+                throw new InvalidCoordinateException(File, Rank,
+                    $"File must be between 'a' and 'h' but found {File.ToString()}");
 
-            _file = value;
+            Value = (byte)(Value & 0b11100000 | value - 'a');
         }
     }
 
@@ -66,13 +69,13 @@ public readonly record struct Coordinate
     /// <exception cref="InvalidCoordinateException">Thrown if out of bounds</exception>
     public byte Rank
     {
-        get => _rank;
+        get => (byte)((Value >> 3) + 1);
         private init
         {
             if (value is < 1 or > 8)
-                throw new InvalidCoordinateException(_file, _rank, $"Rank must be between 1 and 8 but found {value}");
+                throw new InvalidCoordinateException(File, Rank, $"Rank must be between 1 and 8 but found {value}");
 
-            _rank = value;
+            Value = (byte)(Value & 0b00000111 | (value - 1) << 3);
         }
     }
 
@@ -111,13 +114,18 @@ public readonly record struct Coordinate
     /// <summary>
     /// The byte representation of the coordinate. The first 3 bits are the rank and the last 3 bits are the file
     /// </summary>
-    public byte AsByte => (byte)((Rank - 1) + (File - 'a') << 3);
+    public byte AsByte => Value;
+
+    public byte Value { get; set; }
+
     /// <summary>
     /// Creates a new Coordinate from a byte representation
     /// </summary>
     /// <param name="byteCoordinate">The byte representation of the coordinate</param>
     /// <returns></returns>
-    public static Coordinate From(byte byteCoordinate) => new((char)('a' + (byteCoordinate & 0b111)), (byte)((byteCoordinate >> 3) + 1));
+    public static Coordinate From(byte byteCoordinate) =>
+        new((char)('a' + (byteCoordinate & 0b111)), (byte)((byteCoordinate >> 3) + 1));
+
     public override string ToString() => $"{File}{Rank}";
     public static bool IsValid(char file, byte rank) => file is >= 'a' and <= 'h' && rank is >= 1 and <= 8;
     public bool IsValid() => IsValid(File, Rank);
@@ -144,5 +152,10 @@ public readonly record struct Coordinate
     {
         newCoordinate = IsValidOffset(moveOffset) ? OffsetBy(moveOffset) : null;
         return newCoordinate is not null;
+    }
+
+    public readonly void Deconstruct(out byte Value)
+    {
+        Value = this.Value;
     }
 }
