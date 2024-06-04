@@ -6,7 +6,7 @@ public abstract record Piece
 {
     protected Piece(Arguments arguments)
     {
-        ChessPiece = arguments.ChessPiece;
+        PieceProperties = arguments.PieceProperties;
         Coordinate = arguments.Coordinate;
         Board = arguments.Board;
         InvalidMoveHandler = arguments.InvalidMoveHandler;
@@ -14,10 +14,10 @@ public abstract record Piece
 
     public abstract string PieceName { get; }
     public IInvalidMoveHandler InvalidMoveHandler { get; set; }
-    public ChessPiece ChessPiece { get; init; }
+    public PieceProperties PieceProperties { get; init; }
     public Coordinate Coordinate { get; init; }
-    public Colour Colour => ChessPiece.Colour;
-    public PieceType Type => ChessPiece.Type;
+    public Colour Colour => PieceProperties.Colour;
+    public PieceType Type => PieceProperties.Type;
 
     protected Board.Board Board { get; init; }
 
@@ -52,7 +52,7 @@ public abstract record Piece
         if (Coordinate == to)
             return move.InvalidResult(CannotMoveToSameCell);
 
-        var movedPieceColour = ChessPiece.Colour;
+        var movedPieceColour = PieceProperties.Colour;
 
         if (Board.Pieces.TryGetValue(to, out var piece) &&
             piece.Colour == movedPieceColour) return move.InvalidResult(CannotCaptureOwnPiece);
@@ -88,12 +88,12 @@ public abstract record Piece
 
     protected abstract MoveResult ValidateMove(Coordinate to);
 
-    public void Deconstruct(out ChessPiece chessPiece, out Coordinate coordinate)
+    public void Deconstruct(out PieceProperties pieceProperties, out Coordinate coordinate)
     {
-        chessPiece = ChessPiece;
+        pieceProperties = PieceProperties;
         coordinate = Coordinate;
     }
 
-    public record Arguments(ChessPiece ChessPiece, Coordinate Coordinate, Board.Board Board,
+    public record Arguments(PieceProperties PieceProperties, Coordinate Coordinate, Board.Board Board,
         IInvalidMoveHandler InvalidMoveHandler);
 }

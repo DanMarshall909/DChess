@@ -7,14 +7,14 @@ public class PieceTests
 {
     private readonly TestInvalidMoveHandler _invalidMoveHandler = new();
 
-    [Fact(DisplayName = "A piece can be moved")]
+    [Fact(DisplayName = "A pieceProperties can be moved")]
     public void a_piece_can_be_moved()
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
-        var chessPiece = new ChessPiece(PieceType.Pawn, Colour.White);
+        var chessPiece = new PieceProperties(PieceType.Pawn, Colour.White);
 
-        board.ChessPieces[a2] = chessPiece;
+        board.PieceAt[a2] = chessPiece;
         board.Pieces.Count.Should().Be(1);
 
         // Act
@@ -24,9 +24,9 @@ public class PieceTests
         // Assert
         var args = new Piece.Arguments(chessPiece, b3, board, _invalidMoveHandler);
         board.Pieces[b3].Should()
-            .BeEquivalentTo(new Pawn(args), "the piece should be moved");
+            .BeEquivalentTo(new Pawn(args), "the pieceProperties should be moved");
 
-        board.Pieces.Count.Should().Be(1, "the piece should be moved, not duplicated");
+        board.Pieces.Count.Should().Be(1, "the pieceProperties should be moved, not duplicated");
     }
 
     [Fact(DisplayName = "Invalid move should not be allowed")]
@@ -34,7 +34,7 @@ public class PieceTests
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
-        board.ChessPieces[a1] = new ChessPiece(PieceType.Pawn, Colour.White);
+        board.PieceAt[a1] = new PieceProperties(PieceType.Pawn, Colour.White);
         var piece = board.Pieces[a1];
 
         // Act

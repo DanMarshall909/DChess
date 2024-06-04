@@ -8,10 +8,6 @@ namespace DChess.Core.Board;
 [DebuggerDisplay("$\"{File}{Rank}\" {AsBoard}")]
 public record struct Coordinate
 {
-    public bool Equals(Coordinate other) => 
-        Value == other.Value;
-    public override int GetHashCode() => AsByte;
-
     /// <summary>
     ///     Creates a new Coordinate from a string representation e.g. a1. Note that this is case sensitive
     /// </summary>
@@ -59,7 +55,7 @@ public record struct Coordinate
                 throw new InvalidCoordinateException(File, Rank,
                     $"File must be between 'a' and 'h' but found {File.ToString()}");
 
-            Value = (byte)(Value & 0b11100000 | value - 'a');
+            Value = (byte)((Value & 0b11100000) | (value - 'a'));
         }
     }
 
@@ -75,7 +71,7 @@ public record struct Coordinate
             if (value is < 1 or > 8)
                 throw new InvalidCoordinateException(File, Rank, $"Rank must be between 1 and 8 but found {value}");
 
-            Value = (byte)(Value & 0b00000111 | (value - 1) << 3);
+            Value = (byte)((Value & 0b00000111) | ((value - 1) << 3));
         }
     }
 
@@ -112,14 +108,19 @@ public record struct Coordinate
     }
 
     /// <summary>
-    /// The byte representation of the coordinate. The first 3 bits are the rank and the last 3 bits are the file
+    ///     The byte representation of the coordinate. The first 3 bits are the rank and the last 3 bits are the file
     /// </summary>
     public byte AsByte => Value;
 
     public byte Value { get; set; }
 
+    public bool Equals(Coordinate other) =>
+        Value == other.Value;
+
+    public override int GetHashCode() => AsByte;
+
     /// <summary>
-    /// Creates a new Coordinate from a byte representation
+    ///     Creates a new Coordinate from a byte representation
     /// </summary>
     /// <param name="byteCoordinate">The byte representation of the coordinate</param>
     /// <returns></returns>

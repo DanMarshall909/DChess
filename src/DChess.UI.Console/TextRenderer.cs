@@ -35,18 +35,18 @@ public class TextRenderer : IBoardRenderer
 
     private static char PieceChar(char file, byte rank, Board board)
     {
-        if (board.TryGetValue(new Coordinate(file, rank), out var chessPiece))
+        if (board.TryGetProperties(new Coordinate(file, rank), out var chessPiece))
             return DisplayChar(chessPiece!);
 
         bool isOddSquare = (rank + file) % 2 == 0;
         return isOddSquare ? BlackSquare : WhiteSquare;
     }
 
-    private static char DisplayChar(ChessPiece chessPiece)
+    private static char DisplayChar(PieceProperties pieceProperties)
     {
-        return chessPiece.Colour switch
+        return pieceProperties.Colour switch
         {
-            Black => chessPiece.Type switch
+            Black => pieceProperties.Type switch
             {
                 PieceType.Pawn => '♙',
                 PieceType.Rook => '♖',
@@ -54,9 +54,9 @@ public class TextRenderer : IBoardRenderer
                 PieceType.Bishop => '♗',
                 PieceType.Queen => '♕',
                 PieceType.King => '♔',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), chessPiece.Type, "Unknown piece type")
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceProperties.Type, "Unknown pieceProperties type")
             },
-            _ => chessPiece.Type switch
+            _ => pieceProperties.Type switch
             {
                 PieceType.Pawn => '♟',
                 PieceType.Rook => '♜',
@@ -64,7 +64,7 @@ public class TextRenderer : IBoardRenderer
                 PieceType.Bishop => '♝',
                 PieceType.Queen => '♛',
                 PieceType.King => '♚',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), chessPiece.Type, "Unknown piece type")
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceProperties.Type, "Unknown pieceProperties type")
             }
         };
     }

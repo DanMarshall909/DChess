@@ -27,13 +27,13 @@ public class KingTests: BoardTestBase
         }.ToMoveOffsets());
     }
 
-    [Fact(DisplayName = "A piece cannot move such that the king is in check")]
+    [Fact(DisplayName = "A pieceProperties cannot move such that the king is in check")]
     public void a_piece_cannot_move_such_that_the_king_is_in_check()
     {
         // Arrange
-        Board.ChessPieces[a1] = WhiteKing;
-        Board.ChessPieces[a2] = WhiteBishop;
-        Board.ChessPieces[a8] = BlackRook;
+        Board.PieceAt[a1] = WhiteKing;
+        Board.PieceAt[a2] = WhiteBishop;
+        Board.PieceAt[a8] = BlackRook;
 
         // Act
         var result = Board.Pieces[a2].CheckMove(b3);
