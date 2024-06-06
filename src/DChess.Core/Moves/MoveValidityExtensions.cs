@@ -17,7 +17,7 @@ public static class MoveValidityExtensions
             PawnsCanOnlyMove1Or2SquaresForward => "Pawns can only move 1 or 2 squares forward",
             PawnsCanOnlyMove1SquareDiagonallyWhenCapturing => "Pawns can only move 1 square diagonally when capturing",
             PawnsCanOnlyMove1SquareHorizontallyAndOnlyWhenTakingAPiece =>
-                "Pawns can only move 1 square horizontally and only when taking a pieceProperties",
+                "Pawns can only move 1 square horizontally and only when taking a properties",
             PawnsCanOnlyMove2SquaresForwardFromStartingPosition =>
                 "Pawns can only move 2 squares forward from starting position",
             PawnsCanOnlyMoveForward => "Pawns can only move forward",
@@ -26,7 +26,7 @@ public static class MoveValidityExtensions
             RookCanOnlyMoveInAStraightLine => "Rook can only move in a straight line",
             CannotJumpOverOtherPieces => "Cannot jump over other pieces",
             CannotMoveToSameCell => "Cannot move to the same cell",
-            CannotCaptureOwnPiece => "Cannot capture own pieceProperties",
+            CannotCaptureOwnPiece => "Cannot capture own properties",
             CannotMoveIntoCheck => "Cannot move into check",
             _ => throw new ArgumentOutOfRangeException(nameof(validity), validity, null)
         };

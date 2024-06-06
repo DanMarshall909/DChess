@@ -8,6 +8,8 @@ namespace DChess.Core.Board;
 [DebuggerDisplay("$\"{File}{Rank}\" {AsBoard}")]
 public record struct Coordinate
 {
+    public static Coordinate None => new(255);
+    
     /// <summary>
     ///     Creates a new Coordinate from a string representation e.g. a1. Note that this is case sensitive
     /// </summary>
@@ -41,6 +43,7 @@ public record struct Coordinate
     }
 
     public Coordinate(byte Value) => this.Value = Value;
+
 
     /// <summary>
     ///     The file of the coordinate (a-h) running from left to right on a chess board
@@ -149,10 +152,10 @@ public record struct Coordinate
     public bool IsValidOffset(MoveOffset moveOffset) =>
         IsValid((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
 
-    public bool TryApplyOffset(MoveOffset moveOffset, out Coordinate? newCoordinate)
+    public bool TryApplyOffset(MoveOffset moveOffset, out Coordinate newCoordinate)
     {
-        newCoordinate = IsValidOffset(moveOffset) ? OffsetBy(moveOffset) : null;
-        return newCoordinate is not null;
+        newCoordinate = IsValidOffset(moveOffset) ? OffsetBy(moveOffset) : None;
+        return newCoordinate != None;
     }
 
     public readonly void Deconstruct(out byte Value)

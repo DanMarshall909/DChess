@@ -19,4 +19,7 @@ public enum MoveValidity
     CannotMoveToSameCell,
     CannotCaptureOwnPiece,
     CannotMoveIntoCheck,
+    WhiteIsInCheckMate,
+    BlackIsInCheckMate,
+    FromCellDoesNoteContainPiece,
 }

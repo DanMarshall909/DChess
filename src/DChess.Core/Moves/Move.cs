@@ -2,6 +2,7 @@ namespace DChess.Core.Moves;
 
 public readonly record struct Move(Coordinate From, Coordinate To)
 {
+    public static Move Invalid() => default;
     private MoveOffset Offset => new(To.File - From.File, To.Rank - From.Rank);
     public bool IsDiagonal => Math.Abs(To.File - From.File) == Math.Abs(To.Rank - From.Rank);
     public bool IsVertical => From.File == To.File;

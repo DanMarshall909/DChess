@@ -42,11 +42,11 @@ public class TextRenderer : IBoardRenderer
         return isOddSquare ? BlackSquare : WhiteSquare;
     }
 
-    private static char DisplayChar(PieceProperties pieceProperties)
+    private static char DisplayChar(Properties properties)
     {
-        return pieceProperties.Colour switch
+        return properties.Colour switch
         {
-            Black => pieceProperties.Type switch
+            Black => properties.Type switch
             {
                 PieceType.Pawn => '♙',
                 PieceType.Rook => '♖',
@@ -54,9 +54,9 @@ public class TextRenderer : IBoardRenderer
                 PieceType.Bishop => '♗',
                 PieceType.Queen => '♕',
                 PieceType.King => '♔',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceProperties.Type, "Unknown pieceProperties type")
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), properties.Type, "Unknown properties type")
             },
-            _ => pieceProperties.Type switch
+            _ => properties.Type switch
             {
                 PieceType.Pawn => '♟',
                 PieceType.Rook => '♜',
@@ -64,7 +64,7 @@ public class TextRenderer : IBoardRenderer
                 PieceType.Bishop => '♝',
                 PieceType.Queen => '♛',
                 PieceType.King => '♚',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceProperties.Type, "Unknown pieceProperties type")
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), properties.Type, "Unknown properties type")
             }
         };
     }

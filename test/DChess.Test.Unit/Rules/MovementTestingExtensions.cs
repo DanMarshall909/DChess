@@ -7,51 +7,51 @@ public static class MovementTestingExtensions
     public const int LegalPositionValue = 1;
 
     /// <summary>
-    ///     Test that a pieceProperties can move to a given set of offsets from its current position. Offsets resulting in invalid
+    ///     Test that a properties can move to a given set of offsets from its current position. Offsets resulting in invalid
     ///     coordinates are ignored.
     /// </summary>
-    /// <param name="pieceProperties">The pieceProperties that will be evaluated e.g. WhiteKnight</param>
+    /// <param name="properties">The properties that will be evaluated e.g. WhiteKnight</param>
     /// <param name="offsetsFromCurrentPosition">
-    ///     An array of offsets that the pieceProperties should be able to move to from its current
+    ///     An array of offsets that the properties should be able to move to from its current
     ///     position. For example A knight would have offsets in an L shape i.e. (1, 2), (1, -2), (-1, 2), (-1, -2), (2, 1),
     ///     (2, -1), (-2, 1), (-2, -1)
     /// </param>
     /// <param name="setupBoard">
     ///     An optional action that can be used to setup the board before each test. The action takes in
-    ///     the board and the coordinate of the pieceProperties being tested
+    ///     the board and the coordinate of the properties being tested
     /// </param>
-    public static void ShouldBeAbleToMoveTo(this PieceProperties pieceProperties,
+    public static void ShouldBeAbleToMoveTo(this Properties properties,
         IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
-        => AbleToMoveWhenOffsetBy(pieceProperties, offsetsFromCurrentPosition, true, setupBoard);
+        => AbleToMoveWhenOffsetBy(properties, offsetsFromCurrentPosition, true, setupBoard);
 
     /// <summary>
     ///     Tests that every offset in invalidOffsetsFromCurrentPosition array results in an invalid move.  Offsets resulting
     ///     in invalid coordinates are ignored.
     /// </summary>
-    /// <param name="pieceProperties"></param>
+    /// <param name="properties"></param>
     /// <param name="invalidOffsetsFromCurrentPosition"></param>
     /// <param name="setupBoard"></param>
-    public static void ShouldNotBeAbleToMoveTo(this PieceProperties pieceProperties,
+    public static void ShouldNotBeAbleToMoveTo(this Properties properties,
         IReadOnlyCollection<MoveOffset> invalidOffsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
-        => AbleToMoveWhenOffsetBy(pieceProperties, invalidOffsetsFromCurrentPosition, false, setupBoard);
+        => AbleToMoveWhenOffsetBy(properties, invalidOffsetsFromCurrentPosition, false, setupBoard);
 
-    public static void ShouldOnlyBeAbleToMoveTo(this PieceProperties pieceProperties,
+    public static void ShouldOnlyBeAbleToMoveTo(this Properties properties,
         IReadOnlyCollection<MoveOffset> validOffsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
     {
-        pieceProperties.ShouldBeAbleToMoveTo(validOffsetsFromCurrentPosition, setupBoard);
+        properties.ShouldBeAbleToMoveTo(validOffsetsFromCurrentPosition, setupBoard);
         var invalidOffsetsFromCurrentPosition = validOffsetsFromCurrentPosition.Inverse().ToList().AsReadOnly();
-        pieceProperties.ShouldNotBeAbleToMoveTo(invalidOffsetsFromCurrentPosition, setupBoard);
+        properties.ShouldNotBeAbleToMoveTo(invalidOffsetsFromCurrentPosition, setupBoard);
     }
 
     /// <summary>
-    ///     Tests if a pieceProperties can move to a given set of offsets from its current position. Offsets resulting in invalid
+    ///     Tests if a properties can move to a given set of offsets from its current position. Offsets resulting in invalid
     ///     coordinates are ignored.
     /// </summary>
-    /// <param name="pieceProperties"></param>
+    /// <param name="properties"></param>
     /// <param name="offsetsFromCurrentPosition"></param>
     /// <param name="shouldBeAbleToMove"></param>
     /// <param name="setupBoard"></param>
-    private static void AbleToMoveWhenOffsetBy(this PieceProperties pieceProperties,
+    private static void AbleToMoveWhenOffsetBy(this Properties properties,
         IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, bool shouldBeAbleToMove,
         Action<Board, Coordinate>? setupBoard = null)
     {
@@ -62,24 +62,24 @@ public static class MovementTestingExtensions
             var from = new Coordinate(file, rank);
 
             board.Clear();
-            board.PieceAt[from] = pieceProperties;
+            board.Set(from, properties);
             setupBoard?.Invoke(board, from);
 
             var pieceAtFrom = board.Pieces[from];
             foreach (var offset in offsetsFromCurrentPosition)
                 if (from.TryApplyOffset(offset, out var to))
-                    pieceAtFrom.CheckMove(to!.Value).IsValid
+                    pieceAtFrom.CheckMove(to).IsValid
                         .Should().Be(shouldBeAbleToMove,
                             $"{pieceAtFrom.PieceProperties} should {(shouldBeAbleToMove ? "" : "not ")}be able to move from {from} to {to})");
         }
     }
 
     public static void SetOffsetPositions(this Board board, Coordinate from, IReadOnlyCollection<MoveOffset> offsets,
-        PieceProperties pieceProperties)
+        Properties properties)
     {
         foreach (var offset in offsets)
             if (from.TryApplyOffset(offset, out var to))
-                board.PieceAt[to!.Value] = pieceProperties;
+                board.Set(to, properties);
     }
 
     /// <summary>
@@ -87,8 +87,8 @@ public static class MovementTestingExtensions
     /// </summary>
     /// <param name="board"></param>
     /// <param name="coordinate">The coordinate to set the positions around</param>
-    /// <param name="pieceProperties"></param>
-    public static void Surround2CellsFrom(this Board board, Coordinate coordinate, PieceProperties pieceProperties)
+    /// <param name="properties"></param>
+    public static void Surround2CellsFrom(this Board board, Coordinate coordinate, Properties properties)
     {
         SetOffsetPositions(board, coordinate, new MoveOffset[]
         {
@@ -97,10 +97,10 @@ public static class MovementTestingExtensions
             (-2, 0), (2, 0),
             (-2, 1), (2, 1),
             (-2, 2), (-1, 2), (0, 2), (1, 2), (2, 2)
-        }, pieceProperties);
+        }, properties);
     }
 
-    public static void Surround(this Board board, Coordinate coordinate, PieceProperties pieceProperties)
+    public static void Surround(this Board board, Coordinate coordinate, Properties properties)
     {
         SetOffsetPositions(board, coordinate, new MoveOffset[]
         {
@@ -112,7 +112,7 @@ public static class MovementTestingExtensions
             (-1, -1),
             (1, -1),
             (1, -1)
-        }, pieceProperties);
+        }, properties);
     }
 
 

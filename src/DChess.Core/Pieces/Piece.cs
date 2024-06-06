@@ -14,7 +14,7 @@ public abstract record Piece
 
     public abstract string PieceName { get; }
     public IInvalidMoveHandler InvalidMoveHandler { get; set; }
-    public PieceProperties PieceProperties { get; init; }
+    public Properties PieceProperties { get; init; }
     public Coordinate Coordinate { get; init; }
     public Colour Colour => PieceProperties.Colour;
     public PieceType Type => PieceProperties.Type;
@@ -54,7 +54,7 @@ public abstract record Piece
 
         var movedPieceColour = PieceProperties.Colour;
 
-        if (Board.Pieces.TryGetValue(to, out var piece) &&
+        if (Board.TryGetPiece(to, out var piece) &&
             piece.Colour == movedPieceColour) return move.InvalidResult(CannotCaptureOwnPiece);
 
         if (this is not IIgnorePathCheck && move.Path.Any(coordinate => Board.HasPieceAt(coordinate)))
@@ -69,13 +69,12 @@ public abstract record Piece
     private bool IsInCheck(Colour movedPieceColour, Move move)
     {
         var kingCoordinate = Board.GetKingCoordinate(movedPieceColour);
-        
-        if (!kingCoordinate.IsValid())
+        if (kingCoordinate == NullCoordinate)
             return false;
 
         var newBoard = Board.Clone();
         newBoard.Make(move);
-        foreach (var (_, p) in newBoard.OpposingPiecesByCoordinate(movedPieceColour))
+        foreach (var p in newBoard.OpposingPiecesByCoordinate(movedPieceColour))
         {
             if (p.CanMoveTo(kingCoordinate))
                 return true;
@@ -88,12 +87,26 @@ public abstract record Piece
 
     protected abstract MoveResult ValidateMove(Coordinate to);
 
-    public void Deconstruct(out PieceProperties pieceProperties, out Coordinate coordinate)
+    public void Deconstruct(out Properties properties, out Coordinate coordinate)
     {
-        pieceProperties = PieceProperties;
+        properties = PieceProperties;
         coordinate = Coordinate;
     }
 
-    public record Arguments(PieceProperties PieceProperties, Coordinate Coordinate, Board.Board Board,
+    public record Arguments(Properties PieceProperties, Coordinate Coordinate, Board.Board Board,
         IInvalidMoveHandler InvalidMoveHandler);
 }
+
+public record NullPiece : Piece
+{
+    public NullPiece(Arguments arguments) : base(arguments)
+    {
+    }
+
+    public override string PieceName { get; } = "NullPiece";
+    protected override MoveResult ValidateMove(Coordinate to)
+    {
+        return new MoveResult(Move.Invalid(), FromCellDoesNoteContainPiece);
+    }
+}
+

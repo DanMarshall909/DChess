@@ -5,40 +5,40 @@ public static class BoardExtensions
     public static void SetStandardLayout(this Board board)
     {
         board.Clear();
-        board.PieceAt[a8] = BlackRook;
-        board.PieceAt[b8] = BlackKnight;
-        board.PieceAt[c8] = BlackBishop;
-        board.PieceAt[d8] = BlackQueen;
-        board.PieceAt[e8] = BlackKing;
-        board.PieceAt[f8] = BlackBishop;
-        board.PieceAt[g8] = BlackKnight;
-        board.PieceAt[h8] = BlackRook;
+        board.Set(a8, BlackRook);
+        board.Set(b8, BlackKnight);
+        board.Set(c8, BlackBishop);
+        board.Set(d8, BlackQueen);
+        board.Set(e8, BlackKing);
+        board.Set(f8, BlackBishop);
+        board.Set(g8, BlackKnight);
+        board.Set(h8, BlackRook);
 
-        board.PieceAt[a7] = BlackPawn;
-        board.PieceAt[b7] = BlackPawn;
-        board.PieceAt[c7] = BlackPawn;
-        board.PieceAt[d7] = BlackPawn;
-        board.PieceAt[e7] = BlackPawn;
-        board.PieceAt[f7] = BlackPawn;
-        board.PieceAt[g7] = BlackPawn;
-        board.PieceAt[h7] = BlackPawn;
+        board.Set(a7, BlackPawn);
+        board.Set(b7, BlackPawn);
+        board.Set(c7, BlackPawn);
+        board.Set(d7, BlackPawn);
+        board.Set(e7, BlackPawn);
+        board.Set(f7, BlackPawn);
+        board.Set(g7, BlackPawn);
+        board.Set(h7, BlackPawn);
 
-        board.PieceAt[a2] = WhitePawn;
-        board.PieceAt[b2] = WhitePawn;
-        board.PieceAt[c2] = WhitePawn;
-        board.PieceAt[d2] = WhitePawn;
-        board.PieceAt[e2] = WhitePawn;
-        board.PieceAt[f2] = WhitePawn;
-        board.PieceAt[g2] = WhitePawn;
-        board.PieceAt[h2] = WhitePawn;
+        board.Set(a2, WhitePawn);
+        board.Set(b2, WhitePawn);
+        board.Set(c2, WhitePawn);
+        board.Set(d2, WhitePawn);
+        board.Set(e2, WhitePawn);
+        board.Set(f2, WhitePawn);
+        board.Set(g2, WhitePawn);
+        board.Set(h2, WhitePawn);
 
-        board.PieceAt[a1] = WhiteRook;
-        board.PieceAt[b1] = WhiteKnight;
-        board.PieceAt[c1] = WhiteBishop;
-        board.PieceAt[d1] = WhiteQueen;
-        board.PieceAt[e1] = WhiteKing;
-        board.PieceAt[f1] = WhiteBishop;
-        board.PieceAt[g1] = WhiteKnight;
-        board.PieceAt[h1] = WhiteRook;
+        board.Set(a1, WhiteRook);
+        board.Set(b1, WhiteKnight);
+        board.Set(c1, WhiteBishop);
+        board.Set(d1, WhiteQueen);
+        board.Set(e1, WhiteKing);
+        board.Set(f1, WhiteBishop);
+        board.Set(g1, WhiteKnight);
+        board.Set(h1, WhiteRook);
     }
 }

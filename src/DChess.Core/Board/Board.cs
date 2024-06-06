@@ -7,23 +7,117 @@ namespace DChess.Core.Board;
 
 public sealed class Board : IDisposable
 {
-    public bool HasPieceAt(Coordinate coordinate) => _pieceAt.TryGetValue(coordinate, out _);
+    private static readonly Properties[,] NoProperties = EmptyProperties;
+    private bool IsEmpty => _properties == EmptyProperties;
+    private static Properties[,] EmptyProperties => new Properties[8, 8];
 
-    public Dictionary<Coordinate, PieceProperties> PieceAt => _pieceAt;
+    public Board(IInvalidMoveHandler invalidMoveHandler)
+    {
+        _invalidMoveHandler = invalidMoveHandler;
+        _pool = new PiecePool(this, invalidMoveHandler);
+        _moveHandler = new MoveHandler(this);
+        _properties = NoProperties;
+    }
 
-    public Dictionary<Coordinate, Piece> OpposingPiecesByCoordinate(Colour colour) => _pieceAt
-        .Where(x => x.Value.Colour != colour)
-        .ToDictionary(kvp => kvp.Key, kvp => _pool.Get(kvp.Key, kvp.Value));
+    public Board(IInvalidMoveHandler invalidMoveHandler,
+        Dictionary<Coordinate, Properties> piecesByCoordinate) : this(invalidMoveHandler)
+    {
+        var pieces = new Properties[8, 8];
+        foreach (var (coordinate, props) in piecesByCoordinate)
+        {
+            pieces[coordinate.File - 'a', coordinate.Rank - 1] = props;
+        }
 
-    public Dictionary<Coordinate, Piece> Friendly(Colour colour) => _pieceAt
-        .Where(x => x.Value.Colour == colour)
-        .ToDictionary(kvp => kvp.Key, kvp => _pool.Get(kvp.Key, kvp.Value));
+        _properties = pieces;
+    }
 
-    public ReadOnlyDictionary<Coordinate, Piece> Pieces => _pieceAt
-        .ToDictionary(kvp => kvp.Key, kvp => _pool.Get(kvp.Key, kvp.Value)).AsReadOnly();
+    private Board(IInvalidMoveHandler invalidMoveHandler, Properties[,]? properties) : this(invalidMoveHandler) 
+        => _properties = (properties?.Clone() as Properties[,]) ?? EmptyProperties;
 
-    public bool TryGetProperties(Coordinate coordinate, out PieceProperties pieceProperties)
-        => _pieceAt.TryGetValue(coordinate, out pieceProperties);
+    internal static Board CreateInstance(IInvalidMoveHandler invalidMoveHandler, Properties[,]? properties = null)
+    {
+        return new Board(invalidMoveHandler, properties);
+    }
+
+    public bool HasPieceAt(Coordinate coordinate)
+    {
+        Properties properties = _properties[coordinate.File - 'a', coordinate.Rank - 1];
+        return properties == Properties.None;
+    }
+
+
+    public void Set(Coordinate coordinate, Properties properties)
+        => _properties[coordinate.File - 'a', coordinate.Rank - 1] = properties;
+
+    public void Move(Move move)
+    {
+        _moveHandler.Make(move);
+    }
+
+    /// <summary>
+    /// Creates a new Coordinate from an array offset instead of a file and rank
+    /// </summary>
+    /// <param name="fileArrayOffset">The file array offset from 0-7</param>
+    /// <param name="rankArrayOffset">The rank array offset from 0-7</param>
+    /// <exception cref="NotImplementedException"></exception>
+    private Coordinate CoordinateFromZeroOffset(int fileArrayOffset, int rankArrayOffset)
+        => new((byte)((fileArrayOffset & 0b111) | ((rankArrayOffset & 0b111) << 3)));
+
+    public IEnumerable<Piece> OpposingPiecesByCoordinate(Colour colour)
+    {
+        for (int f = 0; f < 8; f++)
+        {
+            for (int r = 0; r < 8; r++)
+            {
+                var props = _properties[f, r];
+                if (props == Properties.None) continue;
+                var val = props;
+                if (val.Colour != colour)
+                    yield return _pool.GetPiece(CoordinateFromZeroOffset(f, r), val);
+            }
+        }
+    }
+
+    public ReadOnlyDictionary<Coordinate, Piece> Pieces
+    {
+        get
+        {
+            var pieces = new Dictionary<Coordinate, Piece>();
+            for (int f = 0; f < 8; f++)
+            {
+                for (int r = 0; r < 8; r++)
+                {
+                    var props = _properties[f, r];
+                    if (props == Properties.None) continue;
+                    var val = props;
+                    var coordinateFromZeroOffset = CoordinateFromZeroOffset(f, r);
+                    pieces.Add(coordinateFromZeroOffset, _pool.GetPiece(coordinateFromZeroOffset, val));
+                }
+            }
+
+            return new ReadOnlyDictionary<Coordinate, Piece>(pieces);
+        }
+    }
+
+
+    public bool TryGetProperties(Coordinate coordinate, out Properties properties)
+    {
+        properties = _properties[coordinate.File - 'a', coordinate.Rank - 1];
+        return properties != Properties.None;
+    }
+
+    public bool TryGetPiece(Coordinate at, out Piece piece)
+    {
+        var p = TryGetProperties(at, out var properties) ? properties : Properties.None;
+        if (p == Properties.None)
+        {
+            piece = new NullPiece(new(p, at, this, _invalidMoveHandler));
+            return false;
+        }
+
+        piece = _pool.GetPiece(at, properties);
+        return true;
+    }
 
     /// <summary>
     ///     The vertical ranks (rows) of the board, from 1 to 8
@@ -35,56 +129,76 @@ public sealed class Board : IDisposable
     /// </summary>
     public static char[] Files = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
 
-    internal void Make(Move move)
-    {
-        if (!_pieceAt.TryGetValue(move.From, out var fromPiece))
-            throw new InvalidMoveException(move, $"No pieceProperties exists at {move.From}");
-
-        bool pawnIsPromoted = (fromPiece.Type == PieceType.Pawn && move.To.File == 'a') || move.To.File == 'h';
-        var toPiece = pawnIsPromoted
-            ? new PieceProperties(PieceType.Queen, fromPiece.Colour)
-            : fromPiece;
-
-        _pieceAt.Remove(move.From);
-        _pieceAt[move.To] = toPiece;
-    }
-
-    public Board(IInvalidMoveHandler invalidMoveHandler,
-        Dictionary<Coordinate, PieceProperties>? piecesByCoordinate = null)
-    {
-        _invalidMoveHandler = invalidMoveHandler;
-        _pieceAt = piecesByCoordinate ?? new Dictionary<Coordinate, PieceProperties>();
-        _pool = new PiecePool(this, invalidMoveHandler);
-    }
-
-    private readonly IInvalidMoveHandler _invalidMoveHandler;
-
-    private readonly Dictionary<Coordinate, PieceProperties> _pieceAt;
-
-    private readonly PiecePool _pool;
-
     public void Dispose()
     {
-        _pieceAt.Clear();
         _pool.Dispose();
     }
 
     public void Clear()
     {
-        _pieceAt.Clear();
+        _properties.Initialize();
     }
 
     public Board Clone()
     {
-        var pieces = _pieceAt.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        return new Board(_invalidMoveHandler, pieces);
+        return new Board(_invalidMoveHandler, _properties);
     }
 
-    public Coordinate GetKingCoordinate(Colour movedPieceColour)
+    public Coordinate GetKingCoordinate(Colour colour)
     {
-        return _pieceAt
-            .Where(x => x.Value.Type == PieceType.King && x.Value.Colour == movedPieceColour)
-            .Select(x => x.Key)
-            .FirstOrDefault();
+        // get index of king
+        for (int f = 0; f < 8; f++)
+        {
+            for (int r = 0; r < 8; r++)
+            {
+                var props = _properties[f, r];
+                if (props.Type == PieceType.King && props.Colour == colour)
+                    return new Coordinate(Files[f], Ranks[r]);
+            }
+        }
+
+        return NullCoordinate;
+    }
+
+    private readonly IInvalidMoveHandler _invalidMoveHandler;
+
+    private readonly Properties[,] _properties;
+
+    private readonly PiecePool _pool;
+    private readonly MoveHandler _moveHandler;
+
+    public void RemovePieceAt(Coordinate moveFrom)
+    {
+        _properties[moveFrom.File - 'a', moveFrom.Rank - 1] = Core.Board.Properties.None;
+    }
+
+    public void SetPiece(Coordinate moveTo, Properties to)
+    {
+        _properties[moveTo.File - 'a', moveTo.Rank - 1] = to;
+    }
+
+    public void Make(Move move)
+    {
+        _moveHandler.Make(move);
+    }
+
+    public Properties GetProperties(Coordinate coordinate) =>
+        _properties[coordinate.File - 'a', coordinate.Rank - 1];
+}
+
+public class MoveHandler(Board board)
+{
+    public void Make(Move move)
+    {
+        if (!board.TryGetProperties(move.From, out var fromPiece))
+            throw new InvalidMoveException(move, $"No piece exists at {move.From}");
+
+        bool pawnIsPromoted = (fromPiece.Type == PieceType.Pawn && move.To.File == 'a') || move.To.File == 'h';
+        var toPiece = pawnIsPromoted
+            ? new Properties(PieceType.Queen, fromPiece.Colour)
+            : fromPiece;
+
+        board.RemovePieceAt(move.From);
+        board.SetPiece(move.To, toPiece);
     }
 }
