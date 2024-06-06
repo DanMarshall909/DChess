@@ -1,10 +1,11 @@
-# ♜🄳♞🄲♝🄷♛🄴♝🅂♞🅂♜
+# DChess
 
-Making chess nerdier
+*Making chess nerdier*
 
-# What it is
+<img src="Resources/DChess.png" alt="DChess" width="200"/>
 
 DChess is a chess engine designed to be:
+
 - a playable chess game
 - modular and extensible
 - a demonstration of TDD
@@ -85,32 +86,25 @@ DChess is a chess engine designed to be:
 - [X] Ensure pawns can move diagonally only when capturing an opponent’s piece.
 - [X] Enforce that pawns can be promoted upon reaching the opposite end of the board.
 
-### Check
+### Miscellaneous rules
 
-- [X] Implement rules for check (king is under threat).
-- [X] Disallow moves that would put the player in check.
-- [ ] Implement rules for checkmate (king is in check and no legal moves can remove the threat).
-
-### Miscelaneous rules
 - [ ] Castling: The king and rook haven't moved
 - [ ] Castling: The squares between a king and rook must be unocupied.
 - [ ] En-passant capturing rules.
 
 ## Game Status
 
-- [ ] Implement a system to keep track of the game status (e.g., ongoing, check, checkmate, stalemate). Display the
-  current game status each time the board is shown.
+- [ ] Implement a system to keep track of the game status (e.g., ongoing, check, checkmate, stalemate).
+- [X] Implement rules for check (king is under threat).
+- [X] Disallow moves that would put the player in check.
+- [ ] Implement rules for checkmate (king is in check and no legal moves can remove the threat).
+- [ ] Implement a turn system to ensure that players alternate turns correctly.
 
 ## Allow the User to Move Pieces Using Algebraic Notation
 
 - [ ] Parse algebraic notation into board coordinates.
 - [ ] Create a function to update the board based on the parsed move.
 - [ ] Develop input validation to ensure notation is syntactically correct.
-
-## Turn System
-
-- [ ] Implement a turn system to ensure that players alternate turns correctly. Include turn validation in the move
-  processing logic to prevent a player from making consecutive moves.
 
 ## Game History
 
@@ -126,7 +120,9 @@ DChess is a chess engine designed to be:
   why a move cannot be made.
 
 ## REST API
+
 ### Design
+
 - The API will call the Core library and essentially just be a plugin.
 - The game should be fully playable via API calls.
 - The code will run on an Azure Function.
