@@ -1,5 +1,7 @@
 ﻿using DChess.Core.Board;
 using DChess.Core.Pieces;
+using static DChess.Core.Board.Colour;
+using static DChess.Core.Board.PieceType;
 
 namespace DChess.Test.Unit;
 
@@ -7,15 +9,15 @@ public class PieceTests
 {
     private readonly TestInvalidMoveHandler _invalidMoveHandler = new();
 
-    [Fact(DisplayName = "A properties can be moved")]
+    [Fact(DisplayName = "A piece can be moved")]
     public void a_piece_can_be_moved()
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
-        var chessPiece = new Properties(PieceType.Pawn, Colour.White);
+        var chessPiece = new Properties(PieceType.Pawn, White);
 
         board.Set(a2, chessPiece);
-        board.Pieces.Count.Should().Be(1);
+        board.FriendlyPiecesByCoordinate(White).Count().Should().Be(1);
 
         // Act
         var piece = board.Pieces[a2];
@@ -26,7 +28,8 @@ public class PieceTests
         board.Pieces[b3].Should()
             .BeEquivalentTo(new Pawn(args), "the properties should be moved");
 
-        board.Pieces.Count.Should().Be(1, "the properties should be moved, not duplicated");
+        board.FriendlyPiecesByCoordinate(White).Count().Should()
+            .Be(1, "the properties should be moved, not duplicated");
     }
 
     [Fact(DisplayName = "Invalid move should not be allowed")]
@@ -34,7 +37,7 @@ public class PieceTests
     {
         // Arrange
         var board = new Board(_invalidMoveHandler);
-        board.Set(a1, new Properties(PieceType.Pawn, Colour.White));
+        board.Set(a1, new Properties(PieceType.Pawn, White));
         var piece = board.Pieces[a1];
 
         // Act

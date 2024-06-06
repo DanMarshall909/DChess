@@ -7,7 +7,6 @@ namespace DChess.Core.Board;
 
 public sealed class Board : IDisposable
 {
-    private static readonly Properties[,] NoProperties = EmptyProperties;
     private bool IsEmpty => _properties == EmptyProperties;
     private static Properties[,] EmptyProperties => new Properties[8, 8];
 
@@ -16,7 +15,7 @@ public sealed class Board : IDisposable
         _invalidMoveHandler = invalidMoveHandler;
         _pool = new PiecePool(this, invalidMoveHandler);
         _moveHandler = new MoveHandler(this);
-        _properties = NoProperties;
+        _properties = EmptyProperties;
     }
 
     public Board(IInvalidMoveHandler invalidMoveHandler,
@@ -34,10 +33,8 @@ public sealed class Board : IDisposable
     private Board(IInvalidMoveHandler invalidMoveHandler, Properties[,]? properties) : this(invalidMoveHandler) 
         => _properties = (properties?.Clone() as Properties[,]) ?? EmptyProperties;
 
-    internal static Board CreateInstance(IInvalidMoveHandler invalidMoveHandler, Properties[,]? properties = null)
-    {
-        return new Board(invalidMoveHandler, properties);
-    }
+    internal static Board CreateInstance(IInvalidMoveHandler invalidMoveHandler, Properties[,]? properties = null) 
+        => new(invalidMoveHandler, properties);
 
     public bool HasPieceAt(Coordinate coordinate)
     {
@@ -63,7 +60,7 @@ public sealed class Board : IDisposable
     private Coordinate CoordinateFromZeroOffset(int fileArrayOffset, int rankArrayOffset)
         => new((byte)((fileArrayOffset & 0b111) | ((rankArrayOffset & 0b111) << 3)));
 
-    public IEnumerable<Piece> OpposingPiecesByCoordinate(Colour colour)
+    public IEnumerable<Piece> FriendlyPiecesByCoordinate(Colour colour)
     {
         for (int f = 0; f < 8; f++)
         {
@@ -71,12 +68,14 @@ public sealed class Board : IDisposable
             {
                 var props = _properties[f, r];
                 if (props == Properties.None) continue;
-                var val = props;
-                if (val.Colour != colour)
-                    yield return _pool.GetPiece(CoordinateFromZeroOffset(f, r), val);
+                if (props.Colour == colour)
+                    yield return _pool.GetPiece(CoordinateFromZeroOffset(f, r), props);
             }
         }
     }
+
+    public IEnumerable<Piece> OpposingPiecesByCoordinate(Colour colour) 
+        => FriendlyPiecesByCoordinate(colour == White ? Black : White);
 
     public ReadOnlyDictionary<Coordinate, Piece> Pieces
     {
@@ -169,7 +168,7 @@ public sealed class Board : IDisposable
 
     public void RemovePieceAt(Coordinate moveFrom)
     {
-        _properties[moveFrom.File - 'a', moveFrom.Rank - 1] = Core.Board.Properties.None;
+        _properties[moveFrom.File - 'a', moveFrom.Rank - 1] = Properties.None;
     }
 
     public void SetPiece(Coordinate moveTo, Properties to)

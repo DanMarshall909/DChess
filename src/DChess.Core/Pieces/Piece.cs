@@ -74,7 +74,7 @@ public abstract record Piece
 
         var newBoard = Board.Clone();
         newBoard.Make(move);
-        foreach (var p in newBoard.OpposingPiecesByCoordinate(movedPieceColour))
+        foreach (var p in newBoard.FriendlyPiecesByCoordinate(movedPieceColour))
         {
             if (p.CanMoveTo(kingCoordinate))
                 return true;

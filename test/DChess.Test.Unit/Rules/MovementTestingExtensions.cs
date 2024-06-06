@@ -125,8 +125,8 @@ public static class MovementTestingExtensions
     /// <returns></returns>
     public static IEnumerable<MoveOffset> Inverse(this IReadOnlyCollection<MoveOffset> offsets)
     {
-        for (int df = -8; df <= 8; df++)
-        for (int dr = -8; dr <= 8; dr++)
+        for (int df = -7; df <= 7; df++)
+        for (int dr = -7; dr <= 7; dr++)
         {
             if (offsets.Contains(new MoveOffset(dr, df)))
                 continue;
@@ -136,8 +136,8 @@ public static class MovementTestingExtensions
     }
 
     /// <summary>
-    ///     Converts a 17x17 matrix of bytes to an array of MoveOffsets. The matrix should be centered at the center of the
-    ///     matrix i.e. (8, 8). The matrix should be 17x17.
+    ///     Converts a 15x15 matrix of bytes to an array of MoveOffsets. The matrix should be centered at the center of the
+    ///     matrix i.e. (8, 8).
     /// </summary>
     /// <param name="movesFromCenter"></param>
     /// <returns></returns>
