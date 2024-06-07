@@ -30,16 +30,16 @@ public sealed class Board : IDisposable
         _properties = pieces;
     }
 
-    private Board(IInvalidMoveHandler invalidMoveHandler, Properties[,]? properties) : this(invalidMoveHandler) 
+    private Board(IInvalidMoveHandler invalidMoveHandler, Properties[,]? properties) : this(invalidMoveHandler)
         => _properties = (properties?.Clone() as Properties[,]) ?? EmptyProperties;
 
-    internal static Board CreateInstance(IInvalidMoveHandler invalidMoveHandler, Properties[,]? properties = null) 
+    internal static Board CreateInstance(IInvalidMoveHandler invalidMoveHandler, Properties[,]? properties = null)
         => new(invalidMoveHandler, properties);
 
     public bool HasPieceAt(Coordinate coordinate)
     {
-        Properties properties = _properties[coordinate.File - 'a', coordinate.Rank - 1];
-        return properties == Properties.None;
+        var properties = _properties[coordinate.File - 'a', coordinate.Rank - 1];
+        return properties != Properties.None;
     }
 
 
@@ -74,7 +74,7 @@ public sealed class Board : IDisposable
         }
     }
 
-    public IEnumerable<Piece> OpposingPiecesByCoordinate(Colour colour) 
+    public IEnumerable<Piece> OpposingPiecesByCoordinate(Colour colour)
         => FriendlyPiecesByCoordinate(colour == White ? Black : White);
 
     public ReadOnlyDictionary<Coordinate, Piece> Pieces
@@ -135,7 +135,7 @@ public sealed class Board : IDisposable
 
     public void Clear()
     {
-        _properties.Initialize();
+        _properties = new Properties[8, 8];
     }
 
     public Board Clone()
@@ -161,7 +161,7 @@ public sealed class Board : IDisposable
 
     private readonly IInvalidMoveHandler _invalidMoveHandler;
 
-    private readonly Properties[,] _properties;
+    private Properties[,] _properties;
 
     private readonly PiecePool _pool;
     private readonly MoveHandler _moveHandler;

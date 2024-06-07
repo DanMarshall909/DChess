@@ -4,6 +4,7 @@ public static class NamedCoordinate
 {
     // ReSharper disable InconsistentNaming
     // ReSharper disable UnusedMember.Global
+    public static readonly Coordinate NullCoordinate = new(255);
     public static readonly Coordinate a1 = new('a', 1);
     public static readonly Coordinate a2 = new('a', 2);
     public static readonly Coordinate a3 = new('a', 3);
@@ -68,5 +69,4 @@ public static class NamedCoordinate
     public static readonly Coordinate h6 = new('h', 6);
     public static readonly Coordinate h7 = new('h', 7);
     public static readonly Coordinate h8 = new('h', 8);
-    public static Coordinate NullCoordinate { get; set; }
 }

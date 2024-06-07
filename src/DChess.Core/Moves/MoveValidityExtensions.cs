@@ -28,6 +28,9 @@ public static class MoveValidityExtensions
             CannotMoveToSameCell => "Cannot move to the same cell",
             CannotCaptureOwnPiece => "Cannot capture own properties",
             CannotMoveIntoCheck => "Cannot move into check",
+            WhiteIsInCheckMate => "White is in check mate",
+            BlackIsInCheckMate => "Black is in check mate",
+            FromCellDoesNoteContainPiece => "From cell does not contain a piece",
             _ => throw new ArgumentOutOfRangeException(nameof(validity), validity, null)
         };
     }

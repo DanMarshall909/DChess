@@ -31,6 +31,29 @@ public class PieceTests
         board.FriendlyPiecesByCoordinate(White).Count().Should()
             .Be(1, "the properties should be moved, not duplicated");
     }
+    
+    [Fact(DisplayName = "A queen can move backwards")]
+    public void a_queen_can_move_backwards()
+    {
+        // Arrange
+        var board = new Board(_invalidMoveHandler);
+
+        board.Set(b2, WhiteQueen);
+        board.FriendlyPiecesByCoordinate(White).Count().Should().Be(1);
+
+        // Act
+        var piece = board.Pieces[b2];
+        piece.MoveTo(a3);
+
+        // Assert
+        var args = new Piece.Arguments(WhiteQueen, a3, board, _invalidMoveHandler);
+        board.Pieces[a3].Should()
+            .BeEquivalentTo(new Queen(args), "the properties should be moved");
+
+        board.FriendlyPiecesByCoordinate(White).Count().Should()
+            .Be(1, "the properties should be moved, not duplicated");
+    }
+
 
     [Fact(DisplayName = "Invalid move should not be allowed")]
     public void invalid_move_should_not_be_allowed()

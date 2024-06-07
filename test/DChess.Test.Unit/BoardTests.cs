@@ -41,17 +41,17 @@ public class BoardTests
         position.Rank.Should().Be(1);
     }
 
-    [Fact(DisplayName = "A properties can be placed on the board")]
+    [Fact(DisplayName = "A piece can be placed on the board")]
     public void a_piece_can_be_placed_on_the_board()
     {
         // Arrange
-        IInvalidMoveHandler a = new TestInvalidMoveHandler();
-        var board = new Board(a);
+        var board = new Board(new TestInvalidMoveHandler());
 
         board.Set(a1, WhitePawn);
 
         // Assert
-        board.GetProperties(a1).Should().BeEquivalentTo(WhitePawn);
+        var properties = board.GetProperties(a1);
+        properties.Should().BeEquivalentTo(WhitePawn);
         board.HasPieceAt(a2).Should().BeFalse();
     }
 

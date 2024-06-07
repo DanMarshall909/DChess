@@ -154,7 +154,10 @@ public record struct Coordinate
 
     public bool TryApplyOffset(MoveOffset moveOffset, out Coordinate newCoordinate)
     {
-        newCoordinate = IsValidOffset(moveOffset) ? OffsetBy(moveOffset) : None;
+        if (IsValidOffset(moveOffset))
+            newCoordinate = OffsetBy(moveOffset);
+        else
+            newCoordinate = None;
         return newCoordinate != None;
     }
 
