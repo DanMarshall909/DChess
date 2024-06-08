@@ -8,7 +8,7 @@ namespace DChess.Core.Board;
 ///     This allows us to use structs to store the properties internally, but expose classes
 ///     to the outside world to allow for polymorphism.
 /// </summary>
-public class PiecePool(Board board, IInvalidMoveHandler invalidMoveHandler)
+public class PiecePool(Game game, IInvalidMoveHandler invalidMoveHandler)
 {
     private readonly Dictionary<(Coordinate, Properties), Piece> _pool = new();
 
@@ -25,7 +25,7 @@ public class PiecePool(Board board, IInvalidMoveHandler invalidMoveHandler)
 
     private Piece CreatePiece(Coordinate coordinate, Properties properties)
     {
-        Piece.Arguments arguments = new(properties, coordinate, board, invalidMoveHandler);
+        Piece.Arguments arguments = new(properties, coordinate, game, invalidMoveHandler);
         return properties.Type switch
         {
             PieceType.Pawn => new Pawn(arguments),

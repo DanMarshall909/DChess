@@ -13,7 +13,7 @@ public readonly record struct Move(Coordinate From, Coordinate To)
     public int HorizontalDistance => Distance.Horizontal;
     public int TotalDistance => Distance.Total;
     public IEnumerable<Coordinate> Path => new Memo<Move, IEnumerable<Coordinate>>(PathFinder.GetPath).Execute(this);
-    public bool IsBlocked(Board.Board board) => Path.Any(board.HasPieceAt);
+    public bool IsBlocked(Game game) => Path.Any(game.GameState.HasPieceAt);
     public override string ToString() => $"{From} -> {To}";
 
     public bool IsForward(Colour colour) => colour == White

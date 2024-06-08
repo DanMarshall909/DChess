@@ -23,7 +23,7 @@ public record Pawn : Piece, IIgnorePathCheck
 
         if (move.IsDiagonal)
         {
-            if (!Board.HasPieceAt(to))
+            if (!Game.GameState.HasPieceAt(to))
                 return move.InvalidResult(PawnsCanOnlySideStepWhenCapturing);
 
             return move.HorizontalDistance == 1

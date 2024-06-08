@@ -1,7 +1,6 @@
 ﻿using DChess.Core.Board;
 using DChess.Core.Pieces;
 using static DChess.Core.Board.Colour;
-using static DChess.Core.Board.PieceType;
 
 namespace DChess.Test.Unit;
 
@@ -13,22 +12,22 @@ public class PieceTests
     public void a_piece_can_be_moved()
     {
         // Arrange
-        var board = new Board(_invalidMoveHandler);
+        var board = new Game(_invalidMoveHandler);
         var chessPiece = new Properties(PieceType.Pawn, White);
 
-        board.Set(a2, chessPiece);
-        board.FriendlyPiecesByCoordinate(White).Count().Should().Be(1);
+        board.GameState.Set(a2, chessPiece);
+        board.GameState.FriendlyPiecesByCoordinate(White).Count().Should().Be(1);
 
         // Act
-        var piece = board.Pieces[a2];
+        var piece = board.GameState.Pieces[a2];
         piece.MoveTo(b3);
 
         // Assert
         var args = new Piece.Arguments(chessPiece, b3, board, _invalidMoveHandler);
-        board.Pieces[b3].Should()
+        board.GameState.Pieces[b3].Should()
             .BeEquivalentTo(new Pawn(args), "the properties should be moved");
 
-        board.FriendlyPiecesByCoordinate(White).Count().Should()
+        board.GameState.FriendlyPiecesByCoordinate(White).Count().Should()
             .Be(1, "the properties should be moved, not duplicated");
     }
     
@@ -36,21 +35,21 @@ public class PieceTests
     public void a_queen_can_move_backwards()
     {
         // Arrange
-        var board = new Board(_invalidMoveHandler);
+        var board = new Game(_invalidMoveHandler);
 
-        board.Set(b2, WhiteQueen);
-        board.FriendlyPiecesByCoordinate(White).Count().Should().Be(1);
+        board.GameState.Set(b2, WhiteQueen);
+        board.GameState.FriendlyPiecesByCoordinate(White).Count().Should().Be(1);
 
         // Act
-        var piece = board.Pieces[b2];
+        var piece = board.GameState.Pieces[b2];
         piece.MoveTo(a3);
 
         // Assert
         var args = new Piece.Arguments(WhiteQueen, a3, board, _invalidMoveHandler);
-        board.Pieces[a3].Should()
+        board.GameState.Pieces[a3].Should()
             .BeEquivalentTo(new Queen(args), "the properties should be moved");
 
-        board.FriendlyPiecesByCoordinate(White).Count().Should()
+        board.GameState.FriendlyPiecesByCoordinate(White).Count().Should()
             .Be(1, "the properties should be moved, not duplicated");
     }
 
@@ -59,9 +58,9 @@ public class PieceTests
     public void invalid_move_should_not_be_allowed()
     {
         // Arrange
-        var board = new Board(_invalidMoveHandler);
-        board.Set(a1, new Properties(PieceType.Pawn, White));
-        var piece = board.Pieces[a1];
+        var board = new Game(_invalidMoveHandler);
+        board.GameState.Set(a1, new Properties(PieceType.Pawn, White));
+        var piece = board.GameState.Pieces[a1];
 
         // Act
         piece.MoveTo(a6);

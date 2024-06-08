@@ -4,7 +4,7 @@ namespace DChess.Test.Unit;
 
 public abstract class BoardTestBase
 {
-    protected BoardTestBase() => Board = new Board(InvalidMoveHandler);
+    protected BoardTestBase() => Game = new Game(InvalidMoveHandler);
     protected IInvalidMoveHandler InvalidMoveHandler { get; } = new TestInvalidMoveHandler();
-    protected Board Board { get; init; }
+    protected Game Game { get; init; }
 }

@@ -1,11 +1,9 @@
-using System.Diagnostics;
 using System.Text;
 using DChess.Core.Exceptions;
 using DChess.Core.Moves;
 
 namespace DChess.Core.Board;
 
-[DebuggerDisplay("$\"{File}{Rank}\" {AsBoard}")]
 public record struct Coordinate
 {
     public static Coordinate None => new(255);
@@ -43,7 +41,6 @@ public record struct Coordinate
     }
 
     public Coordinate(byte Value) => this.Value = Value;
-
 
     /// <summary>
     ///     The file of the coordinate (a-h) running from left to right on a chess board

@@ -3,8 +3,10 @@
 public readonly struct Properties(PieceType type, Colour colour) : IEquatable<Properties>
 {
     public static readonly Properties None = default;
-    public PieceType Type { get; private init; } = type;
-    public Colour Colour { get; private init; } = colour;
+    public PieceType Type { get; } = type;
+    public Colour Colour { get; } = colour;
+
+    public override string ToString() => $"{Colour} {Type}";
 
     public bool Equals(Properties other) => Type == other.Type && Colour == other.Colour;
 

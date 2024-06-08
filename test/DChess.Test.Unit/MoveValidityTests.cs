@@ -15,7 +15,7 @@ public class MoveValidityTests
         }
     }
     
-    [Fact(DisplayName = "OK Message is OK")]
+    [Fact(DisplayName = "Message for move validity works as expected")]
     public void OkMessageIsOk()
     {
         Ok.Message().Should().Be("OK");

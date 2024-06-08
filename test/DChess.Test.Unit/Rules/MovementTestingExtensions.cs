@@ -21,7 +21,7 @@ public static class MovementTestingExtensions
     ///     the board and the coordinate of the properties being tested
     /// </param>
     public static void ShouldBeAbleToMoveTo(this Properties properties,
-        IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
+        IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, Action<Game, Coordinate>? setupBoard = null)
         => AbleToMoveWhenOffsetBy(properties, offsetsFromCurrentPosition, true, setupBoard);
 
     /// <summary>
@@ -32,11 +32,11 @@ public static class MovementTestingExtensions
     /// <param name="invalidOffsetsFromCurrentPosition"></param>
     /// <param name="setupBoard"></param>
     public static void ShouldNotBeAbleToMoveTo(this Properties properties,
-        IReadOnlyCollection<MoveOffset> invalidOffsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
+        IReadOnlyCollection<MoveOffset> invalidOffsetsFromCurrentPosition, Action<Game, Coordinate>? setupBoard = null)
         => AbleToMoveWhenOffsetBy(properties, invalidOffsetsFromCurrentPosition, false, setupBoard);
 
     public static void ShouldOnlyBeAbleToMoveTo(this Properties properties,
-        IReadOnlyCollection<MoveOffset> validOffsetsFromCurrentPosition, Action<Board, Coordinate>? setupBoard = null)
+        IReadOnlyCollection<MoveOffset> validOffsetsFromCurrentPosition, Action<Game, Coordinate>? setupBoard = null)
     {
         properties.ShouldBeAbleToMoveTo(validOffsetsFromCurrentPosition, setupBoard);
         var invalidOffsetsFromCurrentPosition = validOffsetsFromCurrentPosition.Inverse().ToList().AsReadOnly();
@@ -53,19 +53,19 @@ public static class MovementTestingExtensions
     /// <param name="setupBoard"></param>
     private static void AbleToMoveWhenOffsetBy(this Properties properties,
         IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, bool shouldBeAbleToMove,
-        Action<Board, Coordinate>? setupBoard = null)
+        Action<Game, Coordinate>? setupBoard = null)
     {
-        var board = new Board(new TestInvalidMoveHandler());
+        var board = new Game(new TestInvalidMoveHandler());
         for (byte rank = 1; rank < 8; rank++)
         for (var file = 'a'; file < 'h'; file++)
         {
             var from = new Coordinate(file, rank);
 
-            board.Clear();
-            board.Set(from, properties);
+            board.GameState.Clear();
+            board.GameState.Set(from, properties);
             setupBoard?.Invoke(board, from);
 
-            var pieceAtFrom = board.Pieces[from];
+            var pieceAtFrom = board.GameState.Pieces[from];
             foreach (var offset in offsetsFromCurrentPosition)
                 if (from.TryApplyOffset(offset, out var to))
                 {
@@ -78,23 +78,23 @@ public static class MovementTestingExtensions
         }
     }
 
-    public static void SetOffsetPositions(this Board board, Coordinate from, IReadOnlyCollection<MoveOffset> offsets,
+    public static void SetOffsetPositions(this Game game, Coordinate from, IReadOnlyCollection<MoveOffset> offsets,
         Properties properties)
     {
         foreach (var offset in offsets)
             if (from.TryApplyOffset(offset, out var to))
-                board.Set(to, properties);
+                game.GameState.Set(to, properties);
     }
 
     /// <summary>
     ///     Sets the positions of the board to be 2 cells away from the given coordinate in all directions.
     /// </summary>
-    /// <param name="board"></param>
+    /// <param name="game"></param>
     /// <param name="coordinate">The coordinate to set the positions around</param>
     /// <param name="properties"></param>
-    public static void Surround2CellsFrom(this Board board, Coordinate coordinate, Properties properties)
+    public static void Surround2CellsFrom(this Game game, Coordinate coordinate, Properties properties)
     {
-        SetOffsetPositions(board, coordinate, new MoveOffset[]
+        SetOffsetPositions(game, coordinate, new MoveOffset[]
         {
             (-2, -2), (-1, -2), (0, -2), (1, -2), (2, -2),
             (-2, -1), (2, -1),
@@ -104,9 +104,9 @@ public static class MovementTestingExtensions
         }, properties);
     }
 
-    public static void Surround(this Board board, Coordinate coordinate, Properties properties)
+    public static void Surround(this Game game, Coordinate coordinate, Properties properties)
     {
-        SetOffsetPositions(board, coordinate, new MoveOffset[]
+        SetOffsetPositions(game, coordinate, new MoveOffset[]
         {
             (-1, 1),
             (1, 1),

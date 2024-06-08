@@ -12,7 +12,7 @@ public class RenderingTests
     public void the_board_should_be_displayed_correctly()
     {
         // Arrange
-        var board = new Board(_invalidMoveHandler);
+        var board = new Game(_invalidMoveHandler);
         var renderer = new TextRenderer();
 
         // Assert
@@ -35,7 +35,7 @@ public class RenderingTests
     public void a_standard_board_should_be_displayed_correctly_with_pieces()
     {
         // Arrange
-        var board = new Board(_invalidMoveHandler);
+        var board = new Game(_invalidMoveHandler);
         board.SetStandardLayout();
         var renderer = new TextRenderer();
 

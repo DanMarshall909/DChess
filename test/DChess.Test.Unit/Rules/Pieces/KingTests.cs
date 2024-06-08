@@ -31,12 +31,12 @@ public class KingTests: BoardTestBase
     public void a_piece_cannot_move_such_that_the_king_is_in_check()
     {
         // Arrange
-        Board.Set(a1, WhiteKing);
-        Board.Set(a2, WhiteBishop);
-        Board.Set(a8, BlackRook);
+        Game.GameState.Set(a1, WhiteKing);
+        Game.GameState.Set(a2, WhiteBishop);
+        Game.GameState.Set(a8, BlackRook);
 
         // Act
-        var result = Board.Pieces[a2].CheckMove(b3);
+        var result = Game.GameState.Pieces[a2].CheckMove(b3);
 
         // Assert
         result.Validity.Should().Be(CannotMoveIntoCheck);

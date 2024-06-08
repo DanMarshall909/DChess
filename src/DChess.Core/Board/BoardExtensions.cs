@@ -2,43 +2,43 @@
 
 public static class BoardExtensions
 {
-    public static void SetStandardLayout(this Board board)
+    public static void SetStandardLayout(this Game game)
     {
-        board.Clear();
-        board.Set(a8, BlackRook);
-        board.Set(b8, BlackKnight);
-        board.Set(c8, BlackBishop);
-        board.Set(d8, BlackQueen);
-        board.Set(e8, BlackKing);
-        board.Set(f8, BlackBishop);
-        board.Set(g8, BlackKnight);
-        board.Set(h8, BlackRook);
+        game.GameState.Clear();
+        game.GameState.Set(a8, BlackRook);
+        game.GameState.Set(b8, BlackKnight);
+        game.GameState.Set(c8, BlackBishop);
+        game.GameState.Set(d8, BlackQueen);
+        game.GameState.Set(e8, BlackKing);
+        game.GameState.Set(f8, BlackBishop);
+        game.GameState.Set(g8, BlackKnight);
+        game.GameState.Set(h8, BlackRook);
 
-        board.Set(a7, BlackPawn);
-        board.Set(b7, BlackPawn);
-        board.Set(c7, BlackPawn);
-        board.Set(d7, BlackPawn);
-        board.Set(e7, BlackPawn);
-        board.Set(f7, BlackPawn);
-        board.Set(g7, BlackPawn);
-        board.Set(h7, BlackPawn);
+        game.GameState.Set(a7, BlackPawn);
+        game.GameState.Set(b7, BlackPawn);
+        game.GameState.Set(c7, BlackPawn);
+        game.GameState.Set(d7, BlackPawn);
+        game.GameState.Set(e7, BlackPawn);
+        game.GameState.Set(f7, BlackPawn);
+        game.GameState.Set(g7, BlackPawn);
+        game.GameState.Set(h7, BlackPawn);
 
-        board.Set(a2, WhitePawn);
-        board.Set(b2, WhitePawn);
-        board.Set(c2, WhitePawn);
-        board.Set(d2, WhitePawn);
-        board.Set(e2, WhitePawn);
-        board.Set(f2, WhitePawn);
-        board.Set(g2, WhitePawn);
-        board.Set(h2, WhitePawn);
+        game.GameState.Set(a2, WhitePawn);
+        game.GameState.Set(b2, WhitePawn);
+        game.GameState.Set(c2, WhitePawn);
+        game.GameState.Set(d2, WhitePawn);
+        game.GameState.Set(e2, WhitePawn);
+        game.GameState.Set(f2, WhitePawn);
+        game.GameState.Set(g2, WhitePawn);
+        game.GameState.Set(h2, WhitePawn);
 
-        board.Set(a1, WhiteRook);
-        board.Set(b1, WhiteKnight);
-        board.Set(c1, WhiteBishop);
-        board.Set(d1, WhiteQueen);
-        board.Set(e1, WhiteKing);
-        board.Set(f1, WhiteBishop);
-        board.Set(g1, WhiteKnight);
-        board.Set(h1, WhiteRook);
+        game.GameState.Set(a1, WhiteRook);
+        game.GameState.Set(b1, WhiteKnight);
+        game.GameState.Set(c1, WhiteBishop);
+        game.GameState.Set(d1, WhiteQueen);
+        game.GameState.Set(e1, WhiteKing);
+        game.GameState.Set(f1, WhiteBishop);
+        game.GameState.Set(g1, WhiteKnight);
+        game.GameState.Set(h1, WhiteRook);
     }
 }

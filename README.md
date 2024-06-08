@@ -88,6 +88,9 @@ DChess is a chess engine designed to be:
 
 ### Miscellaneous rules
 
+- [X] Implement rules for check (king is under threat).
+- [X] Disallow moves that would put the player in check.
+- [X] Implement rules for checkmate (king is in check and no legal moves can remove the threat).
 - [ ] Castling: The king and rook haven't moved
 - [ ] Castling: The squares between a king and rook must be unocupied.
 - [ ] En-passant capturing rules.
@@ -95,9 +98,6 @@ DChess is a chess engine designed to be:
 ## Game Status
 
 - [ ] Implement a system to keep track of the game status (e.g., ongoing, check, checkmate, stalemate).
-- [X] Implement rules for check (king is under threat).
-- [X] Disallow moves that would put the player in check.
-- [ ] Implement rules for checkmate (king is in check and no legal moves can remove the threat).
 - [ ] Implement a turn system to ensure that players alternate turns correctly.
 
 ## Allow the User to Move Pieces Using Algebraic Notation

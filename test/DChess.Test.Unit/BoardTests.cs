@@ -45,26 +45,26 @@ public class BoardTests
     public void a_piece_can_be_placed_on_the_board()
     {
         // Arrange
-        var board = new Board(new TestInvalidMoveHandler());
+        var board = new Game(new TestInvalidMoveHandler());
 
-        board.Set(a1, WhitePawn);
+        board.GameState.Set(a1, WhitePawn);
 
         // Assert
-        var properties = board.GetProperties(a1);
+        var properties = board.GameState.GetProperties(a1);
         properties.Should().BeEquivalentTo(WhitePawn);
-        board.HasPieceAt(a2).Should().BeFalse();
+        board.GameState.HasPieceAt(a2).Should().BeFalse();
     }
 
     [Fact(DisplayName = "If there are no properties on the board, a cell's properties is null")]
     public void if_there_are_no_pieces_on_the_board_a_cells_piece_is_null()
     {
         // Arrange
-        var board = new Board(_invalidMoveHandler);
+        var board = new Game(_invalidMoveHandler);
 
         // Act
 
         // Assert
-        board.HasPieceAt(a1).Should().BeFalse();
+        board.GameState.HasPieceAt(a1).Should().BeFalse();
     }
 
     [Theory(DisplayName = "A properties cannot be placed outside the board")]
@@ -76,10 +76,10 @@ public class BoardTests
     public void a_piece_cannot_be_placed_outside_the_board(char column, byte row)
     {
         // Arrange
-        var board = new Board(_invalidMoveHandler);
+        var board = new Game(_invalidMoveHandler);
 
         // Act
-        var act = () => board.Set(new Coordinate(column, row), WhitePawn);
+        var act = () => board.GameState.Set(new Coordinate(column, row), WhitePawn);
 
         // Assert
         act.Should().Throw<InvalidCoordinateException>();
@@ -122,20 +122,20 @@ public class BoardTests
         Colour colour)
     {
         // Arrange
-        var board = new Board(_invalidMoveHandler);
+        var board = new Game(_invalidMoveHandler);
         board.SetStandardLayout();
 
         // Assert
-        board.GetProperties(new Coordinate(coordinateString)).Should().BeEquivalentTo(new Properties(type, colour));
+        board.GameState.GetProperties(new Coordinate(coordinateString)).Should().BeEquivalentTo(new Properties(type, colour));
     }
 
     [Fact(DisplayName = "A properties can be added to the board")]
     public void a_piece_can_be_added_to_the_board()
     {
-        var board = new Board(_invalidMoveHandler);
+        var board = new Game(_invalidMoveHandler);
         var whitePawn = WhitePawn;
-        board.Set(a1, whitePawn);
+        board.GameState.Set(a1, whitePawn);
 
-        board.GetProperties(a1).Should().Be(whitePawn);
+        board.GameState.GetProperties(a1).Should().Be(whitePawn);
     }
 }

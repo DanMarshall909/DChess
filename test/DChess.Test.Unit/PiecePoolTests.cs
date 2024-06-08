@@ -12,7 +12,7 @@ public class PiecePoolTests
     public void a_piece_can_be_retrieved_from_the_pool()
     {
         // Arrange
-        var board = new Board(_invalidMoveHandler);
+        var board = new Game(_invalidMoveHandler);
         var chessPiece = new Properties(PieceType.Pawn, White);
 
         // Act
