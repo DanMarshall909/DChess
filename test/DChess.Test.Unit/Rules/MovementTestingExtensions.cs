@@ -55,17 +55,17 @@ public static class MovementTestingExtensions
         IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, bool shouldBeAbleToMove,
         Action<Game, Coordinate>? setupBoard = null)
     {
-        var board = new Game(new TestInvalidMoveHandler());
+        var game = new Game(new TestInvalidMoveHandler());
         for (byte rank = 1; rank < 8; rank++)
         for (var file = 'a'; file < 'h'; file++)
         {
             var from = new Coordinate(file, rank);
 
-            board.GameState.Clear();
-            board.GameState.Set(from, properties);
-            setupBoard?.Invoke(board, from);
+            game.GameState.Clear();
+            game.GameState.Set(from, properties);
+            setupBoard?.Invoke(game, from);
 
-            var pieceAtFrom = board.GameState.Pieces[from];
+            var pieceAtFrom = game.GameState.Pieces[from];
             foreach (var offset in offsetsFromCurrentPosition)
                 if (from.TryApplyOffset(offset, out var to))
                 {

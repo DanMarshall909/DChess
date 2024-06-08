@@ -12,11 +12,11 @@ public class RenderingTests
     public void the_board_should_be_displayed_correctly()
     {
         // Arrange
-        var board = new Game(_invalidMoveHandler);
+        var game = new Game(_invalidMoveHandler);
         var renderer = new TextRenderer();
 
         // Assert
-        renderer.Render(board);
+        renderer.Render(game);
         renderer.LastRender.Should().BeEquivalentTo(
             """
              abcdefgh
@@ -35,11 +35,11 @@ public class RenderingTests
     public void a_standard_board_should_be_displayed_correctly_with_pieces()
     {
         // Arrange
-        var board = new Game(_invalidMoveHandler);
-        board.SetStandardLayout();
+        var game = new Game(_invalidMoveHandler);
+        game.SetStandardLayout();
         var renderer = new TextRenderer();
 
-        renderer.Render(board);
+        renderer.Render(game);
         (Environment.NewLine + renderer.LastRender).Should().BeEquivalentTo(
             """
             

@@ -8,10 +8,10 @@ public sealed class GameState
 {
     private readonly Game _game;
     private readonly IInvalidMoveHandler _invalidMoveHandler;
-    private Properties[,] _properties;
+    private PropertiesGrid _properties;
     private readonly PiecePool _pool;
 
-    public GameState(Game game, PiecePool pool, IInvalidMoveHandler invalidMoveHandler, Properties[,] properties)
+    public GameState(Game game, PiecePool pool, IInvalidMoveHandler invalidMoveHandler, PropertiesGrid properties)
     {
         _game = game;
         _pool = pool;
@@ -90,13 +90,10 @@ public sealed class GameState
 
     public void Clear()
     {
-        _properties = new Properties[8, 8];
+        _properties = new PropertiesGrid();
     }
 
-    public Game Clone()
-    {
-        return new Game(_invalidMoveHandler, _properties);
-    }
+    public Game Clone() => new(_invalidMoveHandler, _properties);
 
     public Coordinate GetKingCoordinate(Colour colour)
     {
