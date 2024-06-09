@@ -76,7 +76,7 @@ public abstract record Piece
         var newBoard = Game.GameState.Clone();
         newBoard.Make(move);
 
-        return newBoard.GameState.OpposingPiecesByCoordinate(movedPieceColour).Any(p => p.CanMoveTo(kingCoordinate));
+        return newBoard.GameState.OpposingPieces(movedPieceColour).Any(p => p.CanMoveTo(kingCoordinate));
     }
 
     private bool CanMoveTo(Coordinate coordinate) => !new Move(Coordinate, coordinate).IsBlocked(Game);

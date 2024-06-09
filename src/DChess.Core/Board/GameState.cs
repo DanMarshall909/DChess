@@ -8,15 +8,15 @@ public sealed class GameState
 {
     private readonly Game _game;
     private readonly IInvalidMoveHandler _invalidMoveHandler;
-    private PropertiesGrid _properties;
+    private readonly PropertiesGrid _propertiesGrid;
     private readonly PiecePool _pool;
 
-    public GameState(Game game, PiecePool pool, IInvalidMoveHandler invalidMoveHandler, PropertiesGrid properties)
+    public GameState(Game game, PiecePool pool, IInvalidMoveHandler invalidMoveHandler, PropertiesGrid propertiesGrid)
     {
         _game = game;
         _pool = pool;
         _invalidMoveHandler = invalidMoveHandler;
-        _properties = properties;
+        _propertiesGrid = propertiesGrid;
     }
 
     public ReadOnlyDictionary<Coordinate, Piece> Pieces
@@ -28,7 +28,7 @@ public sealed class GameState
             {
                 for (var r = 0; r < 8; r++)
                 {
-                    var props = _properties[f, r];
+                    var props = _propertiesGrid[f, r];
                     if (props == Properties.None) continue;
                     var coordinateFromZeroOffset = CoordinateFromZeroOffset(f, r);
                     pieces.Add(coordinateFromZeroOffset, _pool.GetPiece(coordinateFromZeroOffset, props));
@@ -45,33 +45,31 @@ public sealed class GameState
 
     public bool HasPieceAt(Coordinate coordinate)
     {
-        var properties = _properties[coordinate.File - 'a', coordinate.Rank - 1];
+        var properties = _propertiesGrid[coordinate.File, coordinate.Rank];
         return properties != Properties.None;
     }
 
     public void Set(Coordinate coordinate, Properties properties)
-        => _properties[coordinate.File - 'a', coordinate.Rank - 1] = properties;
+        => _propertiesGrid[coordinate] = properties;
 
-    public IEnumerable<Piece> FriendlyPiecesByCoordinate(Colour colour)
+    public IEnumerable<Piece> FriendlyPieces(Colour colour)
     {
         for (var f = 0; f < 8; f++)
+        for (var r = 0; r < 8; r++)
         {
-            for (var r = 0; r < 8; r++)
-            {
-                var props = _properties[f, r];
-                if (props == Properties.None) continue;
-                if (props.Colour == colour)
-                    yield return _pool.GetPiece(CoordinateFromZeroOffset(f, r), props);
-            }
+            var props = _propertiesGrid[f, r];
+            if (props == Properties.None) continue;
+            if (props.Colour == colour)
+                yield return _pool.GetPiece(CoordinateFromZeroOffset(f, r), props);
         }
     }
 
-    public IEnumerable<Piece> OpposingPiecesByCoordinate(Colour colour)
-        => FriendlyPiecesByCoordinate(colour == White ? Black : White);
+    public IEnumerable<Piece> OpposingPieces(Colour colour)
+        => FriendlyPieces(colour == White ? Black : White);
 
     public bool TryGetProperties(Coordinate coordinate, out Properties properties)
     {
-        properties = _properties[coordinate.File - 'a', coordinate.Rank - 1];
+        properties = _propertiesGrid[coordinate];
         return properties != Properties.None;
     }
 
@@ -90,10 +88,10 @@ public sealed class GameState
 
     public void Clear()
     {
-        _properties = new PropertiesGrid();
+        _propertiesGrid.Clear();
     }
 
-    public Game Clone() => new(_invalidMoveHandler, _properties);
+    public Game Clone() => new(_invalidMoveHandler, _propertiesGrid);
 
     public Coordinate GetKingCoordinate(Colour colour)
     {
@@ -102,7 +100,7 @@ public sealed class GameState
         {
             for (var r = 0; r < 8; r++)
             {
-                var props = _properties[f, r];
+                var props = _propertiesGrid[f, r];
                 if (props.Type == PieceType.King && props.Colour == colour)
                     return new Coordinate(Game.Files[f], Game.Ranks[r]);
             }
@@ -113,14 +111,14 @@ public sealed class GameState
 
     public void RemovePieceAt(Coordinate moveFrom)
     {
-        _properties[moveFrom.File - 'a', moveFrom.Rank - 1] = Properties.None;
+        _propertiesGrid[moveFrom] = Properties.None;
     }
 
     public void SetPiece(Coordinate moveTo, Properties to)
     {
-        _properties[moveTo.File - 'a', moveTo.Rank - 1] = to;
+        _propertiesGrid[moveTo] = to;
     }
 
     public Properties GetProperties(Coordinate coordinate) =>
-        _properties[coordinate.File - 'a', coordinate.Rank - 1];
+        _propertiesGrid[coordinate];
 }

@@ -16,7 +16,7 @@ public class PieceTests
         var chessPiece = new Properties(PieceType.Pawn, White);
 
         game.GameState.Set(a2, chessPiece);
-        game.GameState.FriendlyPiecesByCoordinate(White).Count().Should().Be(1);
+        game.GameState.FriendlyPieces(White).Count().Should().Be(1);
 
         // Act
         var piece = game.GameState.Pieces[a2];
@@ -27,7 +27,7 @@ public class PieceTests
         game.GameState.Pieces[b3].Should()
             .BeEquivalentTo(new Pawn(args), "the properties should be moved");
 
-        game.GameState.FriendlyPiecesByCoordinate(White).Count().Should()
+        game.GameState.FriendlyPieces(White).Count().Should()
             .Be(1, "the properties should be moved, not duplicated");
     }
     
@@ -38,7 +38,7 @@ public class PieceTests
         var game = new Game(_invalidMoveHandler);
 
         game.GameState.Set(b2, WhiteQueen);
-        game.GameState.FriendlyPiecesByCoordinate(White).Count().Should().Be(1);
+        game.GameState.FriendlyPieces(White).Count().Should().Be(1);
 
         // Act
         var piece = game.GameState.Pieces[b2];
@@ -49,7 +49,7 @@ public class PieceTests
         game.GameState.Pieces[a3].Should()
             .BeEquivalentTo(new Queen(args), "the properties should be moved");
 
-        game.GameState.FriendlyPiecesByCoordinate(White).Count().Should()
+        game.GameState.FriendlyPieces(White).Count().Should()
             .Be(1, "the properties should be moved, not duplicated");
     }
 
