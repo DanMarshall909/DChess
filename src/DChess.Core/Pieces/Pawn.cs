@@ -27,12 +27,12 @@ public record Pawn : Piece, IIgnorePathCheck
             if (!Game.GameState.HasPieceAt(to))
                 return move.InvalidResult(PawnsCanOnlySideStepWhenCapturing);
 
-            return move.HorizontalDistance == 1
+            return move.Distance.Horizontal == 1
                 ? move.OkResult()
                 : move.InvalidResult(PawnsCanOnlySideStepWhenCapturing);
         }
 
-        int verticalDistance = move.VerticalDistance;
+        int verticalDistance = move.Distance.Vertical;
 
         bool isFirstMove = (Coordinate.Rank == 2 && Colour == White) ||
                            (Coordinate.Rank == 7 && Colour == Black);
@@ -40,7 +40,7 @@ public record Pawn : Piece, IIgnorePathCheck
         if (verticalDistance > 2)
             return move.InvalidResult(PawnsCanOnlyMove1Or2SquaresForward);
 
-        if (move.HorizontalDistance > 2)
+        if (move.Distance.Horizontal > 2)
             return move.InvalidResult(PawnsCanOnlyMove1SquareHorizontallyAndOnlyWhenTakingAPiece);
         
         if (verticalDistance == 2 && !isFirstMove)
