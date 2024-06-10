@@ -2,31 +2,31 @@ using System.Runtime.CompilerServices;
 
 namespace DChess.Core.Game;
 
-public readonly record struct ChessBoardState
+public readonly record struct BoardState
 {
-    public const int TotalPropertiesInGrid = 8 * 8;
+    public const int TotalCellsOnBoard = 8 * 8;
 
-    public static ChessBoardState CloneOrEmptyIfNull(ChessBoardState? state)
+    public static BoardState CloneOrEmptyIfNull(BoardState? state)
         => state is not null
-            ? new ChessBoardState(state!.Value.AsArray.Clone() as Properties[] ?? Array.Empty<Properties>())
-            : new ChessBoardState();
+            ? new BoardState(state!.Value.AsArray.Clone() as Properties[] ?? Array.Empty<Properties>())
+            : new BoardState();
 
-    public ChessBoardState()
+    public BoardState()
     {
         Clear();
     }
 
-    private ChessBoardState(Properties[] data)
+    private BoardState(Properties[] data)
         => AsArray = CloneOf(data);
 
     private static Properties[] CloneOf(Properties[] data)
         => data.Clone() as Properties[] ?? Array.Empty<Properties>();
 
-    public Properties[] AsArray { get; } = new Properties[TotalPropertiesInGrid];
+    public Properties[] AsArray { get; } = new Properties[TotalCellsOnBoard];
 
     public void Clear()
     {
-        var rowSpan = new Span<Properties>(AsArray, 0, TotalPropertiesInGrid);
+        var rowSpan = new Span<Properties>(AsArray, 0, TotalCellsOnBoard);
         rowSpan.Fill(Properties.None);
     }
 
@@ -71,4 +71,6 @@ public readonly record struct ChessBoardState
 
         return NullCoordinate;
     }
+
+    public bool HasPieceAt(Coordinate coordinate) => this[coordinate] != Properties.None;
 }

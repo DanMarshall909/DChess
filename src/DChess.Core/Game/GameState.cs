@@ -8,15 +8,17 @@ public sealed class GameState
 {
     private readonly Game _game;
     private readonly IInvalidMoveHandler _invalidMoveHandler;
-    private readonly ChessBoardState _chessBoardState;
+    private readonly BoardState _boardState;
     private readonly PiecePool _pool;
 
-    public GameState(Game game, PiecePool pool, IInvalidMoveHandler invalidMoveHandler, ChessBoardState chessBoardState)
+    public BoardState BoardState => _boardState;
+
+    public GameState(Game game, PiecePool pool, IInvalidMoveHandler invalidMoveHandler, BoardState boardState)
     {
         _game = game;
         _pool = pool;
         _invalidMoveHandler = invalidMoveHandler;
-        _chessBoardState = chessBoardState;
+        _boardState = boardState;
     }
 
     public override string ToString() => Pieces.Where(x => x.Key != Coordinate.None)?.ToString() ?? "Not initialised";
@@ -30,7 +32,7 @@ public sealed class GameState
             {
                 for (var r = 0; r < 8; r++)
                 {
-                    var props = _chessBoardState[f, r];
+                    var props = _boardState[f, r];
                     if (props == Properties.None) continue;
                     var coordinateFromZeroOffset = CoordinateFromZeroOffset(f, r);
                     pieces.Add(coordinateFromZeroOffset, _pool.PieceWithProperties(coordinateFromZeroOffset, props));
@@ -47,19 +49,19 @@ public sealed class GameState
 
     public bool HasPieceAt(Coordinate coordinate)
     {
-        var properties = _chessBoardState[coordinate.File, coordinate.Rank];
+        var properties = _boardState[coordinate.File, coordinate.Rank];
         return properties != Properties.None;
     }
 
     public void Place(Properties pieceProperties, Coordinate at)
-        => _chessBoardState[at] = pieceProperties;
+        => _boardState[at] = pieceProperties;
 
     public IEnumerable<Piece> FriendlyPieces(Colour colour)
     {
         for (var f = 0; f < 8; f++)
         for (var r = 0; r < 8; r++)
         {
-            var props = _chessBoardState[f, r];
+            var props = _boardState[f, r];
             if (props.Colour == colour)
                 yield return _pool.PieceWithProperties(CoordinateFromZeroOffset(f, r), props);
         }
@@ -70,7 +72,7 @@ public sealed class GameState
 
     public bool TryGetProperties(Coordinate coordinate, out Properties properties)
     {
-        properties = _chessBoardState[coordinate];
+        properties = _boardState[coordinate];
         return properties != Properties.None;
     }
 
@@ -89,28 +91,28 @@ public sealed class GameState
 
     public void ClearProperties()
     {
-        _chessBoardState.Clear();
+        _boardState.Clear();
     }
 
-    public Game Clone() => new(_invalidMoveHandler, _chessBoardState);
+    public Game Clone() => new(_invalidMoveHandler, _boardState);
 
     public Coordinate KingCoordinate(Colour colour)
     {
-        return _chessBoardState.Find(props => props.Type == PieceType.King && props.Colour == colour);
+        return _boardState.Find(props => props.Type == PieceType.King && props.Colour == colour);
     }
 
     public void RemovePieceAt(Coordinate moveFrom)
     {
-        _chessBoardState[moveFrom] = Properties.None;
+        _boardState[moveFrom] = Properties.None;
     }
 
     public void SetPiece(Coordinate moveTo, Properties to)
     {
-        _chessBoardState[moveTo] = to;
+        _boardState[moveTo] = to;
     }
 
     public Properties GetProperties(Coordinate coordinate) =>
-        _chessBoardState[coordinate];
+        _boardState[coordinate];
 
     public bool IsInCheck(Colour colour)
     {

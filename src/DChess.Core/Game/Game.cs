@@ -4,11 +4,11 @@ namespace DChess.Core.Game;
 
 public sealed class Game : IDisposable
 {
-    public Game(IInvalidMoveHandler invalidMoveHandler, ChessBoardState? properties = null)
+    public Game(IInvalidMoveHandler invalidMoveHandler, BoardState? chessBoardState = null)
     { 
         _moveHandler = new MoveHandler(this);
         _piecePool = new PiecePool(this, invalidMoveHandler);
-        _gameState = new GameState(this, _piecePool, invalidMoveHandler, ChessBoardState.CloneOrEmptyIfNull(properties));
+        _gameState = new GameState(this, _piecePool, invalidMoveHandler, BoardState.CloneOrEmptyIfNull(chessBoardState));
     }
 
     /// <summary>

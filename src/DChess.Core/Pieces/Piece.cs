@@ -1,4 +1,4 @@
-﻿using DChess.Core.Game;
+using DChess.Core.Game;
 using DChess.Core.Moves;
 
 namespace DChess.Core.Pieces;
@@ -58,7 +58,7 @@ public abstract record Piece
             piece.Colour == movedPieceColour) return move.InvalidResult(CannotCaptureOwnPiece);
 
         if (this is not IIgnorePathCheck &&
-            move.Path.Any(coordinate => Game.GameState.HasPieceAt(coordinate)))
+            move.CoordinatesAlongPath.Any(coordinate => Game.GameState.HasPieceAt(coordinate)))
             return move.InvalidResult(CannotJumpOverOtherPieces);
 
         if (MovingIntoCheck(movedPieceColour, move))
@@ -78,10 +78,7 @@ public abstract record Piece
     public bool CanMoveTo(Coordinate coordinate)
     {
         var move = new Move(Coordinate, coordinate);
-        if(!move.Path.Any())
-            return false;
-        
-        return !move.IsBlocked(Game.GameState);
+        return move.IsLegalIfNotBlocked && !move.IsBlocked(Game.GameState.BoardState);
     }
 
     protected abstract MoveResult ValidateMove(Coordinate to);
@@ -106,6 +103,6 @@ public record NullPiece : Piece
 
     protected override MoveResult ValidateMove(Coordinate to)
     {
-        return new MoveResult(Move.Invalid(), FromCellDoesNoteContainPiece);
+        return new MoveResult(Move.InvalidMove, FromCellDoesNoteContainPiece);
     }
 }

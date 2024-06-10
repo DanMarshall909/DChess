@@ -2,9 +2,6 @@ namespace DChess.Core.Moves;
 
 public static class MoveValidityExtensions
 {
-    public static MoveResult OkResult(this Move move) => new(move, Ok);
-    public static MoveResult InvalidResult(this Move move, MoveValidity invalidReason) => new(move, invalidReason);
-    
     public static string Message(this MoveValidity validity)
     {
         return validity switch
