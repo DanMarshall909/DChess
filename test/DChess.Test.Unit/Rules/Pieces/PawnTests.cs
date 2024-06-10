@@ -1,8 +1,8 @@
-﻿using DChess.Core.Board;
+﻿using DChess.Core.Game;
 
 namespace DChess.Test.Unit.Rules.Pieces;
 
-public class PawnTests : BoardTestBase
+public class PawnTests : PieceTestBase
 {
     [Fact(DisplayName = "Pawns can move forward one square")]
     public void pawn_can_move_forward_one_square()

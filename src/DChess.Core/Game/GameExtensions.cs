@@ -1,10 +1,10 @@
-﻿namespace DChess.Core.Board;
+﻿namespace DChess.Core.Game;
 
-public static class BoardExtensions
+public static class GameExtensions
 {
     public static void SetStandardLayout(this Game game)
     {
-        game.GameState.Clear();
+        game.GameState.ClearProperties();
         game.GameState.Set(a8, BlackRook);
         game.GameState.Set(b8, BlackKnight);
         game.GameState.Set(c8, BlackBishop);

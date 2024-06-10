@@ -2,5 +2,5 @@
 
 public interface IBoardRenderer
 {
-    void Render(Game game);
+    void Render(Game.Game game);
 }

@@ -2,7 +2,7 @@ using System.Text;
 using DChess.Core.Exceptions;
 using DChess.Core.Moves;
 
-namespace DChess.Core.Board;
+namespace DChess.Core.Game;
 
 public record struct Coordinate
 {

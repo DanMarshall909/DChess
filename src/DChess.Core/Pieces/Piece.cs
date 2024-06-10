@@ -1,4 +1,5 @@
-﻿using DChess.Core.Moves;
+﻿using DChess.Core.Game;
+using DChess.Core.Moves;
 
 namespace DChess.Core.Pieces;
 
@@ -19,7 +20,7 @@ public abstract record Piece
     public Colour Colour => PieceProperties.Colour;
     public PieceType Type => PieceProperties.Type;
 
-    protected Game Game { get; init; }
+    protected Game.Game Game { get; init; }
 
     public void MoveTo(Coordinate to)
     {
@@ -69,7 +70,7 @@ public abstract record Piece
 
     private bool IsInCheck(Colour movedPieceColour, Move move)
     {
-        var kingCoordinate = Game.GameState.GetKingCoordinate(movedPieceColour);
+        var kingCoordinate = Game.GameState.KingCoordinate(movedPieceColour);
         if (kingCoordinate == NullCoordinate)
             return false;
 
@@ -89,7 +90,7 @@ public abstract record Piece
         coordinate = Coordinate;
     }
 
-    public record Arguments(Properties PieceProperties, Coordinate Coordinate, Game Game,
+    public record Arguments(Properties PieceProperties, Coordinate Coordinate, Game.Game Game,
         IInvalidMoveHandler InvalidMoveHandler);
 }
 

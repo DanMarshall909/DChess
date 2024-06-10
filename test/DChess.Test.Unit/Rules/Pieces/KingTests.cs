@@ -1,6 +1,6 @@
 ﻿namespace DChess.Test.Unit.Rules.Pieces;
 
-public class KingTests: BoardTestBase
+public class KingTests: PieceTestBase
 {
     private const int X = LegalPositionValue;
 

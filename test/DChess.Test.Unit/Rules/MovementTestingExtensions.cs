@@ -1,4 +1,4 @@
-﻿using DChess.Core.Board;
+﻿using DChess.Core.Game;
 
 namespace DChess.Test.Unit.Rules;
 
@@ -61,7 +61,7 @@ public static class MovementTestingExtensions
         {
             var from = new Coordinate(file, rank);
 
-            game.GameState.Clear();
+            game.GameState.ClearProperties();
             game.GameState.Set(from, properties);
             setupBoard?.Invoke(game, from);
 

@@ -1,4 +1,6 @@
-﻿namespace DChess.Core.Moves;
+﻿using DChess.Core.Game;
+
+namespace DChess.Core.Moves;
 
 public static class PathFinder
 {

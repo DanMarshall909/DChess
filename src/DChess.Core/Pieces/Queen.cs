@@ -1,4 +1,5 @@
-﻿using DChess.Core.Moves;
+﻿using DChess.Core.Game;
+using DChess.Core.Moves;
 
 namespace DChess.Core.Pieces;
 

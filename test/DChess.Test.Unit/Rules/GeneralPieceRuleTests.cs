@@ -1,8 +1,8 @@
-﻿using DChess.Core.Board;
+﻿using DChess.Core.Game;
 
 namespace DChess.Test.Unit.Rules;
 
-public class GeneralGameRuleTests: BoardTestBase
+public class GeneralPieceRuleTests: PieceTestBase
 {
     [Fact(DisplayName = "A properties cannot take its own properties")]
     public void a_piece_cannot_take_its_own_piece()

@@ -1,10 +1,10 @@
-﻿using DChess.Core.Board;
+﻿using DChess.Core.Game;
 
 namespace DChess.Test.Unit;
 
-public abstract class BoardTestBase
+public abstract class PieceTestBase
 {
-    protected BoardTestBase() => Game = new Game(InvalidMoveHandler);
+    protected PieceTestBase() => Game = new Game(InvalidMoveHandler);
     protected IInvalidMoveHandler InvalidMoveHandler { get; } = new TestInvalidMoveHandler();
     protected Game Game { get; init; }
 }

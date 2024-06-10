@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using DChess.Core.Board;
 using DChess.Core.Exceptions;
+using DChess.Core.Game;
 
 namespace DChess.Test.Unit;
 
 [SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
-public class BoardTests
+public class GameTests
 {
     private readonly TestInvalidMoveHandler _invalidMoveHandler = new();
     private static Properties WhitePawn => new(PieceType.Pawn, Colour.White);
@@ -18,12 +18,12 @@ public class BoardTests
     [InlineData("a9")]
     [InlineData("1a")]
     [InlineData("9a")]
-    public void an_invalid_position_should_throw_an_exception(string positionName)
+    public void an_invalid_position_should_throw_an_exception(string coordinateString)
     {
         // Arrange
         // ReSharper disable once ObjectCreationAsStatement
 #pragma warning disable CA1806
-        Action act = () => new Coordinate(positionName);
+        Action act = () => new Coordinate(coordinateString);
 #pragma warning restore CA1806
         // Assert
         act.Should().Throw<InvalidCoordinateException>();

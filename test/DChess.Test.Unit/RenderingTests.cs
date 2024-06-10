@@ -1,4 +1,4 @@
-﻿using DChess.Core.Board;
+﻿using DChess.Core.Game;
 using DChess.UI.Console;
 
 namespace DChess.Test.Unit;

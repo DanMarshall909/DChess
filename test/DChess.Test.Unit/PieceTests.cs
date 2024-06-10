@@ -1,6 +1,6 @@
-﻿using DChess.Core.Board;
+﻿using DChess.Core.Game;
 using DChess.Core.Pieces;
-using static DChess.Core.Board.Colour;
+using static DChess.Core.Game.Colour;
 
 namespace DChess.Test.Unit;
 

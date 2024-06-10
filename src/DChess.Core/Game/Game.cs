@@ -1,6 +1,6 @@
 using DChess.Core.Moves;
 
-namespace DChess.Core.Board;
+namespace DChess.Core.Game;
 
 public sealed class Game : IDisposable
 {

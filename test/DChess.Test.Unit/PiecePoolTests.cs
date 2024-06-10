@@ -1,6 +1,6 @@
-﻿using DChess.Core.Board;
+﻿using DChess.Core.Game;
 using DChess.Core.Pieces;
-using static DChess.Core.Board.Colour;
+using static DChess.Core.Game.Colour;
 
 namespace DChess.Test.Unit;
 
@@ -17,8 +17,8 @@ public class PiecePoolTests
 
         // Act
         var pool = new PiecePool(game, _invalidMoveHandler);
-        var piece = pool.GetPiece(a1, chessPiece);
-        var secondPieceWithSameDefinition = pool.GetPiece(a1, chessPiece);
+        var piece = pool.PieceWithProperties(a1, chessPiece);
+        var secondPieceWithSameDefinition = pool.PieceWithProperties(a1, chessPiece);
 
         // Assert
         piece.Should().BeEquivalentTo(new Pawn(new Piece.Arguments(chessPiece, a1, game, _invalidMoveHandler)));

@@ -1,4 +1,4 @@
-﻿namespace DChess.Core.Board;
+﻿namespace DChess.Core.Game;
 
 public readonly struct Properties(PieceType type, Colour colour) : IEquatable<Properties>
 {

@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using DChess.Core.Moves;
 using DChess.Core.Pieces;
 
-namespace DChess.Core.Board;
+namespace DChess.Core.Game;
 
 public sealed class GameState
 {
@@ -31,7 +31,7 @@ public sealed class GameState
                     var props = _propertiesGrid[f, r];
                     if (props == Properties.None) continue;
                     var coordinateFromZeroOffset = CoordinateFromZeroOffset(f, r);
-                    pieces.Add(coordinateFromZeroOffset, _pool.GetPiece(coordinateFromZeroOffset, props));
+                    pieces.Add(coordinateFromZeroOffset, _pool.PieceWithProperties(coordinateFromZeroOffset, props));
                 }
             }
 
@@ -58,9 +58,8 @@ public sealed class GameState
         for (var r = 0; r < 8; r++)
         {
             var props = _propertiesGrid[f, r];
-            if (props == Properties.None) continue;
-            if (props.Colour == colour)
-                yield return _pool.GetPiece(CoordinateFromZeroOffset(f, r), props);
+            if (props.Colour == colour) 
+                yield return _pool.PieceWithProperties(CoordinateFromZeroOffset(f, r), props);
         }
     }
 
@@ -78,35 +77,24 @@ public sealed class GameState
         var p = TryGetProperties(at, out var properties) ? properties : Properties.None;
         if (p == Properties.None)
         {
-            piece = new NullPiece(new(p, at, _game, _invalidMoveHandler));
+            piece = _pool.PieceWithProperties(at, properties);
             return false;
         }
 
-        piece = _pool.GetPiece(at, properties);
+        piece = _pool.PieceWithProperties(at, properties);
         return true;
     }
 
-    public void Clear()
+    public void ClearProperties()
     {
         _propertiesGrid.Clear();
     }
 
     public Game Clone() => new(_invalidMoveHandler, _propertiesGrid);
 
-    public Coordinate GetKingCoordinate(Colour colour)
+    public Coordinate KingCoordinate(Colour colour)
     {
-        // get index of king
-        for (var f = 0; f < 8; f++)
-        {
-            for (var r = 0; r < 8; r++)
-            {
-                var props = _propertiesGrid[f, r];
-                if (props.Type == PieceType.King && props.Colour == colour)
-                    return new Coordinate(Game.Files[f], Game.Ranks[r]);
-            }
-        }
-
-        return NullCoordinate;
+        return _propertiesGrid.Find(props => props.Type == PieceType.King && props.Colour == colour);
     }
 
     public void RemovePieceAt(Coordinate moveFrom)

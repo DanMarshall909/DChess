@@ -1,7 +1,7 @@
 ﻿using DChess.Core.Moves;
 using DChess.Core.Pieces;
 
-namespace DChess.Core.Board;
+namespace DChess.Core.Game;
 
 /// <summary>
 ///     A pool of pieces that can be reused to reduce memory allocation / GC pressure
@@ -12,7 +12,7 @@ public class PiecePool(Game game, IInvalidMoveHandler invalidMoveHandler)
 {
     private readonly Dictionary<(Coordinate, Properties), Piece> _pool = new();
 
-    public Piece GetPiece(Coordinate coordinate, Properties properties)
+    public Piece PieceWithProperties(Coordinate coordinate, Properties properties)
     {
         if (_pool.TryGetValue((coordinate, properties), out var piece))
             return piece;
@@ -34,6 +34,7 @@ public class PiecePool(Game game, IInvalidMoveHandler invalidMoveHandler)
             PieceType.Bishop => new Bishop(arguments),
             PieceType.Queen => new Queen(arguments),
             PieceType.King => new King(arguments),
+            PieceType.None => new NullPiece(arguments),
             _ => throw new ArgumentOutOfRangeException(nameof(properties.Type), properties.Type, null)
         };
     }

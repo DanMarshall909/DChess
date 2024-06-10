@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace DChess.Core.Board;
+namespace DChess.Core.Game;
 
 public readonly record struct PropertiesGrid
 {
@@ -29,7 +29,7 @@ public readonly record struct PropertiesGrid
         var rowSpan = new Span<Properties>(AsArray, 0, TotalPropertiesInGrid);
         rowSpan.Fill(Properties.None);
     }
-    
+
     public Properties this[Coordinate coordinate]
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -56,4 +56,19 @@ public readonly record struct PropertiesGrid
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static int ToIndex(int file, int rank) => (file + (rank << 3));
+
+    public Coordinate Find(Func<Properties, bool> func)
+    {
+        for (var f = 0; f < 8; f++)
+        {
+            for (var r = 0; r < 8; r++)
+            {
+                var props = this[f, r];
+                if (func(props))
+                    return new Coordinate(Game.Files[f], Game.Ranks[r]);
+            }
+        }
+
+        return NullCoordinate;
+    }
 }
