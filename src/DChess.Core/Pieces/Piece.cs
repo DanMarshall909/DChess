@@ -7,7 +7,7 @@ public abstract record Piece
 {
     protected Piece(Arguments arguments)
     {
-        PieceProperties = arguments.PieceProperties;
+        Properties = arguments.PieceProperties;
         Coordinate = arguments.Coordinate;
         Game = arguments.Game;
         InvalidMoveHandler = arguments.InvalidMoveHandler;
@@ -15,10 +15,10 @@ public abstract record Piece
 
     public abstract string PieceName { get; }
     public IInvalidMoveHandler InvalidMoveHandler { get; set; }
-    public Properties PieceProperties { get; init; }
+    public Properties Properties { get; init; }
     public Coordinate Coordinate { get; init; }
-    public Colour Colour => PieceProperties.Colour;
-    public PieceType Type => PieceProperties.Type;
+    public Colour Colour => Properties.Colour;
+    public PieceType Type => Properties.Type;
 
     protected Game.Game Game { get; init; }
 
@@ -29,9 +29,8 @@ public abstract record Piece
         if (!result.IsValid)
             InvalidMoveHandler.HandleInvalidMove(result);
 
-        Game.Make(move);
+        Game.Move(move);
     }
-
 
     public MoveResult CheckMove(Coordinate to)
     {
@@ -53,7 +52,7 @@ public abstract record Piece
         if (Coordinate == to)
             return move.InvalidResult(CannotMoveToSameCell);
 
-        var movedPieceColour = PieceProperties.Colour;
+        var movedPieceColour = Properties.Colour;
 
         if (Game.GameState.TryGetPiece(to, out var piece) &&
             piece.Colour == movedPieceColour) return move.InvalidResult(CannotCaptureOwnPiece);
@@ -62,31 +61,34 @@ public abstract record Piece
             move.Path.Any(coordinate => Game.GameState.HasPieceAt(coordinate)))
             return move.InvalidResult(CannotJumpOverOtherPieces);
 
-        if (IsInCheck(movedPieceColour, move))
+        if (MovingIntoCheck(movedPieceColour, move))
             return move.InvalidResult(CannotMoveIntoCheck);
 
         return move.OkResult();
     }
 
-    private bool IsInCheck(Colour movedPieceColour, Move move)
+    private bool MovingIntoCheck(Colour movedPieceColour, Move move)
     {
-        var kingCoordinate = Game.GameState.KingCoordinate(movedPieceColour);
-        if (kingCoordinate == NullCoordinate)
-            return false;
-
         var newBoard = Game.GameState.Clone();
-        newBoard.Make(move);
+        newBoard.Move(move);
 
-        return newBoard.GameState.OpposingPieces(movedPieceColour).Any(p => p.CanMoveTo(kingCoordinate));
+        return newBoard.GameState.IsInCheck(movedPieceColour);
     }
 
-    private bool CanMoveTo(Coordinate coordinate) => !new Move(Coordinate, coordinate).IsBlocked(Game);
+    public bool CanMoveTo(Coordinate coordinate)
+    {
+        var move = new Move(Coordinate, coordinate);
+        if(!move.Path.Any())
+            return false;
+        
+        return !move.IsBlocked(Game.GameState);
+    }
 
     protected abstract MoveResult ValidateMove(Coordinate to);
 
     public void Deconstruct(out Properties properties, out Coordinate coordinate)
     {
-        properties = PieceProperties;
+        properties = Properties;
         coordinate = Coordinate;
     }
 

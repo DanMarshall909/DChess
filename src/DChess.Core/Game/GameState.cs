@@ -8,16 +8,18 @@ public sealed class GameState
 {
     private readonly Game _game;
     private readonly IInvalidMoveHandler _invalidMoveHandler;
-    private readonly PropertiesGrid _propertiesGrid;
+    private readonly ChessBoardState _chessBoardState;
     private readonly PiecePool _pool;
 
-    public GameState(Game game, PiecePool pool, IInvalidMoveHandler invalidMoveHandler, PropertiesGrid propertiesGrid)
+    public GameState(Game game, PiecePool pool, IInvalidMoveHandler invalidMoveHandler, ChessBoardState chessBoardState)
     {
         _game = game;
         _pool = pool;
         _invalidMoveHandler = invalidMoveHandler;
-        _propertiesGrid = propertiesGrid;
+        _chessBoardState = chessBoardState;
     }
+
+    public override string ToString() => Pieces.Where(x => x.Key != Coordinate.None)?.ToString() ?? "Not initialised";
 
     public ReadOnlyDictionary<Coordinate, Piece> Pieces
     {
@@ -28,7 +30,7 @@ public sealed class GameState
             {
                 for (var r = 0; r < 8; r++)
                 {
-                    var props = _propertiesGrid[f, r];
+                    var props = _chessBoardState[f, r];
                     if (props == Properties.None) continue;
                     var coordinateFromZeroOffset = CoordinateFromZeroOffset(f, r);
                     pieces.Add(coordinateFromZeroOffset, _pool.PieceWithProperties(coordinateFromZeroOffset, props));
@@ -45,20 +47,20 @@ public sealed class GameState
 
     public bool HasPieceAt(Coordinate coordinate)
     {
-        var properties = _propertiesGrid[coordinate.File, coordinate.Rank];
+        var properties = _chessBoardState[coordinate.File, coordinate.Rank];
         return properties != Properties.None;
     }
 
-    public void Set(Coordinate coordinate, Properties properties)
-        => _propertiesGrid[coordinate] = properties;
+    public void Place(Properties pieceProperties, Coordinate at)
+        => _chessBoardState[at] = pieceProperties;
 
     public IEnumerable<Piece> FriendlyPieces(Colour colour)
     {
         for (var f = 0; f < 8; f++)
         for (var r = 0; r < 8; r++)
         {
-            var props = _propertiesGrid[f, r];
-            if (props.Colour == colour) 
+            var props = _chessBoardState[f, r];
+            if (props.Colour == colour)
                 yield return _pool.PieceWithProperties(CoordinateFromZeroOffset(f, r), props);
         }
     }
@@ -68,7 +70,7 @@ public sealed class GameState
 
     public bool TryGetProperties(Coordinate coordinate, out Properties properties)
     {
-        properties = _propertiesGrid[coordinate];
+        properties = _chessBoardState[coordinate];
         return properties != Properties.None;
     }
 
@@ -87,26 +89,40 @@ public sealed class GameState
 
     public void ClearProperties()
     {
-        _propertiesGrid.Clear();
+        _chessBoardState.Clear();
     }
 
-    public Game Clone() => new(_invalidMoveHandler, _propertiesGrid);
+    public Game Clone() => new(_invalidMoveHandler, _chessBoardState);
 
     public Coordinate KingCoordinate(Colour colour)
     {
-        return _propertiesGrid.Find(props => props.Type == PieceType.King && props.Colour == colour);
+        return _chessBoardState.Find(props => props.Type == PieceType.King && props.Colour == colour);
     }
 
     public void RemovePieceAt(Coordinate moveFrom)
     {
-        _propertiesGrid[moveFrom] = Properties.None;
+        _chessBoardState[moveFrom] = Properties.None;
     }
 
     public void SetPiece(Coordinate moveTo, Properties to)
     {
-        _propertiesGrid[moveTo] = to;
+        _chessBoardState[moveTo] = to;
     }
 
     public Properties GetProperties(Coordinate coordinate) =>
-        _propertiesGrid[coordinate];
+        _chessBoardState[coordinate];
+
+    public bool IsInCheck(Colour colour)
+    {
+        var king = KingCoordinate(colour);
+        foreach (var p in OpposingPieces(colour))
+        {
+            if (p.CanMoveTo(king))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

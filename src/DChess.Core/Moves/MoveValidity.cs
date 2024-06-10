@@ -3,6 +3,7 @@ namespace DChess.Core.Moves;
 public enum MoveValidity
 {
     Ok,
+    InvalidMove,
     BishopCanOnlyMoveDiagonally,
     KingCanOnlyMove1SquareAtATime,
     KnightsCanOnlyMoveInAnLShape,

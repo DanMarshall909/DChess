@@ -47,7 +47,7 @@ public class GameTests
         // Arrange
         var game = new Game(new TestInvalidMoveHandler());
 
-        game.GameState.Set(a1, WhitePawn);
+        game.GameState.Place(WhitePawn, a1);
 
         // Assert
         var properties = game.GameState.GetProperties(a1);
@@ -79,7 +79,7 @@ public class GameTests
         var game = new Game(_invalidMoveHandler);
 
         // Act
-        var act = () => game.GameState.Set(new Coordinate(column, row), WhitePawn);
+        var act = () => game.GameState.Place(WhitePawn, new Coordinate(column, row));
 
         // Assert
         act.Should().Throw<InvalidCoordinateException>();
@@ -134,7 +134,7 @@ public class GameTests
     {
         var game = new Game(_invalidMoveHandler);
         var whitePawn = WhitePawn;
-        game.GameState.Set(a1, whitePawn);
+        game.GameState.Place(whitePawn, a1);
 
         game.GameState.GetProperties(a1).Should().Be(whitePawn);
     }

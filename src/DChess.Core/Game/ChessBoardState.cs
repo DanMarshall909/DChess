@@ -2,21 +2,21 @@ using System.Runtime.CompilerServices;
 
 namespace DChess.Core.Game;
 
-public readonly record struct PropertiesGrid
+public readonly record struct ChessBoardState
 {
     public const int TotalPropertiesInGrid = 8 * 8;
 
-    public static PropertiesGrid CloneOrEmptyIfNull(PropertiesGrid? properties)
-        => properties is not null
-            ? new PropertiesGrid(properties!.Value.AsArray.Clone() as Properties[] ?? Array.Empty<Properties>())
-            : new PropertiesGrid();
+    public static ChessBoardState CloneOrEmptyIfNull(ChessBoardState? state)
+        => state is not null
+            ? new ChessBoardState(state!.Value.AsArray.Clone() as Properties[] ?? Array.Empty<Properties>())
+            : new ChessBoardState();
 
-    public PropertiesGrid()
+    public ChessBoardState()
     {
         Clear();
     }
 
-    private PropertiesGrid(Properties[] data)
+    private ChessBoardState(Properties[] data)
         => AsArray = CloneOf(data);
 
     private static Properties[] CloneOf(Properties[] data)

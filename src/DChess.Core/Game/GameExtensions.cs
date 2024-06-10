@@ -5,40 +5,40 @@ public static class GameExtensions
     public static void SetStandardLayout(this Game game)
     {
         game.GameState.ClearProperties();
-        game.GameState.Set(a8, BlackRook);
-        game.GameState.Set(b8, BlackKnight);
-        game.GameState.Set(c8, BlackBishop);
-        game.GameState.Set(d8, BlackQueen);
-        game.GameState.Set(e8, BlackKing);
-        game.GameState.Set(f8, BlackBishop);
-        game.GameState.Set(g8, BlackKnight);
-        game.GameState.Set(h8, BlackRook);
+        game.GameState.Place(BlackRook, a8);
+        game.GameState.Place(BlackKnight, b8);
+        game.GameState.Place(BlackBishop, c8);
+        game.GameState.Place(BlackQueen, d8);
+        game.GameState.Place(BlackKing, e8);
+        game.GameState.Place(BlackBishop, f8);
+        game.GameState.Place(BlackKnight, g8);
+        game.GameState.Place(BlackRook, h8);
 
-        game.GameState.Set(a7, BlackPawn);
-        game.GameState.Set(b7, BlackPawn);
-        game.GameState.Set(c7, BlackPawn);
-        game.GameState.Set(d7, BlackPawn);
-        game.GameState.Set(e7, BlackPawn);
-        game.GameState.Set(f7, BlackPawn);
-        game.GameState.Set(g7, BlackPawn);
-        game.GameState.Set(h7, BlackPawn);
+        game.GameState.Place(BlackPawn, a7);
+        game.GameState.Place(BlackPawn, b7);
+        game.GameState.Place(BlackPawn, c7);
+        game.GameState.Place(BlackPawn, d7);
+        game.GameState.Place(BlackPawn, e7);
+        game.GameState.Place(BlackPawn, f7);
+        game.GameState.Place(BlackPawn, g7);
+        game.GameState.Place(BlackPawn, h7);
 
-        game.GameState.Set(a2, WhitePawn);
-        game.GameState.Set(b2, WhitePawn);
-        game.GameState.Set(c2, WhitePawn);
-        game.GameState.Set(d2, WhitePawn);
-        game.GameState.Set(e2, WhitePawn);
-        game.GameState.Set(f2, WhitePawn);
-        game.GameState.Set(g2, WhitePawn);
-        game.GameState.Set(h2, WhitePawn);
+        game.GameState.Place(WhitePawn, a2);
+        game.GameState.Place(WhitePawn, b2);
+        game.GameState.Place(WhitePawn, c2);
+        game.GameState.Place(WhitePawn, d2);
+        game.GameState.Place(WhitePawn, e2);
+        game.GameState.Place(WhitePawn, f2);
+        game.GameState.Place(WhitePawn, g2);
+        game.GameState.Place(WhitePawn, h2);
 
-        game.GameState.Set(a1, WhiteRook);
-        game.GameState.Set(b1, WhiteKnight);
-        game.GameState.Set(c1, WhiteBishop);
-        game.GameState.Set(d1, WhiteQueen);
-        game.GameState.Set(e1, WhiteKing);
-        game.GameState.Set(f1, WhiteBishop);
-        game.GameState.Set(g1, WhiteKnight);
-        game.GameState.Set(h1, WhiteRook);
+        game.GameState.Place(WhiteRook, a1);
+        game.GameState.Place(WhiteKnight, b1);
+        game.GameState.Place(WhiteBishop, c1);
+        game.GameState.Place(WhiteQueen, d1);
+        game.GameState.Place(WhiteKing, e1);
+        game.GameState.Place(WhiteBishop, f1);
+        game.GameState.Place(WhiteKnight, g1);
+        game.GameState.Place(WhiteRook, h1);
     }
 }

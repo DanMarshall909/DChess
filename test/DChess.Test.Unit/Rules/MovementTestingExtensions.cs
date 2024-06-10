@@ -62,7 +62,7 @@ public static class MovementTestingExtensions
             var from = new Coordinate(file, rank);
 
             game.GameState.ClearProperties();
-            game.GameState.Set(from, properties);
+            game.GameState.Place(properties, from);
             setupBoard?.Invoke(game, from);
 
             var pieceAtFrom = game.GameState.Pieces[from];
@@ -73,7 +73,7 @@ public static class MovementTestingExtensions
                     moveResult
                         .IsValid
                         .Should().Be(shouldBeAbleToMove,
-                            $"{pieceAtFrom.PieceProperties} should {(shouldBeAbleToMove ? "" : "not ")}be able to move from {from} to {to})");
+                            $"{pieceAtFrom.Properties} should {(shouldBeAbleToMove ? "" : "not ")}be able to move from {from} to {to})");
                 }
         }
     }
@@ -83,7 +83,7 @@ public static class MovementTestingExtensions
     {
         foreach (var offset in offsets)
             if (from.TryApplyOffset(offset, out var to))
-                game.GameState.Set(to, properties);
+                game.GameState.Place(properties, to);
     }
 
     /// <summary>

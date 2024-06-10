@@ -2,9 +2,10 @@
 
 namespace DChess.Test.Unit;
 
-public abstract class PieceTestBase
+public abstract class GameTestBase
 {
-    protected PieceTestBase() => Game = new Game(InvalidMoveHandler);
+    protected GameTestBase() => Game = new Game(InvalidMoveHandler);
+
     protected IInvalidMoveHandler InvalidMoveHandler { get; } = new TestInvalidMoveHandler();
     protected Game Game { get; init; }
 }

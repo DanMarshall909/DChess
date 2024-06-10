@@ -10,6 +10,7 @@ public static class MoveValidityExtensions
         return validity switch
         {
             Ok => "OK",
+            InvalidMove => "Invalid move",
             BishopCanOnlyMoveDiagonally => "Bishop can only move diagonally",
             KingCanOnlyMove1SquareAtATime => "King can only move 1 square at a time",
             KnightsCanOnlyMoveInAnLShape => "Knights can only move in an L shape",

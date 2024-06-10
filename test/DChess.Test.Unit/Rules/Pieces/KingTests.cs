@@ -1,6 +1,6 @@
 ﻿namespace DChess.Test.Unit.Rules.Pieces;
 
-public class KingTests: PieceTestBase
+public class KingTests: GameTestBase
 {
     private const int X = LegalPositionValue;
 
@@ -31,9 +31,9 @@ public class KingTests: PieceTestBase
     public void a_piece_cannot_move_such_that_the_king_is_in_check()
     {
         // Arrange
-        Game.GameState.Set(a1, WhiteKing);
-        Game.GameState.Set(a2, WhiteBishop);
-        Game.GameState.Set(a8, BlackRook);
+        Game.GameState.Place(WhiteKing, a1);
+        Game.GameState.Place(WhiteBishop, a2);
+        Game.GameState.Place(BlackRook, a8);
 
         // Act
         var result = Game.GameState.Pieces[a2].CheckMove(b3);

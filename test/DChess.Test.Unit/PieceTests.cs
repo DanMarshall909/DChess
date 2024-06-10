@@ -15,7 +15,7 @@ public class PieceTests
         var game = new Game(_invalidMoveHandler);
         var chessPiece = new Properties(PieceType.Pawn, White);
 
-        game.GameState.Set(a2, chessPiece);
+        game.GameState.Place(chessPiece, a2);
         game.GameState.FriendlyPieces(White).Count().Should().Be(1);
 
         // Act
@@ -37,7 +37,7 @@ public class PieceTests
         // Arrange
         var game = new Game(_invalidMoveHandler);
 
-        game.GameState.Set(b2, WhiteQueen);
+        game.GameState.Place(WhiteQueen, b2);
         game.GameState.FriendlyPieces(White).Count().Should().Be(1);
 
         // Act
@@ -59,7 +59,7 @@ public class PieceTests
     {
         // Arrange
         var game = new Game(_invalidMoveHandler);
-        game.GameState.Set(a1, new Properties(PieceType.Pawn, White));
+        game.GameState.Place(new Properties(PieceType.Pawn, White), a1);
         var piece = game.GameState.Pieces[a1];
 
         // Act
