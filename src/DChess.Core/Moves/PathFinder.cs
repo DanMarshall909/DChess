@@ -23,6 +23,7 @@ public static class PathFinder
         int step = Math.Sign(move.To.Rank - move.From.Rank);
         for (int r = move.From.Rank + step; r != move.To.Rank; r += step)
             yield return new Coordinate(move.From.File, (byte)r);
+        yield return move.To;
     }
 
     private static IEnumerable<Coordinate> HorizontalPath(Move move)
@@ -30,6 +31,7 @@ public static class PathFinder
         var step = (char)Math.Sign(move.To.File - move.From.File);
         for (var f = (char)(move.From.File + step); f != move.To.File; f += step)
             yield return new Coordinate(f, move.From.Rank);
+        yield return move.To;
     }
 
     private static IEnumerable<Coordinate> DiagonalPath(Move move)
@@ -45,5 +47,7 @@ public static class PathFinder
             f += (char)stepFile;
             r += (byte)stepRank;
         }
+        
+        yield return move.To;
     }
 }
