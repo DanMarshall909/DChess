@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using DChess.Core.Exceptions;
 using DChess.Core.Moves;
 using DChess.Core.Pieces;
 
@@ -19,6 +20,21 @@ public sealed class GameState
         _pool = pool;
         _invalidMoveHandler = invalidMoveHandler;
         _boardState = boardState;
+    }
+
+    public bool LegalMoves(Colour colour)
+    {
+        foreach (var piece in FriendlyPieces(colour))
+        {
+            foreach (Move move in piece.LegalMoves())
+            {
+                var result = piece.CheckMove(move.To);
+                if (result.IsValid)
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     public override string ToString() => Pieces.Where(x => x.Key != Coordinate.None)?.ToString() ?? "Not initialised";
@@ -42,6 +58,8 @@ public sealed class GameState
             return new ReadOnlyDictionary<Coordinate, Piece>(pieces);
         }
     }
+
+    public Colour CurrentPlayer { get; set; } = White;
 
     private static Coordinate CoordinateFromZeroOffset(int fileArrayOffset, int rankArrayOffset)
         => new((byte)((fileArrayOffset & 0b111) | ((rankArrayOffset & 0b111) << 3)));
@@ -117,6 +135,9 @@ public sealed class GameState
     public bool IsInCheck(Colour colour)
     {
         var king = KingCoordinate(colour);
+        if (king == Coordinate.None)
+            throw new NoKingFoundException();
+        
         foreach (var p in OpposingPieces(colour))
         {
             if (p.CanMoveTo(king))
@@ -126,5 +147,23 @@ public sealed class GameState
         }
 
         return false;
+    }
+
+    public bool IsInCheckmate(Colour colour)
+    {
+        if (!IsInCheck(colour))
+            return false;
+
+        foreach (var piece in FriendlyPieces(colour))
+        {
+            foreach (var move in piece.LegalMoves())
+            {
+                var result = piece.CheckMove(move.To);
+                if (result.IsValid)
+                    return false;
+            }
+        }
+
+        return true;
     }
 }

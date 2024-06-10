@@ -13,22 +13,20 @@ public class PieceTests
     {
         // Arrange
         var game = new Game(_invalidMoveHandler);
-        var chessPiece = new Properties(PieceType.Pawn, White);
-
-        game.GameState.Place(chessPiece, a2);
-        game.GameState.FriendlyPieces(White).Count().Should().Be(1);
+        game.GameState.Place(WhitePawn, a2);
+        game.GameState.Place(WhiteKing, f1);
 
         // Act
         var piece = game.GameState.Pieces[a2];
         piece.MoveTo(b3);
 
         // Assert
-        var args = new Piece.Arguments(chessPiece, b3, game, _invalidMoveHandler);
-        game.GameState.Pieces[b3].Should()
-            .BeEquivalentTo(new Pawn(args), "the properties should be moved");
+        // ReSharper disable once HeapView.BoxingAllocation
+        game.GameState.Pieces[b3].Properties.Should()
+            .BeEquivalentTo(WhitePawn, "the properties should be moved");
 
         game.GameState.FriendlyPieces(White).Count().Should()
-            .Be(1, "the properties should be moved, not duplicated");
+            .Be(2, "the properties should be moved, not duplicated");
     }
     
     [Fact(DisplayName = "A queen can move backwards")]
@@ -38,7 +36,8 @@ public class PieceTests
         var game = new Game(_invalidMoveHandler);
 
         game.GameState.Place(WhiteQueen, b2);
-        game.GameState.FriendlyPieces(White).Count().Should().Be(1);
+        game.GameState.Place(WhiteKing, f1);
+        game.GameState.FriendlyPieces(White).Count().Should().Be(2);
 
         // Act
         var piece = game.GameState.Pieces[b2];
@@ -50,7 +49,7 @@ public class PieceTests
             .BeEquivalentTo(new Queen(args), "the properties should be moved");
 
         game.GameState.FriendlyPieces(White).Count().Should()
-            .Be(1, "the properties should be moved, not duplicated");
+            .Be(2, "the properties should be moved, not duplicated");
     }
 
 
@@ -59,6 +58,7 @@ public class PieceTests
     {
         // Arrange
         var game = new Game(_invalidMoveHandler);
+        game.GameState.Place(WhiteKing, f1);
         game.GameState.Place(new Properties(PieceType.Pawn, White), a1);
         var piece = game.GameState.Pieces[a1];
 

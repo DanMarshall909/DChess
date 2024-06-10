@@ -78,6 +78,9 @@ public abstract record Piece
     public bool CanMoveTo(Coordinate coordinate)
     {
         var move = new Move(Coordinate, coordinate);
+        var val = ValidateMove(coordinate);
+        if (!val.IsValid)
+            return false;
         return move.IsLegalIfNotBlocked && !move.IsBlocked(Game.GameState.BoardState);
     }
 
@@ -91,6 +94,14 @@ public abstract record Piece
 
     public record Arguments(Properties PieceProperties, Coordinate Coordinate, Game.Game Game,
         IInvalidMoveHandler InvalidMoveHandler);
+
+    public IEnumerable<Move> LegalMoves()
+    {
+        return BoardState
+            .AllCoordinates
+            .Where(CanMoveTo)
+            .Select(to => new Move(Coordinate, to));
+    }
 }
 
 public record NullPiece : Piece

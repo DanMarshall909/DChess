@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using DChess.Core.Game;
 
-namespace DChess.UI.Console;
+namespace DChess.Core.Renderers;
 
 public class TextRenderer : IBoardRenderer
 {
@@ -10,7 +10,7 @@ public class TextRenderer : IBoardRenderer
 
     public string LastRender { get; private set; } = string.Empty;
 
-    public void Render(Game game)
+    public void Render(Game.Game game)
     {
         var result = new StringBuilder(" abcdefgh" + Environment.NewLine);
         for (byte rank = 8; rank >= 1; rank--)
@@ -31,9 +31,9 @@ public class TextRenderer : IBoardRenderer
         LastRender = result.ToString();
     }
 
-    private static char RenderCell(Game game, char file, byte rank) => PieceChar(file, rank, game);
+    private static char RenderCell(Game.Game game, char file, byte rank) => PieceChar(file, rank, game);
 
-    private static char PieceChar(char file, byte rank, Game game)
+    private static char PieceChar(char file, byte rank, Game.Game game)
     {
         if (game.GameState.TryGetProperties(new Coordinate(file, rank), out var chessPiece))
             return DisplayChar(chessPiece!);
@@ -46,7 +46,7 @@ public class TextRenderer : IBoardRenderer
     {
         return properties.Colour switch
         {
-            Black => properties.Type switch
+            Colour.Black => properties.Type switch
             {
                 PieceType.Pawn => '♙',
                 PieceType.Rook => '♖',

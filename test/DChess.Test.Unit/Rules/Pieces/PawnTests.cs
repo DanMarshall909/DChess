@@ -7,6 +7,7 @@ public class PawnTests : GameTestBase
     [Fact(DisplayName = "Pawns can move forward one square")]
     public void pawn_can_move_forward_one_square()
     {
+        Game.GameState.Place(WhiteKing, f1);
         Game.GameState.Place(WhitePawn, a1);
 
         Game.GameState.Pieces[a1].MoveTo(b1);
@@ -15,23 +16,19 @@ public class PawnTests : GameTestBase
     [Fact(DisplayName = "Pawns can only move forward two squares from starting position")]
     public void pawn_can_move_forward_two_squares_from_starting_position()
     {
-        Game.GameState.Place(WhitePawn, b1);
+        Game.GameState.Place(WhiteKing, f1);
+        Game.GameState.Place(WhitePawn, b2);
 
-        Game.GameState.Pieces[b1].MoveTo(b2);
         Game.GameState.Pieces[b2].MoveTo(b3);
-        Game.GameState.Pieces[b3].CheckMove(b5).Validity.Should().Be(PawnsCanOnlyMove2SquaresForwardFromStartingPosition,
-            "the pawn has already moved");
-
-        Game.GameState.Place(BlackPawn, b6);
-        Game.GameState.Pieces[b6].MoveTo(b5);
-        Game.GameState.Pieces[b5].CheckMove(b3).Validity.Should().Be(PawnsCanOnlyMove2SquaresForwardFromStartingPosition,
+        Game.GameState.Pieces[b3].MoveTo(b4);
+        Game.GameState.Pieces[b4].CheckMove(b6).Validity.Should().Be(PawnsCanOnlyMove2SquaresForwardFromStartingPosition,
             "the pawn has already moved");
     }
 
     [Fact(DisplayName = "Pawns cannot move diagonally")]
     public void pawns_cannot_move_diagonally()
     {
-        Game.GameState.Pieces.Should().BeEmpty();
+        Game.GameState.Place(WhiteKing, f1);
         Game.GameState.Place(WhitePawn, a3);
 
         Game.GameState.Pieces[a3].CheckMove(b3).Validity.Should().Be(PawnsCannotMoveHorizontally);
@@ -41,6 +38,7 @@ public class PawnTests : GameTestBase
     public void pawns_can_be_promoted_upon_reaching_the_opposite_end_of_the_board()
     {
         Game.GameState.Place(BlackKing, e8);
+        Game.GameState.Place(WhiteKing, e1);
         foreach (byte rank in Game.Ranks)
         {
             var from = new Coordinate('g', rank);

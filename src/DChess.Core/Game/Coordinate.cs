@@ -36,9 +36,13 @@ public record struct Coordinate
     /// </exception>
     public Coordinate(char File, byte Rank)
     {
+        if (!IsValid(File, Rank))
+            throw new InvalidCoordinateException(File, Rank, "Invalid coordinate");
         this.File = File;
         this.Rank = Rank;
     }
+    
+    public Coordinate(byte fileIndex, byte rankIndex) => Value = (byte)(fileIndex + (rankIndex << 3));
 
     public Coordinate(byte Value) => this.Value = Value;
 
@@ -127,7 +131,11 @@ public record struct Coordinate
     public static Coordinate From(byte byteCoordinate) =>
         new((char)('a' + (byteCoordinate & 0b111)), (byte)((byteCoordinate >> 3) + 1));
 
-    public override string ToString() => $"{File}{Rank}";
+    public override string ToString()
+    {
+        return this == NullCoordinate ? "Null Coordinate" : $"{File}{Rank}";
+    }
+
     public static bool IsValid(char file, byte rank) => file is >= 'a' and <= 'h' && rank is >= 1 and <= 8;
     public bool IsValid() => IsValid(File, Rank);
 

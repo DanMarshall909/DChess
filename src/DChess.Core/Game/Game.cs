@@ -11,6 +11,8 @@ public sealed class Game : IDisposable
         _gameState = new GameState(this, _piecePool, invalidMoveHandler, BoardState.CloneOrEmptyIfNull(chessBoardState));
     }
 
+    public override string ToString() => this.RenderToText();
+
     /// <summary>
     /// Creates a new Coordinate from an array offset instead of a file and rank
     /// </summary>
@@ -22,6 +24,8 @@ public sealed class Game : IDisposable
     {
         get { return _gameState; }
     }
+
+    public Colour CurrentPlayer { get; set; }
 
 
     /// <summary>

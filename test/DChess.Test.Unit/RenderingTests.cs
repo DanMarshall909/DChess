@@ -1,5 +1,5 @@
 ﻿using DChess.Core.Game;
-using DChess.UI.Console;
+using DChess.Core.Renderers;
 
 namespace DChess.Test.Unit;
 
