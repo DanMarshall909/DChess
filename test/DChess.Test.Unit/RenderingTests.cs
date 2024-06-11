@@ -3,7 +3,7 @@ using DChess.Core.Renderers;
 
 namespace DChess.Test.Unit;
 
-public class RenderingTests
+public class RenderingTests : GameTestBase
 {
     private readonly TestInvalidMoveHandler _invalidMoveHandler = new();
 
@@ -11,12 +11,9 @@ public class RenderingTests
     [Fact(DisplayName = "The board should be displayed correctly")]
     public void the_board_should_be_displayed_correctly()
     {
-        // Arrange
-        var game = new Game(_invalidMoveHandler);
         var renderer = new TextRenderer();
 
-        // Assert
-        renderer.Render(game);
+        renderer.Render(Game.GameState);
         renderer.LastRender.Should().BeEquivalentTo(
             """
              abcdefgh
@@ -34,12 +31,10 @@ public class RenderingTests
     [Fact(DisplayName = "A standard  board should be displayed correctly with chess pieces")]
     public void a_standard_board_should_be_displayed_correctly_with_pieces()
     {
-        // Arrange
-        var game = new Game(_invalidMoveHandler);
-        game.SetStandardLayout();
+        Game.SetStandardLayout();
         var renderer = new TextRenderer();
 
-        renderer.Render(game);
+        renderer.Render(Game.GameState);
         (Environment.NewLine + renderer.LastRender).Should().BeEquivalentTo(
             """
             

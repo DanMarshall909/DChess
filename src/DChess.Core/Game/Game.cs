@@ -1,17 +1,21 @@
 using DChess.Core.Moves;
+using DChess.Test.Unit;
 
 namespace DChess.Core.Game;
 
+
 public sealed class Game : IDisposable
 {
-    public Game(IInvalidMoveHandler invalidMoveHandler, BoardState? chessBoardState = null)
+    public Game(IInvalidMoveHandler invalidMoveHandler, GameOptions? gameOptions = null, BoardState? chessBoardState = null)
     { 
         _moveHandler = new MoveHandler(this);
         _piecePool = new PiecePool(this, invalidMoveHandler);
         _gameState = new GameState(this, _piecePool, invalidMoveHandler, BoardState.CloneOrEmptyIfNull(chessBoardState));
+        _gameOptions = gameOptions ?? GameOptions.DefaultGameOptions;
     }
 
-    public string AsText => this.RenderToText();
+    public Colour CurrentPlayer { get; set; } = White;
+
 
     /// <summary>
     /// Creates a new Coordinate from an array offset instead of a file and rank
@@ -25,7 +29,7 @@ public sealed class Game : IDisposable
         get { return _gameState; }
     }
 
-    public Colour CurrentPlayer { get; set; }
+    public GameOptions Options => _gameOptions;
 
 
     /// <summary>
@@ -46,14 +50,16 @@ public sealed class Game : IDisposable
     private readonly MoveHandler _moveHandler;
     private readonly GameState _gameState;
     private readonly PiecePool _piecePool;
+    private readonly GameOptions _gameOptions;
 
     public void Move(Coordinate from, Coordinate to)
     {
         _moveHandler.Make(new Move(from, to));
+        CurrentPlayer = CurrentPlayer == White ? Black : White;
     }
     
     public void Move(Move move)
     {
-        _moveHandler.Make(move);
+        Move(move.From, move.To);
     }
 }

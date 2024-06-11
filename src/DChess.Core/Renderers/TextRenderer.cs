@@ -10,7 +10,7 @@ public class TextRenderer : IBoardRenderer
 
     public string LastRender { get; private set; } = string.Empty;
 
-    public void Render(Game.Game game)
+    public void Render(GameState gameState)
     {
         var result = new StringBuilder(" abcdefgh" + Environment.NewLine);
         for (byte rank = 8; rank >= 1; rank--)
@@ -19,7 +19,7 @@ public class TextRenderer : IBoardRenderer
 
             for (var file = 'a'; file <= 'h'; file++)
             {
-                char cell = RenderCell(game, file, rank);
+                char cell = RenderCell(gameState, file, rank);
 
                 result.Append(cell);
             }
@@ -31,11 +31,11 @@ public class TextRenderer : IBoardRenderer
         LastRender = result.ToString();
     }
 
-    private static char RenderCell(Game.Game game, char file, byte rank) => PieceChar(file, rank, game);
+    private static char RenderCell(GameState gameState, char file, byte rank) => PieceChar(file, rank, gameState);
 
-    private static char PieceChar(char file, byte rank, Game.Game game)
+    private static char PieceChar(char file, byte rank, GameState game)
     {
-        if (game.GameState.TryGetProperties(new Coordinate(file, rank), out var chessPiece))
+        if (game.TryGetProperties(new Coordinate(file, rank), out var chessPiece))
             return DisplayChar(chessPiece!);
 
         bool isOddSquare = (rank + file) % 2 == 0;

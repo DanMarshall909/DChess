@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using DChess.Core.Exceptions;
 using DChess.Core.Moves;
 using DChess.Core.Pieces;
-using static DChess.Core.Game.GameState.GameStatus;
 
 namespace DChess.Core.Game;
 
@@ -23,6 +22,7 @@ public sealed class GameState
         _invalidMoveHandler = invalidMoveHandler;
         _boardState = boardState;
     }
+    public string AsText => this.RenderToText();
 
     public bool HasLegalMoves(Colour colour)
     {
@@ -64,7 +64,6 @@ public sealed class GameState
 
     private static Coordinate CoordinateFromZeroOffset(int fileArrayOffset, int rankArrayOffset)
         => new((byte)((fileArrayOffset & 0b111) | ((rankArrayOffset & 0b111) << 3)));
-
 
     public bool HasPieceAt(Coordinate coordinate)
     {
@@ -113,7 +112,7 @@ public sealed class GameState
         _boardState.Clear();
     }
 
-    public Game Clone() => new(_invalidMoveHandler, _boardState);
+    public Game Clone() => new(_invalidMoveHandler, _game.Options,  _boardState);
 
     public Coordinate KingCoordinate(Colour colour)
     {
