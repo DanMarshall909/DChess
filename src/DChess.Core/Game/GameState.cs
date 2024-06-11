@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using DChess.Core.Exceptions;
 using DChess.Core.Moves;
 using DChess.Core.Pieces;
+using static DChess.Core.Game.GameState.GameStatus;
 
 namespace DChess.Core.Game;
 
@@ -22,11 +23,12 @@ public sealed class GameState
         _boardState = boardState;
     }
 
-    public bool LegalMoves(Colour colour)
+    public bool HasLegalMoves(Colour colour)
     {
         foreach (var piece in FriendlyPieces(colour))
         {
-            foreach (Move move in piece.LegalMoves())
+            var legalMoves = piece.LegalMoves();
+            foreach (Move move in legalMoves)
             {
                 var result = piece.CheckMove(move.To);
                 if (result.IsValid)
@@ -137,33 +139,29 @@ public sealed class GameState
         var king = KingCoordinate(colour);
         if (king == Coordinate.None)
             throw new NoKingFoundException();
-        
-        foreach (var p in OpposingPieces(colour))
-        {
-            if (p.CanMoveTo(king))
-            {
-                return true;
-            }
-        }
 
-        return false;
+        return OpposingPieces(colour).Any(piece => piece.CanMoveTo(king));
     }
 
-    public bool IsInCheckmate(Colour colour)
+    public GameStatus Status(Colour colour)
     {
-        if (!IsInCheck(colour))
-            return false;
-
-        foreach (var piece in FriendlyPieces(colour))
+        GameStatus status;
+        
+        bool isInCheck = IsInCheck(colour);
+        if (!HasLegalMoves(colour))
         {
-            foreach (var move in piece.LegalMoves())
-            {
-                var result = piece.CheckMove(move.To);
-                if (result.IsValid)
-                    return false;
-            }
+            return isInCheck ? Checkmate : Stalemate;
         }
 
-        return true;
+        return isInCheck ? Check : InPlay;
+    }
+
+    public enum GameStatus
+    {
+        InPlay,
+        Check,
+        Checkmate,
+        Stalemate
     }
 }
+

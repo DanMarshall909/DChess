@@ -11,7 +11,7 @@ public sealed class Game : IDisposable
         _gameState = new GameState(this, _piecePool, invalidMoveHandler, BoardState.CloneOrEmptyIfNull(chessBoardState));
     }
 
-    public override string ToString() => this.RenderToText();
+    public string AsText => this.RenderToText();
 
     /// <summary>
     /// Creates a new Coordinate from an array offset instead of a file and rank

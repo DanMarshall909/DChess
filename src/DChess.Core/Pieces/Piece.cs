@@ -75,10 +75,10 @@ public abstract record Piece
         return newBoard.GameState.IsInCheck(movedPieceColour);
     }
 
-    public bool CanMoveTo(Coordinate coordinate)
+    public bool CanMoveTo(Coordinate to)
     {
-        var move = new Move(Coordinate, coordinate);
-        var val = ValidateMove(coordinate);
+        var move = new Move(Coordinate, to);
+        var val = ValidateMove(to);
         if (!val.IsValid)
             return false;
         return move.IsLegalIfNotBlocked && !move.IsBlocked(Game.GameState.BoardState);
