@@ -14,7 +14,7 @@ public sealed class GameState
 
     public BoardState BoardState => _boardState;
     public Colour CurrentPlayer { get; set; } = White;
-    
+
     public GameState(Game game, PiecePool pool, IInvalidMoveHandler invalidMoveHandler, BoardState boardState)
     {
         _game = game;
@@ -22,6 +22,7 @@ public sealed class GameState
         _invalidMoveHandler = invalidMoveHandler;
         _boardState = boardState;
     }
+
     public string AsText => this.RenderToText();
 
     public bool HasLegalMoves(Colour colour)
@@ -29,7 +30,7 @@ public sealed class GameState
         foreach (var piece in FriendlyPieces(colour))
         {
             var legalMoves = piece.LegalMoves();
-            foreach (Move move in legalMoves)
+            foreach (var move in legalMoves)
             {
                 var result = piece.CheckMove(move.To);
                 if (result.IsValid)
@@ -48,14 +49,12 @@ public sealed class GameState
         {
             var pieces = new Dictionary<Coordinate, Piece>();
             for (var f = 0; f < 8; f++)
+            for (var r = 0; r < 8; r++)
             {
-                for (var r = 0; r < 8; r++)
-                {
-                    var props = _boardState[f, r];
-                    if (props == Properties.None) continue;
-                    var coordinateFromZeroOffset = CoordinateFromZeroOffset(f, r);
-                    pieces.Add(coordinateFromZeroOffset, _pool.PieceWithProperties(coordinateFromZeroOffset, props));
-                }
+                var props = _boardState[f, r];
+                if (props == Properties.None) continue;
+                var coordinateFromZeroOffset = CoordinateFromZeroOffset(f, r);
+                pieces.Add(coordinateFromZeroOffset, _pool.PieceWithProperties(coordinateFromZeroOffset, props));
             }
 
             return new ReadOnlyDictionary<Coordinate, Piece>(pieces);
@@ -112,7 +111,7 @@ public sealed class GameState
         _boardState.Clear();
     }
 
-    public Game Clone() => new(_invalidMoveHandler, _game.Options,  _boardState);
+    public Game Clone() => new(_invalidMoveHandler, _game.Options, _boardState);
 
     public Coordinate KingCoordinate(Colour colour)
     {
@@ -144,12 +143,9 @@ public sealed class GameState
     public GameStatus Status(Colour colour)
     {
         GameStatus status;
-        
+
         bool isInCheck = IsInCheck(colour);
-        if (!HasLegalMoves(colour))
-        {
-            return isInCheck ? Checkmate : Stalemate;
-        }
+        if (!HasLegalMoves(colour)) return isInCheck ? Checkmate : Stalemate;
 
         return isInCheck ? Check : InPlay;
     }
@@ -162,4 +158,3 @@ public sealed class GameState
         Stalemate
     }
 }
-

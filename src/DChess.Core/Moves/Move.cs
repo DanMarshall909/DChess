@@ -11,11 +11,17 @@ public readonly record struct Move(Coordinate From, Coordinate To)
     public bool IsVertical => From.File == To.File;
     public bool IsHorizontal => From.Rank == To.Rank;
     public bool IsAdjacent => Distance.Total == 1;
+
     public bool IsBackwards(Colour colour) => colour == White
         ? To.Rank < From.Rank
         : To.Rank > From.Rank;
-    public IEnumerable<Coordinate> CoordinatesAlongPath => new Memo<Move, IEnumerable<Coordinate>>(PathFinder.GetPath).Execute(this);
-    public bool IsBlocked(BoardState boardState) => CoordinatesAlongPath.SkipLast(1).Any(coordinate => boardState.HasPieceAt(coordinate));
+
+    public IEnumerable<Coordinate> CoordinatesAlongPath =>
+        new Memo<Move, IEnumerable<Coordinate>>(PathFinder.GetPath).Execute(this);
+
+    public bool IsBlocked(BoardState boardState) =>
+        CoordinatesAlongPath.SkipLast(1).Any(coordinate => boardState.HasPieceAt(coordinate));
+
     public override string ToString() => $"{From} -> {To}";
     private MoveOffset Offset => new(To.File - From.File, To.Rank - From.Rank);
     public MoveResult OkResult() => new(this, Ok);

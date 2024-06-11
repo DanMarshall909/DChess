@@ -67,18 +67,16 @@ public readonly record struct BoardState
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int ToIndex(int file, int rank) => (file + (rank << 3));
+    private static int ToIndex(int file, int rank) => file + (rank << 3);
 
     public Coordinate Find(Func<Properties, bool> func)
     {
         for (byte f = 0; f < 8; f++)
+        for (byte r = 0; r < 8; r++)
         {
-            for (byte r = 0; r < 8; r++)
-            {
-                var props = this[f, r];
-                if (func(props))
-                    return new Coordinate(f, r);
-            }
+            var props = this[f, r];
+            if (func(props))
+                return new Coordinate(f, r);
         }
 
         return NullCoordinate;

@@ -46,7 +46,7 @@ public class TextRenderer : IBoardRenderer
     {
         return properties.Colour switch
         {
-            Colour.Black => properties.Type switch
+            Black => properties.Type switch
             {
                 PieceType.Pawn => '♙',
                 PieceType.Rook => '♖',

@@ -7,7 +7,7 @@ namespace DChess.Core.Game;
 public record struct Coordinate
 {
     public static Coordinate None => new(255);
-    
+
     /// <summary>
     ///     Creates a new Coordinate from a string representation e.g. a1. Note that this is case sensitive
     /// </summary>
@@ -41,7 +41,7 @@ public record struct Coordinate
         this.File = File;
         this.Rank = Rank;
     }
-    
+
     public Coordinate(byte fileIndex, byte rankIndex) => Value = (byte)(fileIndex + (rankIndex << 3));
 
     public Coordinate(byte Value) => this.Value = Value;
@@ -131,10 +131,7 @@ public record struct Coordinate
     public static Coordinate From(byte byteCoordinate) =>
         new((char)('a' + (byteCoordinate & 0b111)), (byte)((byteCoordinate >> 3) + 1));
 
-    public override string ToString()
-    {
-        return this == NullCoordinate ? "Null Coordinate" : $"{File}{Rank}";
-    }
+    public override string ToString() => this == NullCoordinate ? "Null Coordinate" : $"{File}{Rank}";
 
     public static bool IsValid(char file, byte rank) => file is >= 'a' and <= 'h' && rank is >= 1 and <= 8;
     public bool IsValid() => IsValid(File, Rank);

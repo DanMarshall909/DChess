@@ -3,14 +3,15 @@ using DChess.Test.Unit;
 
 namespace DChess.Core.Game;
 
-
 public sealed class Game : IDisposable
 {
-    public Game(IInvalidMoveHandler invalidMoveHandler, GameOptions? gameOptions = null, BoardState? chessBoardState = null)
-    { 
+    public Game(IInvalidMoveHandler invalidMoveHandler, GameOptions? gameOptions = null,
+        BoardState? chessBoardState = null)
+    {
         _moveHandler = new MoveHandler(this);
         _piecePool = new PiecePool(this, invalidMoveHandler);
-        _gameState = new GameState(this, _piecePool, invalidMoveHandler, BoardState.CloneOrEmptyIfNull(chessBoardState));
+        _gameState = new GameState(this, _piecePool, invalidMoveHandler,
+            BoardState.CloneOrEmptyIfNull(chessBoardState));
         _gameOptions = gameOptions ?? GameOptions.DefaultGameOptions;
     }
 
@@ -24,10 +25,7 @@ public sealed class Game : IDisposable
     /// <param name="rankArrayOffset">The rank array offset from 0-7</param>
     /// <exception cref="NotImplementedException"></exception>
 
-    public GameState GameState
-    {
-        get { return _gameState; }
-    }
+    public GameState GameState => _gameState;
 
     public GameOptions Options => _gameOptions;
 
@@ -57,7 +55,7 @@ public sealed class Game : IDisposable
         _moveHandler.Make(new Move(from, to));
         CurrentPlayer = CurrentPlayer == White ? Black : White;
     }
-    
+
     public void Move(Move move)
     {
         Move(move.From, move.To);

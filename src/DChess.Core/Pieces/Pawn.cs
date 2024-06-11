@@ -18,7 +18,7 @@ public record Pawn : Piece, IIgnorePathCheck
 
         if (move.IsHorizontal)
             return move.InvalidResult(PawnsCannotMoveHorizontally);
-        
+
         if (move.IsBackwards(Colour))
             return move.InvalidResult(PawnsCanOnlyMoveForward);
 
@@ -42,7 +42,7 @@ public record Pawn : Piece, IIgnorePathCheck
 
         if (move.Distance.Horizontal > 2)
             return move.InvalidResult(PawnsCanOnlyMove1SquareHorizontallyAndOnlyWhenTakingAPiece);
-        
+
         if (verticalDistance == 2 && !isFirstMove)
             return move.InvalidResult(PawnsCanOnlyMove2SquaresForwardFromStartingPosition);
 

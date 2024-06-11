@@ -47,7 +47,7 @@ public static class PathFinder
             f += (char)stepFile;
             r += (byte)stepRank;
         }
-        
+
         yield return move.To;
     }
 }

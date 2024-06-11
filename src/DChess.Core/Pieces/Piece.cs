@@ -112,8 +112,5 @@ public record NullPiece : Piece
 
     public override string PieceName { get; } = "NullPiece";
 
-    protected override MoveResult ValidateMove(Coordinate to)
-    {
-        return new MoveResult(Move.InvalidMove, FromCellDoesNoteContainPiece);
-    }
+    protected override MoveResult ValidateMove(Coordinate to) => new(Move.InvalidMove, FromCellDoesNoteContainPiece);
 }
