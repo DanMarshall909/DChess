@@ -11,7 +11,7 @@ internal record King : Piece, IIgnorePathCheck
 
     public override string PieceName => "King";
 
-    protected override MoveResult ValidateMove(Coordinate to)
+    protected override MoveResult ValidateMove(Coordinate to, GameState gameState)
     {
         var move = new Move(Coordinate, to);
 

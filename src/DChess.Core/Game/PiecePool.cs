@@ -25,7 +25,7 @@ public class PiecePool(Game game, IInvalidMoveHandler invalidMoveHandler)
 
     private Piece CreatePiece(Coordinate coordinate, Properties properties)
     {
-        Piece.Arguments arguments = new(properties, coordinate, game, invalidMoveHandler);
+        Piece.Arguments arguments = new(properties, coordinate, game.GameState, invalidMoveHandler);
         return properties.Type switch
         {
             PieceType.Pawn => new Pawn(arguments),

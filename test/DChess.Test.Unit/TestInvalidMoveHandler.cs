@@ -1,4 +1,6 @@
-﻿namespace DChess.Test.Unit;
+﻿using DChess.Core.Game;
+
+namespace DChess.Test.Unit;
 
 public class TestInvalidMoveHandler : IInvalidMoveHandler
 {
@@ -11,5 +13,10 @@ public class TestInvalidMoveHandler : IInvalidMoveHandler
 
     public void HandleNoKingFound()
     {
+    }
+
+    public void HandleNoPieceAt(Coordinate moveFrom)
+    {
+        throw new NotImplementedException();
     }
 }

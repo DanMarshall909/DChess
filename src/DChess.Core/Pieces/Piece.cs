@@ -9,7 +9,6 @@ public abstract record Piece
     {
         Properties = arguments.PieceProperties;
         Coordinate = arguments.Coordinate;
-        Game = arguments.Game;
         InvalidMoveHandler = arguments.InvalidMoveHandler;
     }
 
@@ -20,32 +19,20 @@ public abstract record Piece
     public Colour Colour => Properties.Colour;
     public PieceType Type => Properties.Type;
 
-    protected Game.Game Game { get; init; }
-
-    public void MoveTo(Coordinate to)
+    public MoveResult CheckMove(Coordinate to, GameState gameState)
     {
-        var move = new Move(Coordinate, to);
-        var result = CheckMove(to);
-        if (!result.IsValid)
-            InvalidMoveHandler.HandleInvalidMove(result);
-
-        Game.Move(move);
-    }
-
-    public MoveResult CheckMove(Coordinate to)
-    {
-        var generalMoveResult = IsGenerallyValid(to);
+        var generalMoveResult = IsGenerallyValid(to, gameState);
 
         if (!generalMoveResult.IsValid)
             return generalMoveResult;
 
-        var validity = ValidateMove(to);
+        var validity = ValidateMove(to, gameState);
 
         var moveResult = validity.IsValid ? generalMoveResult : validity;
         return moveResult;
     }
 
-    private MoveResult IsGenerallyValid(Coordinate to)
+    private MoveResult IsGenerallyValid(Coordinate to, GameState gameState)
     {
         var move = new Move(Coordinate, to);
 
@@ -54,37 +41,37 @@ public abstract record Piece
 
         var movedPieceColour = Properties.Colour;
 
-        if (Game.GameState.TryGetPiece(to, out var piece) &&
+        if (gameState.TryGetPiece(to, out var piece) &&
             piece.Colour == movedPieceColour) return move.InvalidResult(CannotCaptureOwnPiece);
 
         if (this is not IIgnorePathCheck &&
-            move.CoordinatesAlongPath.Any(coordinate => Game.GameState.HasPieceAt(coordinate)))
+            move.CoordinatesAlongPath.Any(coordinate => gameState.HasPieceAt(coordinate)))
             return move.InvalidResult(CannotJumpOverOtherPieces);
 
-        if (MovingIntoCheck(movedPieceColour, move))
+        if (MovingIntoCheck(movedPieceColour, move, gameState))
             return move.InvalidResult(CannotMoveIntoCheck);
 
         return move.OkResult();
     }
 
-    private bool MovingIntoCheck(Colour movedPieceColour, Move move)
+    private bool MovingIntoCheck(Colour movedPieceColour, Move move, GameState gameState)
     {
-        var newBoard = Game.GameState.Clone();
-        newBoard.Move(move);
+        var newGameState = gameState.AsClone();
+        newGameState.Move(move, force: true);
 
-        return newBoard.GameState.IsInCheck(movedPieceColour);
+        return newGameState.IsInCheck(movedPieceColour);
     }
 
-    public bool CanMoveTo(Coordinate to)
+    public bool CanMoveTo(Coordinate to, GameState gameState)
     {
         var move = new Move(Coordinate, to);
-        var val = ValidateMove(to);
+        var val = ValidateMove(to, gameState);
         if (!val.IsValid)
             return false;
-        return move.IsLegalIfNotBlocked && !move.IsBlocked(Game.GameState.BoardState);
+        return move.IsLegalIfNotBlocked && !move.IsBlocked(gameState.BoardState);
     }
 
-    protected abstract MoveResult ValidateMove(Coordinate to);
+    protected abstract MoveResult ValidateMove(Coordinate to, GameState state);
 
     public void Deconstruct(out Properties properties, out Coordinate coordinate)
     {
@@ -92,14 +79,15 @@ public abstract record Piece
         coordinate = Coordinate;
     }
 
-    public record Arguments(Properties PieceProperties, Coordinate Coordinate, Game.Game Game,
+    public record Arguments(Properties PieceProperties, Coordinate Coordinate, GameState GameState,
         IInvalidMoveHandler InvalidMoveHandler);
+    
 
-    public IEnumerable<Move> LegalMoves()
+    public IEnumerable<Move> LegalMoves(GameState gameState)
     {
         return Coordinate
             .All
-            .Where(CanMoveTo)
+            .Where(to => CanMoveTo(to, gameState))
             .Select(to => new Move(Coordinate, to));
     }
 }
@@ -112,5 +100,5 @@ public record NullPiece : Piece
 
     public override string PieceName { get; } = "NullPiece";
 
-    protected override MoveResult ValidateMove(Coordinate to) => new(Move.InvalidMove, FromCellDoesNoteContainPiece);
+    protected override MoveResult ValidateMove(Coordinate to, GameState gameState) => new(Move.InvalidMove, FromCellDoesNoteContainPiece);
 }

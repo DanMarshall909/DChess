@@ -69,7 +69,7 @@ public static class MovementTestingExtensions
             foreach (var offset in offsetsFromCurrentPosition)
                 if (from.TryApplyOffset(offset, out var to))
                 {
-                    var moveResult = pieceAtFrom.CheckMove(to);
+                    var moveResult = pieceAtFrom.CheckMove(to, game.GameState);
                     moveResult
                         .IsValid
                         .Should().Be(shouldBeAbleToMove,

@@ -5,12 +5,15 @@ namespace DChess.Core.Game;
 
 public sealed class Game : IDisposable
 {
+    private readonly IInvalidMoveHandler _invalidMoveHandler;
+
     public Game(IInvalidMoveHandler invalidMoveHandler, GameOptions? gameOptions = null,
         BoardState? chessBoardState = null)
     {
+        _invalidMoveHandler = invalidMoveHandler;
         _moveHandler = new MoveHandler(this);
         _piecePool = new PiecePool(this, invalidMoveHandler);
-        _gameState = new GameState(this, _piecePool, invalidMoveHandler,
+        _gameState = new GameState(_piecePool, invalidMoveHandler,
             BoardState.CloneOrEmptyIfNull(chessBoardState));
         _gameOptions = gameOptions ?? GameOptions.DefaultGameOptions;
     }
@@ -52,12 +55,6 @@ public sealed class Game : IDisposable
 
     public void Move(Coordinate from, Coordinate to)
     {
-        _moveHandler.Make(new Move(from, to));
-        CurrentPlayer = CurrentPlayer == White ? Black : White;
-    }
-
-    public void Move(Move move)
-    {
-        Move(move.From, move.To);
+        _gameState.Move(new Move(from, to));
     }
 }

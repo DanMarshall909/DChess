@@ -30,11 +30,11 @@ public class KingTests: GameTestBase
     [Fact(DisplayName = "A properties cannot move such that the king is in check")]
     public void a_piece_cannot_move_such_that_the_king_is_in_check()
     {
-        Game.GameState.Place(WhiteKing, a1);
-        Game.GameState.Place(WhiteBishop, a2);
-        Game.GameState.Place(BlackRook, a8);
+        Sut.GameState.Place(WhiteKing, a1);
+        Sut.GameState.Place(WhiteBishop, a2);
+        Sut.GameState.Place(BlackRook, a8);
 
-        var result = Game.GameState.Pieces[a2].CheckMove(b3);
+        var result = Sut.GameState.Pieces[a2].CheckMove(b3, Sut.GameState);
 
         result.Validity.Should().Be(CannotMoveIntoCheck);
     }

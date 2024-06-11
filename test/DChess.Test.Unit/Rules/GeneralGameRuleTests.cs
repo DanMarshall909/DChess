@@ -9,11 +9,11 @@ public class GeneralGameRuleTests: GameTestBase
     {
         var whitePawn = new Properties(PieceType.Pawn, Colour.White);
 
-        Game.GameState.Place(whitePawn, a1);
-        Game.GameState.Place(whitePawn, b2);
+        Sut.GameState.Place(whitePawn, a1);
+        Sut.GameState.Place(whitePawn, b2);
 
-        var boardPiece = Game.GameState.Pieces[a1];
-        var result = boardPiece.CheckMove(b2);
+        var piece = Sut.GameState.Pieces[a1];
+        var result = piece.CheckMove(b2, Sut.GameState);
 
         result.IsValid.Should().BeFalse();
     }

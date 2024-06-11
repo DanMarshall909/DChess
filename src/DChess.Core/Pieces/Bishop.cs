@@ -11,7 +11,7 @@ internal record Bishop : Piece
 
     public override string PieceName => "Bishop";
 
-    protected override MoveResult ValidateMove(Coordinate to)
+    protected override MoveResult ValidateMove(Coordinate to, GameState gameState)
     {
         var move = new Move(Coordinate, to);
         if (!move.IsDiagonal)
