@@ -14,7 +14,8 @@ public sealed class GameState
     private readonly PiecePool _pool;
 
     public BoardState BoardState => _boardState;
-
+    public Colour CurrentPlayer { get; set; } = White;
+    
     public GameState(Game game, PiecePool pool, IInvalidMoveHandler invalidMoveHandler, BoardState boardState)
     {
         _game = game;
@@ -60,8 +61,6 @@ public sealed class GameState
             return new ReadOnlyDictionary<Coordinate, Piece>(pieces);
         }
     }
-
-    public Colour CurrentPlayer { get; set; } = White;
 
     private static Coordinate CoordinateFromZeroOffset(int fileArrayOffset, int rankArrayOffset)
         => new((byte)((fileArrayOffset & 0b111) | ((rankArrayOffset & 0b111) << 3)));
