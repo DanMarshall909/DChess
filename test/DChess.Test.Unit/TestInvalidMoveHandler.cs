@@ -8,4 +8,8 @@ public class TestInvalidMoveHandler : IInvalidMoveHandler
     {
         InvalidMoves.Add(result);
     }
+
+    public void HandleNoKingFound()
+    {
+    }
 }

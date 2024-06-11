@@ -1,5 +1,4 @@
-﻿using DChess.Core.Exceptions;
-using DChess.Core.Game;
+﻿using DChess.Core.Game;
 
 namespace DChess.Test.Unit.Rules;
 
@@ -70,17 +69,11 @@ public static class MovementTestingExtensions
             foreach (var offset in offsetsFromCurrentPosition)
                 if (from.TryApplyOffset(offset, out var to))
                 {
-                    try
-                    {
-                        var moveResult = pieceAtFrom.CheckMove(to);
-                        moveResult
-                            .IsValid
-                            .Should().Be(shouldBeAbleToMove,
-                                $"{pieceAtFrom.Properties} should {(shouldBeAbleToMove ? "" : "not ")}be able to move from {from} to {to})");
-                    }
-                    catch (NoKingFoundException)
-                    {
-                    }
+                    var moveResult = pieceAtFrom.CheckMove(to);
+                    moveResult
+                        .IsValid
+                        .Should().Be(shouldBeAbleToMove,
+                            $"{pieceAtFrom.Properties} should {(shouldBeAbleToMove ? "" : "not ")}be able to move from {from} to {to})");
                 }
         }
     }

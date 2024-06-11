@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using DChess.Core.Exceptions;
 using DChess.Core.Moves;
 using DChess.Core.Pieces;
 
@@ -134,10 +133,11 @@ public sealed class GameState
     public bool IsInCheck(Colour colour)
     {
         var king = KingCoordinate(colour);
-        if (king == Coordinate.None)
-            throw new NoKingFoundException();
-
-        return OpposingPieces(colour).Any(piece => piece.CanMoveTo(king));
+        if (king != Coordinate.None) 
+            return OpposingPieces(colour).Any(piece => piece.CanMoveTo(king));
+        
+        _invalidMoveHandler.HandleNoKingFound();
+        return false;
     }
 
     public GameStatus Status(Colour colour)

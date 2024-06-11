@@ -97,8 +97,8 @@ public abstract record Piece
 
     public IEnumerable<Move> LegalMoves()
     {
-        return BoardState
-            .AllCoordinates
+        return Coordinate
+            .All
             .Where(CanMoveTo)
             .Select(to => new Move(Coordinate, to));
     }

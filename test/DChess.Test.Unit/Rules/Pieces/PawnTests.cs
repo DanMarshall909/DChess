@@ -1,4 +1,4 @@
-﻿using DChess.Core.Game;
+using DChess.Core.Game;
 
 namespace DChess.Test.Unit.Rules.Pieces;
 
@@ -39,7 +39,7 @@ public class PawnTests : GameTestBase
     {
         Game.GameState.Place(BlackKing, e8);
         Game.GameState.Place(WhiteKing, e1);
-        foreach (byte rank in Game.Ranks)
+        for (byte rank = 1; rank <= 8; rank++)
         {
             var from = new Coordinate('g', rank);
             var to = new Coordinate('h', rank);
