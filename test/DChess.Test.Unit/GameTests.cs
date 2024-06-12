@@ -112,8 +112,9 @@ public class GameTests: GameTestBase
     [Fact(DisplayName = "A properties can be added to the board")]
     public void a_piece_can_be_added_to_the_board()
     {;
-        Sut.GameState.Place(WhitePawn, a1);
-        Sut.GameState.GetProperties(a1).Should().Be(WhitePawn);
+        Sut.GameState.Place(WhitePawn, b2);
+        Sut.GameState.GetProperties(b2).Should().Be(WhitePawn);
+        Sut.GameState.BoardState.AsArray[9].Should().Be(WhitePawn);
     }
     
     [Fact(DisplayName = "A new invalidMoveHandler starts with white as the current player")]

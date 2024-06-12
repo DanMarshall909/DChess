@@ -17,7 +17,7 @@ public sealed class GameState
     {
         _pool = pool;
         _invalidMoveHandler = invalidMoveHandler;
-        _boardState = boardState;
+        _boardState = BoardState.CloneOrEmptyIfNull(boardState);
     }
 
     public string AsText => this.RenderToText();
@@ -155,8 +155,10 @@ public sealed class GameState
 
     public GameState AsClone()
     {
-        var clone = new GameState(_pool, _invalidMoveHandler, _boardState);
-        clone.CurrentPlayer = CurrentPlayer;
+        var clone = new GameState(_pool, _invalidMoveHandler, _boardState)
+        {
+            CurrentPlayer = CurrentPlayer
+        };
         return clone;
     }
 
@@ -170,7 +172,10 @@ public sealed class GameState
         {
             var result = piece.CheckMove(move.To, this);
             if (!result.IsValid)
+            {
                 _invalidMoveHandler.HandleInvalidMove(result);
+                return;
+            }
         }
 
         bool pawnIsPromoted = (piece.Type == PieceType.Pawn && move.To.File == 'a') || move.To.File == 'h';

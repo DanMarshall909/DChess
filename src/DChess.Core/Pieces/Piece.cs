@@ -65,7 +65,7 @@ public abstract record Piece
     public bool CanMoveTo(Coordinate to, GameState gameState)
     {
         var move = new Move(Coordinate, to);
-        var val = ValidateMove(to, gameState);
+        var val = ValidateMove(to, gameState.AsClone());
         if (!val.IsValid)
             return false;
         return move.IsLegalIfNotBlocked && !move.IsBlocked(gameState.BoardState);
