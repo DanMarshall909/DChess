@@ -9,7 +9,7 @@ public sealed class Game : IDisposable
         BoardState? boardState = null)
     {
         _errorHandler = errorHandler;
-        _piecePool = new PiecePool(this);
+        _piecePool = new PiecePool();
         GameState = new GameState(_piecePool, BoardState.CloneOrEmptyIfNull(boardState), errorHandler);
         _gameOptions = gameOptions ?? GameOptions.DefaultGameOptions;
     }

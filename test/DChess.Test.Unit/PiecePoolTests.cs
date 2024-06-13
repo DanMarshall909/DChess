@@ -12,7 +12,7 @@ public class PiecePoolTests : GameTestBase
         var game = base.Sut;
         var chessPiece = new Properties(PieceType.Pawn, White);
 
-        var pool = new PiecePool(game);
+        var pool = new PiecePool();
         var piece = pool.PieceWithProperties(a1, chessPiece);
         var secondPieceWithSameDefinition = pool.PieceWithProperties(a1, chessPiece);
 

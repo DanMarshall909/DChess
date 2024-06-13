@@ -22,7 +22,7 @@ public static class MovementTestingExtensions
     ///     the board and the coordinate of the properties being tested
     /// </param>
     public static void ShouldBeAbleToMoveTo(this Properties properties,
-        IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, IErrorHandler testErrorHandler, Action<Game, Coordinate>? setupBoard = null)
+        IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, IErrorHandler testErrorHandler, Action<GameState, Coordinate>? setupBoard = null)
         => AbleToMoveWhenOffsetBy(properties, offsetsFromCurrentPosition, true, testErrorHandler, setupBoard);
 
     /// <summary>
@@ -34,11 +34,11 @@ public static class MovementTestingExtensions
     /// <param name="errorHandler"></param>
     /// <param name="setupBoard"></param>
     public static void ShouldNotBeAbleToMoveTo(this Properties properties,
-        IReadOnlyCollection<MoveOffset> invalidOffsetsFromCurrentPosition, IErrorHandler errorHandler, Action<Game, Coordinate>? setupBoard = null)
+        IReadOnlyCollection<MoveOffset> invalidOffsetsFromCurrentPosition, IErrorHandler errorHandler, Action<GameState, Coordinate>? setupBoard = null)
         => AbleToMoveWhenOffsetBy(properties, invalidOffsetsFromCurrentPosition, false, errorHandler, setupBoard);
 
     public static void ShouldOnlyBeAbleToMoveTo(this Properties properties,
-        IReadOnlyCollection<MoveOffset> validOffsetsFromCurrentPosition, IErrorHandler errorHandler, Action<Game, Coordinate>? setupBoard = null)
+        IReadOnlyCollection<MoveOffset> validOffsetsFromCurrentPosition, IErrorHandler errorHandler, Action<GameState, Coordinate>? setupBoard = null)
     {
         properties.ShouldBeAbleToMoveTo(validOffsetsFromCurrentPosition, errorHandler, setupBoard);
         var invalidOffsetsFromCurrentPosition = validOffsetsFromCurrentPosition.Inverse().ToList().AsReadOnly();
@@ -56,23 +56,23 @@ public static class MovementTestingExtensions
     /// <param name="setupBoard"></param>
     private static void AbleToMoveWhenOffsetBy(this Properties properties,
         IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, bool shouldBeAbleToMove, IErrorHandler errorHandler,
-        Action<Game, Coordinate>? setupBoard = null)
+        Action<GameState, Coordinate>? setupBoard = null)
     {
-        var game = new Game(errorHandler);
+        var gameState = new GameState(new PiecePool(), new BoardState(), errorHandler);
         for (byte rank = 1; rank < 8; rank++)
         for (var file = 'a'; file < 'h'; file++)
         {
             var from = new Coordinate(file, rank);
 
-            game.GameState.ClearProperties();
-            game.GameState.Place(properties, from);
-            setupBoard?.Invoke(game, from);
+            gameState.ClearProperties();
+            gameState.Place(properties, from);
+            setupBoard?.Invoke(gameState, from);
 
-            var pieceAtFrom = game.GameState.Pieces[from];
+            var pieceAtFrom = gameState.Pieces[from];
             foreach (var offset in offsetsFromCurrentPosition)
                 if (from.TryApplyOffset(offset, out var to))
                 {
-                    var moveResult = pieceAtFrom.CheckMove(to, game.GameState);
+                    var moveResult = pieceAtFrom.CheckMove(to, gameState);
                     moveResult
                         .IsValid
                         .Should().Be(shouldBeAbleToMove,
@@ -81,12 +81,12 @@ public static class MovementTestingExtensions
         }
     }
 
-    public static void SetOffsetPositions(this Game game, Coordinate from, IReadOnlyCollection<MoveOffset> offsets,
+    public static void SetOffsetPositions(this GameState gameState, Coordinate from, IEnumerable<MoveOffset> offsets,
         Properties properties)
     {
         foreach (var offset in offsets)
             if (from.TryApplyOffset(offset, out var to))
-                game.GameState.Place(properties, to);
+                gameState.Place(properties, to);
     }
 
     /// <summary>
@@ -95,7 +95,7 @@ public static class MovementTestingExtensions
     /// <param name="game"></param>
     /// <param name="coordinate">The coordinate to set the positions around</param>
     /// <param name="properties"></param>
-    public static void Surround2CellsFrom(this Game game, Coordinate coordinate, Properties properties)
+    public static void Surround2CellsFrom(this GameState game, Coordinate coordinate, Properties properties)
     {
         SetOffsetPositions(game, coordinate, new MoveOffset[]
         {
@@ -107,7 +107,7 @@ public static class MovementTestingExtensions
         }, properties);
     }
 
-    public static void Surround(this Game game, Coordinate coordinate, Properties properties)
+    public static void Surround(this GameState game, Coordinate coordinate, Properties properties)
     {
         SetOffsetPositions(game, coordinate, new MoveOffset[]
         {

@@ -7,7 +7,7 @@ namespace DChess.Core.Game;
 ///     This allows us to use structs to store the properties internally, but expose classes
 ///     to the outside world to allow for polymorphism.
 /// </summary>
-public class PiecePool(Game game)
+public class PiecePool()
 {
     private readonly Dictionary<(Coordinate, Properties), Piece> _pool = new();
 
