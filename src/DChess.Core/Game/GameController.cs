@@ -1,14 +1,14 @@
-using DChess.Core.Game;
 using DChess.Core.Moves;
+using DChess.Test.Unit;
 
-namespace DChess.Test.Unit;
+namespace DChess.Core.Game;
 
-public class GameController(IInvalidMoveHandler InvalidMoveHandler)
+public class GameController(IErrorHandler errorHandler)
 {
-    public Game CurrentGame { get; private set; }
+    private Game CurrentGame { get; set; } = null!;
 
     public void NewGame(GameOptions gameOptions)
     {
-        CurrentGame = new Game(InvalidMoveHandler, gameOptions);
+        CurrentGame = new Game(errorHandler, gameOptions);
     }
 }

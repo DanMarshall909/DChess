@@ -8,8 +8,6 @@ namespace DChess.Test.Unit;
 [SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
 public class GameTests: GameTestBase
 {
-    private readonly TestInvalidMoveHandler _invalidMoveHandler = new();
-
     [Theory(DisplayName = "An invalid position should throw an exception")]
     [InlineData("a")]
     [InlineData("a11")]

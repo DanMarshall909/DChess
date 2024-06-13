@@ -6,7 +6,6 @@ namespace DChess.Test.Unit;
 
 public class PieceTests : GameTestBase
 {
-    private readonly TestInvalidMoveHandler _invalidMoveHandler = new();
 
     [Fact(DisplayName = "A piece can be moved")]
     public void a_piece_can_be_moved()
@@ -32,7 +31,7 @@ public class PieceTests : GameTestBase
 
         Sut.Move(b2, a3);
 
-        var args = new Piece.Arguments(WhiteQueen, a3, Sut.GameState, _invalidMoveHandler);
+        var args = new Piece.Arguments(WhiteQueen, a3);
         Sut.GameState.Pieces[a3].Should()
             .BeEquivalentTo(new Queen(args), "the properties should be moved");
 

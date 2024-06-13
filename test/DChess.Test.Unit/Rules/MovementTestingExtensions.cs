@@ -16,13 +16,14 @@ public static class MovementTestingExtensions
     ///     position. For example A knight would have offsets in an L shape i.e. (1, 2), (1, -2), (-1, 2), (-1, -2), (2, 1),
     ///     (2, -1), (-2, 1), (-2, -1)
     /// </param>
+    /// <param name="testErrorHandler"></param>
     /// <param name="setupBoard">
     ///     An optional action that can be used to setup the board before each test. The action takes in
     ///     the board and the coordinate of the properties being tested
     /// </param>
     public static void ShouldBeAbleToMoveTo(this Properties properties,
-        IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, Action<Game, Coordinate>? setupBoard = null)
-        => AbleToMoveWhenOffsetBy(properties, offsetsFromCurrentPosition, true, setupBoard);
+        IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, IErrorHandler testErrorHandler, Action<Game, Coordinate>? setupBoard = null)
+        => AbleToMoveWhenOffsetBy(properties, offsetsFromCurrentPosition, true, testErrorHandler, setupBoard);
 
     /// <summary>
     ///     Tests that every offset in invalidOffsetsFromCurrentPosition array results in an invalid move.  Offsets resulting
@@ -30,17 +31,18 @@ public static class MovementTestingExtensions
     /// </summary>
     /// <param name="properties"></param>
     /// <param name="invalidOffsetsFromCurrentPosition"></param>
+    /// <param name="errorHandler"></param>
     /// <param name="setupBoard"></param>
     public static void ShouldNotBeAbleToMoveTo(this Properties properties,
-        IReadOnlyCollection<MoveOffset> invalidOffsetsFromCurrentPosition, Action<Game, Coordinate>? setupBoard = null)
-        => AbleToMoveWhenOffsetBy(properties, invalidOffsetsFromCurrentPosition, false, setupBoard);
+        IReadOnlyCollection<MoveOffset> invalidOffsetsFromCurrentPosition, IErrorHandler errorHandler, Action<Game, Coordinate>? setupBoard = null)
+        => AbleToMoveWhenOffsetBy(properties, invalidOffsetsFromCurrentPosition, false, errorHandler, setupBoard);
 
     public static void ShouldOnlyBeAbleToMoveTo(this Properties properties,
-        IReadOnlyCollection<MoveOffset> validOffsetsFromCurrentPosition, Action<Game, Coordinate>? setupBoard = null)
+        IReadOnlyCollection<MoveOffset> validOffsetsFromCurrentPosition, IErrorHandler errorHandler, Action<Game, Coordinate>? setupBoard = null)
     {
-        properties.ShouldBeAbleToMoveTo(validOffsetsFromCurrentPosition, setupBoard);
+        properties.ShouldBeAbleToMoveTo(validOffsetsFromCurrentPosition, errorHandler, setupBoard);
         var invalidOffsetsFromCurrentPosition = validOffsetsFromCurrentPosition.Inverse().ToList().AsReadOnly();
-        properties.ShouldNotBeAbleToMoveTo(invalidOffsetsFromCurrentPosition, setupBoard);
+        properties.ShouldNotBeAbleToMoveTo(invalidOffsetsFromCurrentPosition, errorHandler, setupBoard);
     }
 
     /// <summary>
@@ -50,12 +52,13 @@ public static class MovementTestingExtensions
     /// <param name="properties"></param>
     /// <param name="offsetsFromCurrentPosition"></param>
     /// <param name="shouldBeAbleToMove"></param>
+    /// <param name="errorHandler"></param>
     /// <param name="setupBoard"></param>
     private static void AbleToMoveWhenOffsetBy(this Properties properties,
-        IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, bool shouldBeAbleToMove,
+        IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, bool shouldBeAbleToMove, IErrorHandler errorHandler,
         Action<Game, Coordinate>? setupBoard = null)
     {
-        var game = new Game(new TestInvalidMoveHandler());
+        var game = new Game(errorHandler);
         for (byte rank = 1; rank < 8; rank++)
         for (var file = 'a'; file < 'h'; file++)
         {

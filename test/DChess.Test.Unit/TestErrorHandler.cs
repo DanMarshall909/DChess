@@ -2,7 +2,7 @@
 
 namespace DChess.Test.Unit;
 
-public class TestInvalidMoveHandler : IInvalidMoveHandler
+public class TestErrorHandler : IErrorHandler
 {
     public readonly List<MoveResult> InvalidMoves = new();
 

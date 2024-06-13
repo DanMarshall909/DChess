@@ -4,19 +4,23 @@ using DChess.Core.Pieces;
 
 namespace DChess.Core.Game;
 
+/// <summary>
+/// All the properties of a game at a specific point in play
+/// </summary>
 public sealed class GameState
 {
-    private readonly IInvalidMoveHandler _invalidMoveHandler;
+    private readonly MoveHandler _moveHandler;
+    private readonly IErrorHandler _errorHandler;
     private readonly BoardState _boardState;
     private readonly PiecePool _pool;
 
     public BoardState BoardState => _boardState;
     public Colour CurrentPlayer { get; set; } = White;
-
-    public GameState(PiecePool pool, IInvalidMoveHandler invalidMoveHandler, BoardState boardState)
+    public GameState(PiecePool pool, BoardState boardState, IErrorHandler errorHandler)
     {
         _pool = pool;
-        _invalidMoveHandler = invalidMoveHandler;
+        _moveHandler = new MoveHandler(errorHandler) ;
+        _errorHandler = errorHandler;
         _boardState = BoardState.CloneOrEmptyIfNull(boardState);
     }
 
@@ -131,7 +135,7 @@ public sealed class GameState
         if (king != Coordinate.None)
             return OpposingPieces(colour).Any(piece => piece.CanMoveTo(king, this));
 
-        _invalidMoveHandler.HandleNoKingFound();
+        _errorHandler.HandleNoKingFound();
         return false;
     }
 
@@ -153,39 +157,39 @@ public sealed class GameState
         Stalemate
     }
 
-    public GameState AsClone()
-    {
-        var clone = new GameState(_pool, _invalidMoveHandler, _boardState)
+    public GameState AsClone() =>
+        new(_pool, _boardState, _errorHandler)
         {
             CurrentPlayer = CurrentPlayer
         };
-        return clone;
-    }
 
     public void Move(Move move, bool force = false)
     {
-        var piece = Pieces[move.From];
-        if (piece is NullPiece)
-            _invalidMoveHandler.HandleNoPieceAt(move.From);
-
-        if (!force)
-        {
-            var result = piece.CheckMove(move.To, this);
-            if (!result.IsValid)
-            {
-                _invalidMoveHandler.HandleInvalidMove(result);
-                return;
-            }
-        }
-
-        bool pawnIsPromoted = (piece.Type == PieceType.Pawn && move.To.File == 'a') || move.To.File == 'h';
-        var toPiece = pawnIsPromoted
-            ? new Properties(PieceType.Queen, piece.Colour)
-            : piece.Properties;
-
-        RemovePieceAt(move.From);
-        SetPiece(move.To, toPiece);
-
-        CurrentPlayer = CurrentPlayer == White ? Black : White;
+        _moveHandler.Make(move, this, force);
     }
+
+    /// <summary>
+    ///     The vertical ranks (rows) of the board, from 1 to 8
+    /// </summary>
+    public static byte[] Ranks = { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+    /// <summary>
+    ///     The horizontal files (columns) of the board, from a to h
+    /// </summary>
+    public static char[] Files = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
+    
+    /// <summary>
+    /// All the coordinates on the board
+    /// </summary>
+    public static IEnumerable<Coordinate> AllCoordinates { get; } = new[]
+    {
+        a1, b1, c1, d1, e1, f1, g1, h1,
+        a2, b2, c2, d2, e2, f2, g2, h2,
+        a3, b3, c3, d3, e3, f3, g3, h3,
+        a4, b4, c4, d4, e4, f4, g4, h4,
+        a5, b5, c5, d5, e5, f5, g5, h5,
+        a6, b6, c6, d6, e6, f6, g6, h6,
+        a7, b7, c7, d7, e7, f7, g7, h7,
+        a8, b8, c8, d8, e8, f8, g8, h8
+    };
 }

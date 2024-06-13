@@ -5,56 +5,31 @@ namespace DChess.Core.Game;
 
 public sealed class Game : IDisposable
 {
-    private readonly IInvalidMoveHandler _invalidMoveHandler;
-
-    public Game(IInvalidMoveHandler invalidMoveHandler, GameOptions? gameOptions = null,
-        BoardState? chessBoardState = null)
+    public Game(IErrorHandler errorHandler, GameOptions? gameOptions = null,
+        BoardState? boardState = null)
     {
-        _invalidMoveHandler = invalidMoveHandler;
-        _moveHandler = new MoveHandler(this);
-        _piecePool = new PiecePool(this, invalidMoveHandler);
-        _gameState = new GameState(_piecePool, invalidMoveHandler,
-            BoardState.CloneOrEmptyIfNull(chessBoardState));
+        _errorHandler = errorHandler;
+        _piecePool = new PiecePool(this);
+        GameState = new GameState(_piecePool, BoardState.CloneOrEmptyIfNull(boardState), errorHandler);
         _gameOptions = gameOptions ?? GameOptions.DefaultGameOptions;
     }
 
     public Colour CurrentPlayer { get; set; } = White;
 
-
-    /// <summary>
-    /// Creates a new Coordinate from an array offset instead of a file and rank
-    /// </summary>
-    /// <param name="fileArrayOffset">The file array offset from 0-7</param>
-    /// <param name="rankArrayOffset">The rank array offset from 0-7</param>
-    /// <exception cref="NotImplementedException"></exception>
-
-    public GameState GameState => _gameState;
-
-    public GameOptions Options => _gameOptions;
-
-
-    /// <summary>
-    ///     The vertical ranks (rows) of the board, from 1 to 8
-    /// </summary>
-    public static byte[] Ranks = { 1, 2, 3, 4, 5, 6, 7, 8 };
-
-    /// <summary>
-    ///     The horizontal files (columns) of the board, from a to h
-    /// </summary>
-    public static char[] Files = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
+    public GameState GameState { get; }
 
     public void Dispose()
     {
         _piecePool.Dispose();
     }
 
-    private readonly MoveHandler _moveHandler;
-    private readonly GameState _gameState;
+    private readonly IErrorHandler _errorHandler;
     private readonly PiecePool _piecePool;
     private readonly GameOptions _gameOptions;
+    private readonly MoveHandler _moveHandler;
 
     public void Move(Coordinate from, Coordinate to)
     {
-        _gameState.Move(new Move(from, to));
+        GameState.Move(new Move(from, to));
     }
 }

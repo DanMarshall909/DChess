@@ -1,5 +1,4 @@
-﻿using DChess.Core.Moves;
-using DChess.Core.Pieces;
+﻿using DChess.Core.Pieces;
 
 namespace DChess.Core.Game;
 
@@ -8,7 +7,7 @@ namespace DChess.Core.Game;
 ///     This allows us to use structs to store the properties internally, but expose classes
 ///     to the outside world to allow for polymorphism.
 /// </summary>
-public class PiecePool(Game game, IInvalidMoveHandler invalidMoveHandler)
+public class PiecePool(Game game)
 {
     private readonly Dictionary<(Coordinate, Properties), Piece> _pool = new();
 
@@ -25,7 +24,7 @@ public class PiecePool(Game game, IInvalidMoveHandler invalidMoveHandler)
 
     private Piece CreatePiece(Coordinate coordinate, Properties properties)
     {
-        Piece.Arguments arguments = new(properties, coordinate, game.GameState, invalidMoveHandler);
+        Piece.Arguments arguments = new(properties, coordinate);
         return properties.Type switch
         {
             PieceType.Pawn => new Pawn(arguments),

@@ -3,11 +3,11 @@ using DChess.Core.Moves;
 
 namespace DChess.Core.Game;
 
-public class MoveHandler(Game game)
+public class MoveHandler(IErrorHandler errorHandler)
 {
-    public void Make(Move move)
+    public void Make(Move move, GameState gameState, bool force = false)
     {
-        if (!game.GameState.TryGetProperties(move.From, out var fromPiece))
+        if (!gameState.TryGetProperties(move.From, out var fromPiece))
             throw new InvalidMoveException(move, $"No piece exists at {move.From}");
 
         bool pawnIsPromoted = (fromPiece.Type == PieceType.Pawn && move.To.File == 'a') || move.To.File == 'h';
@@ -15,7 +15,7 @@ public class MoveHandler(Game game)
             ? new Properties(PieceType.Queen, fromPiece.Colour)
             : fromPiece;
 
-        game.GameState.RemovePieceAt(move.From);
-        game.GameState.SetPiece(move.To, toPiece);
+        gameState.RemovePieceAt(move.From);
+        gameState.SetPiece(move.To, toPiece);
     }
 }

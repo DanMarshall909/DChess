@@ -9,11 +9,9 @@ public abstract record Piece
     {
         Properties = arguments.PieceProperties;
         Coordinate = arguments.Coordinate;
-        InvalidMoveHandler = arguments.InvalidMoveHandler;
     }
 
     public abstract string PieceName { get; }
-    public IInvalidMoveHandler InvalidMoveHandler { get; set; }
     public Properties Properties { get; init; }
     public Coordinate Coordinate { get; init; }
     public Colour Colour => Properties.Colour;
@@ -79,9 +77,8 @@ public abstract record Piece
         coordinate = Coordinate;
     }
 
-    public record Arguments(Properties PieceProperties, Coordinate Coordinate, GameState GameState,
-        IInvalidMoveHandler InvalidMoveHandler);
-    
+    public record Arguments(Properties PieceProperties, Coordinate Coordinate);
+
 
     public IEnumerable<Move> LegalMoves(GameState gameState)
     {
@@ -97,8 +94,14 @@ public record NullPiece : Piece
     public NullPiece(Arguments arguments) : base(arguments)
     {
     }
+    
+    public NullPiece(IErrorHandler errorHandler) 
+        : base(new Arguments(new Properties(PieceType.None, None), Coordinate.None))
+    {
+    }
 
     public override string PieceName { get; } = "NullPiece";
 
-    protected override MoveResult ValidateMove(Coordinate to, GameState gameState) => new(Move.InvalidMove, FromCellDoesNoteContainPiece);
+    protected override MoveResult ValidateMove(Coordinate to, GameState gameState) =>
+        new(Move.InvalidMove, FromCellDoesNoteContainPiece);
 }

@@ -2,7 +2,7 @@
 
 namespace DChess.Core.Moves;
 
-public interface IInvalidMoveHandler
+public interface IErrorHandler
 {
     void HandleInvalidMove(MoveResult result);
     void HandleNoKingFound();

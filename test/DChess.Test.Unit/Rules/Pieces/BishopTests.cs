@@ -24,7 +24,7 @@ public class BishopTests: GameTestBase
             { 0, 0, X, 0, 0, 0, 0, 0, 0, 0, 0, 0, X, 0, 0 },
             { 0, X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X, 0 },
             { X, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, X }
-        }.ToMoveOffsets());
+        }.ToMoveOffsets(), ErrorHandler);
     }
 
     [Fact(DisplayName = "Bishops cannot jump over other pieces")]
@@ -47,7 +47,7 @@ public class BishopTests: GameTestBase
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-        }.ToMoveOffsets(), (board, coordinate) =>
+        }.ToMoveOffsets(), ErrorHandler, (board, coordinate) =>
             board.Surround2CellsFrom(coordinate, WhitePawn));
     }
 }

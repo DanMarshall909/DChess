@@ -24,7 +24,7 @@ public class KingTests: GameTestBase
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-        }.ToMoveOffsets());
+        }.ToMoveOffsets(), ErrorHandler);
     }
 
     [Fact(DisplayName = "A properties cannot move such that the king is in check")]
