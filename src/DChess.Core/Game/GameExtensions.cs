@@ -4,7 +4,7 @@ public static class GameExtensions
 {
     public static void SetStandardLayout(this Game game)
     {
-        game.GameState.ClearProperties();
+        game.GameState.Clear();
         game.GameState.Place(BlackRook, a8);
         game.GameState.Place(BlackKnight, b8);
         game.GameState.Place(BlackBishop, c8);

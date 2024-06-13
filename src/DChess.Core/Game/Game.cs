@@ -14,8 +14,6 @@ public sealed class Game : IDisposable
         _gameOptions = gameOptions ?? GameOptions.DefaultGameOptions;
     }
 
-    public Colour CurrentPlayer { get; set; } = White;
-
     public GameState GameState { get; }
 
     public void Dispose()

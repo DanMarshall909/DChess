@@ -21,7 +21,8 @@ public class PawnTests : GameTestBase
 
         Sut.Move(b2, b3);
         Sut.Move(b3, b4);
-        Sut.GameState.Pieces[b4].CheckMove(b6, Sut.GameState).Validity.Should().Be(PawnsCanOnlyMove2SquaresForwardFromStartingPosition,
+        Sut.GameState.Pieces[b4].CheckMove(b6, Sut.GameState).Validity.Should().Be(
+            PawnsCanOnlyMove2SquaresForwardFromStartingPosition,
             "the pawn has already moved");
     }
 
@@ -39,26 +40,13 @@ public class PawnTests : GameTestBase
     {
         Sut.GameState.Place(BlackKing, e8);
         Sut.GameState.Place(WhiteKing, e1);
-        for (byte rank = 1; rank <= 8; rank++)
-        {
-            var from = new Coordinate('g', rank);
-            var to = new Coordinate('h', rank);
 
-            Sut.GameState.Place(WhitePawn, from);
-            
-            Sut.Move(from, to);
-            var chessPiece = Sut.GameState.GetProperties(to);
-            chessPiece.Type.Should().Be(PieceType.Queen, "white pawns are promoted to Queens");
-            chessPiece.Colour.Should().Be(Colour.White, "white pawns are promoted to Queens of the same colour");
+        Sut.GameState.Place(WhitePawn, f7);
+        Sut.GameState.Place(BlackPawn, f2);
 
-            from = new Coordinate('b', rank);
-            to = new Coordinate('a', rank);
-
-            Sut.GameState.Place(BlackPawn, from);
-            Sut.Move(from, to);
-            chessPiece = Sut.GameState.GetProperties(to);
-            chessPiece.Type.Should().Be(PieceType.Queen, "black pawns are promoted to Queens");
-            chessPiece.Colour.Should().Be(Colour.Black, "black pawns are promoted to Queens of the same colour");
+        Sut.Move(f7, f8);
+        Sut.GameState.GetProperties(f8).Should().Be(WhiteQueen, "white pawns are promoted to queens");
+        Sut.Move(f2, f1);
+        Sut.GameState.GetProperties(f1).Should().Be(BlackQueen, "black pawns are promoted to queens");
         }
-    }
 }

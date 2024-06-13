@@ -106,7 +106,7 @@ public sealed class GameState
         return true;
     }
 
-    public void ClearProperties()
+    public void Clear()
     {
         _boardState.Clear();
     }

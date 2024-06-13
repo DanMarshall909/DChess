@@ -118,14 +118,14 @@ public class GameTests: GameTestBase
     [Fact(DisplayName = "A new invalidMoveHandler starts with white as the current player")]
     public void a_new_game_starts_with_white_as_the_current_player()
     {
-        Sut.CurrentPlayer.Should().Be(White);
+        Sut.GameState.CurrentPlayer.Should().Be(White);
     }
     
-    [Fact (DisplayName = "After takiing a turn the current player changes")]
+    [Fact (DisplayName = "After taking a turn the current player changes")]
     public void after_taking_a_turn_the_current_player_changes()
     {
         Sut.SetStandardLayout();
         Sut.Move(a2, a4);
-        Sut.CurrentPlayer.Should().Be(Black);
+        Sut.GameState.CurrentPlayer.Should().Be(Black);
     }
 }

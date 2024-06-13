@@ -64,7 +64,7 @@ public static class MovementTestingExtensions
         {
             var from = new Coordinate(file, rank);
 
-            gameState.ClearProperties();
+            gameState.Clear();
             gameState.Place(properties, from);
             setupBoard?.Invoke(gameState, from);
 
