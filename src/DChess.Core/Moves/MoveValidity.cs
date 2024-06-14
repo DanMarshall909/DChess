@@ -22,5 +22,6 @@ public enum MoveValidity
     CannotMoveIntoCheck,
     WhiteIsInCheckMate,
     BlackIsInCheckMate,
-    FromCellDoesNoteContainPiece
+    FromCellDoesNoteContainPiece,
+    CannotMoveOpponentsPiece,
 }

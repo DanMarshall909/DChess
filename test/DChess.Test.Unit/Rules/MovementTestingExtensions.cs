@@ -76,7 +76,7 @@ public static class MovementTestingExtensions
                     moveResult
                         .IsValid
                         .Should().Be(shouldBeAbleToMove,
-                            $"{pieceAtFrom.Properties} should {(shouldBeAbleToMove ? "" : "not ")}be able to move from {from} to {to})");
+                            $"{pieceAtFrom.Properties} should {(shouldBeAbleToMove ? "" : "not ")}be able to move from {from} to {to}). {moveResult.Validity.Message()}");
                 }
         }
     }

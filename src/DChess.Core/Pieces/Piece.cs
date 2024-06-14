@@ -5,7 +5,7 @@ namespace DChess.Core.Pieces;
 
 public abstract record Piece
 {
-    protected Piece(Arguments arguments)
+      protected Piece(Arguments arguments)
     {
         Properties = arguments.PieceProperties;
         Coordinate = arguments.Coordinate;
@@ -19,6 +19,8 @@ public abstract record Piece
 
     public MoveResult CheckMove(Coordinate to, GameState gameState)
     {
+        ValidateMove(to, gameState);
+        
         var generalMoveResult = IsGenerallyValid(to, gameState);
 
         if (!generalMoveResult.IsValid)
@@ -33,11 +35,13 @@ public abstract record Piece
     private MoveResult IsGenerallyValid(Coordinate to, GameState gameState)
     {
         var move = new Move(Coordinate, to);
+        
+        var movedPieceColour = Properties.Colour;
+        if(gameState.GetProperties(to).Colour != Properties.Colour)
+            return move.InvalidResult(CannotMoveOpponentsPiece);
 
         if (Coordinate == to)
             return move.InvalidResult(CannotMoveToSameCell);
-
-        var movedPieceColour = Properties.Colour;
 
         if (gameState.TryGetPiece(to, out var piece) &&
             piece.Colour == movedPieceColour) return move.InvalidResult(CannotCaptureOwnPiece);
@@ -78,7 +82,6 @@ public abstract record Piece
     }
 
     public record Arguments(Properties PieceProperties, Coordinate Coordinate);
-
 
     public IEnumerable<Move> LegalMoves(GameState gameState)
     {

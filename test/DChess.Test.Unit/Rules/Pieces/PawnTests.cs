@@ -1,5 +1,3 @@
-using DChess.Core.Game;
-
 namespace DChess.Test.Unit.Rules.Pieces;
 
 public class PawnTests : GameTestBase

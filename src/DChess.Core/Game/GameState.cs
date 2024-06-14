@@ -121,9 +121,9 @@ public sealed class GameState
         _boardState[moveFrom] = Properties.None;
     }
 
-    public void SetPiece(Coordinate moveTo, Properties to)
+    public void SetPiece(Coordinate coordinate, Properties to)
     {
-        _boardState[moveTo] = to;
+        _boardState[coordinate] = to;
     }
 
     public Properties GetProperties(Coordinate coordinate) =>

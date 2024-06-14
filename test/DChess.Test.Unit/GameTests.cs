@@ -128,4 +128,20 @@ public class GameTests: GameTestBase
         Sut.Move(a2, a4);
         Sut.GameState.CurrentPlayer.Should().Be(Black);
     }
+    
+    [Fact (DisplayName = "After taking two turns the current player changes back to white")]
+    public void after_taking_two_turns_the_current_player_changes_back_to_white()
+    {
+        Sut.SetStandardLayout();
+        Sut.Move(a2, a4);
+        Sut.Move(a7, a6);
+        Sut.GameState.CurrentPlayer.Should().Be(White);
+    }
+    
+    [Fact (DisplayName = "A player can only move their own pieces")]
+    public void a_player_can_only_move_their_own_pieces()
+    {
+        Sut.SetStandardLayout();
+        Sut.GameState.Pieces[a7].CheckMove(a5, Sut.GameState).Validity.Should().Be(CannotMoveOpponentsPiece);
+    }
 }
