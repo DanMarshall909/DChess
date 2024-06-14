@@ -20,6 +20,7 @@ public class GameStateTests : GameTestBase
         Sut.GameState.Place(BlackQueen, a2);
         Sut.GameState.Status(White).Should().Be(InPlay);
 
+        Sut.GameState.CurrentPlayer = Black;
         Sut.Move(a2, a6);
         Sut.GameState.Status(White).Should().Be(Check);
     }
