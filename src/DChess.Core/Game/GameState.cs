@@ -61,7 +61,6 @@ public sealed class GameState
         }
     }
 
-
     public void Place(Properties pieceProperties, Coordinate at)
         => _boardState[at] = pieceProperties;
 
