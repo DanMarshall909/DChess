@@ -53,7 +53,7 @@ public sealed class GameState
             {
                 var props = _boardState[f, r];
                 if (props == Properties.None) continue;
-                var coordinateFromZeroOffset = CoordinateFromZeroOffset(f, r);
+                var coordinateFromZeroOffset = Coordinate.FromZeroOffset(f, r);
                 pieces.Add(coordinateFromZeroOffset, _pool.PieceWithProperties(coordinateFromZeroOffset, props));
             }
 
@@ -61,8 +61,6 @@ public sealed class GameState
         }
     }
 
-    private static Coordinate CoordinateFromZeroOffset(int fileArrayOffset, int rankArrayOffset)
-        => new((byte)((fileArrayOffset & 0b111) | ((rankArrayOffset & 0b111) << 3)));
 
     public void Place(Properties pieceProperties, Coordinate at)
         => _boardState[at] = pieceProperties;
@@ -74,7 +72,7 @@ public sealed class GameState
         {
             var props = _boardState[f, r];
             if (props.Colour == colour)
-                yield return _pool.PieceWithProperties(CoordinateFromZeroOffset(f, r), props);
+                yield return _pool.PieceWithProperties(Coordinate.FromZeroOffset(f, r), props);
         }
     }
 
