@@ -64,12 +64,6 @@ public sealed class GameState
     private static Coordinate CoordinateFromZeroOffset(int fileArrayOffset, int rankArrayOffset)
         => new((byte)((fileArrayOffset & 0b111) | ((rankArrayOffset & 0b111) << 3)));
 
-    public bool HasPieceAt(Coordinate coordinate)
-    {
-        var properties = _boardState[coordinate.File, coordinate.Rank];
-        return properties != Properties.None;
-    }
-
     public void Place(Properties pieceProperties, Coordinate at)
         => _boardState[at] = pieceProperties;
 
@@ -114,16 +108,6 @@ public sealed class GameState
     public Coordinate KingCoordinate(Colour colour)
     {
         return _boardState.Find(props => props.Type == PieceType.King && props.Colour == colour);
-    }
-
-    public void RemovePieceAt(Coordinate moveFrom)
-    {
-        _boardState[moveFrom] = Properties.None;
-    }
-
-    public void SetPiece(Coordinate coordinate, Properties to)
-    {
-        _boardState[coordinate] = to;
     }
 
     public Properties GetProperties(Coordinate coordinate) =>

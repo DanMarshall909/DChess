@@ -44,13 +44,13 @@ public class GameTests: GameTestBase
 
         var properties = game.GameState.GetProperties(a1);
         properties.Should().BeEquivalentTo(WhitePawn);
-        game.GameState.HasPieceAt(a2).Should().BeFalse();
+        game.GameState.BoardState.HasPieceAt(a2).Should().BeFalse();
     }
 
     [Fact(DisplayName = "If there are no properties on the board, a cell's properties is null")]
     public void if_there_are_no_pieces_on_the_board_a_cells_piece_is_null()
     {
-        Sut.GameState.HasPieceAt(a1).Should().BeFalse();
+        Sut.GameState.BoardState.HasPieceAt(a1).Should().BeFalse();
     }
 
     [Theory(DisplayName = "A properties cannot be placed outside the board")]

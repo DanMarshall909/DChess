@@ -1,5 +1,4 @@
 using DChess.Core.Moves;
-using DChess.Test.Unit;
 
 namespace DChess.Core.Game;
 
@@ -24,7 +23,6 @@ public sealed class Game : IDisposable
     private readonly IErrorHandler _errorHandler;
     private readonly PiecePool _piecePool;
     private readonly GameOptions _gameOptions;
-    private readonly MoveHandler _moveHandler;
 
     public void Move(Coordinate from, Coordinate to)
     {

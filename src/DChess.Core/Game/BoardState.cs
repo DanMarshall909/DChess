@@ -4,7 +4,7 @@ namespace DChess.Core.Game;
 
 public readonly record struct BoardState
 {
-    public const int TotalCellsOnBoard = 8 * 8;
+    private const int TotalCellsOnBoard = 8 * 8;
 
     public static BoardState CloneOrEmptyIfNull(BoardState? state)
         => state is not null
@@ -38,7 +38,7 @@ public readonly record struct BoardState
         set => this[coordinate.File, coordinate.Rank] = value;
     }
 
-    public Properties this[char file, byte rank]
+    public Properties this[char file, int rank]
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => AsArray[ToIndex(file - 'a', rank - 1)];
@@ -71,4 +71,14 @@ public readonly record struct BoardState
     }
 
     public bool HasPieceAt(Coordinate coordinate) => this[coordinate] != Properties.None;
+
+    public void RemovePieceAt(Coordinate coordinate)
+    {
+        this[coordinate] = Properties.None;
+    }
+
+    public void SetPiece(Coordinate coordinate, Properties properties)
+    {
+        this[coordinate] = properties;
+    }
 }

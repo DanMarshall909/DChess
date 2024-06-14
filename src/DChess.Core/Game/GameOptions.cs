@@ -1,6 +1,4 @@
-using DChess.Core.Game;
-
-namespace DChess.Test.Unit;
+namespace DChess.Core.Game;
 
 public record GameOptions(Colour PlayerColour = White, string PlayerName = "Player1", string OpponentName = "Player2")
 {
