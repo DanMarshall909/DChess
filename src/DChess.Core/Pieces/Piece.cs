@@ -41,17 +41,17 @@ public abstract record Piece
             return move.InvalidResult(CannotMoveOpponentsPiece);
 
         if (Coordinate == to)
-            return move.InvalidResult(CannotMoveToSameCell);
+            return move.InvalidResult(MoveValidity.CannotMoveToSameCell);
 
         if (gameState.TryGetPiece(to, out var piece) &&
-            piece.Colour == movedPieceColour) return move.InvalidResult(CannotCaptureOwnPiece);
+            piece.Colour == movedPieceColour) return move.InvalidResult(MoveValidity.CannotCaptureOwnPiece);
 
         if (this is not IIgnorePathCheck &&
             move.CoordinatesAlongPath.Any(coordinate => gameState.HasPieceAt(coordinate)))
-            return move.InvalidResult(CannotJumpOverOtherPieces);
+            return move.InvalidResult(MoveValidity.CannotJumpOverOtherPieces);
 
         if (MovingIntoCheck(movedPieceColour, move, gameState))
-            return move.InvalidResult(CannotMoveIntoCheck);
+            return move.InvalidResult(MoveValidity.CannotMoveIntoCheck);
 
         return move.OkResult();
     }
@@ -106,5 +106,5 @@ public record NullPiece : Piece
     public override string PieceName { get; } = "NullPiece";
 
     protected override MoveResult ValidateMove(Coordinate to, GameState gameState) =>
-        new(Move.InvalidMove, FromCellDoesNoteContainPiece);
+        new(Move.NullMove, MoveValidity.FromCellDoesNoteContainPiece);
 }

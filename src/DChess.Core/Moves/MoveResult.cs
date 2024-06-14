@@ -1,4 +1,6 @@
-﻿namespace DChess.Core.Moves;
+﻿using static DChess.Core.Moves.MoveValidity;
+
+namespace DChess.Core.Moves;
 
 public readonly record struct MoveResult(Move Move, MoveValidity Validity)
 {
@@ -9,6 +11,6 @@ public readonly record struct MoveResult(Move Move, MoveValidity Validity)
 
     public static MoveResult InvalidMove(string noKingFound)
     {
-        throw new NotImplementedException();
+        return new(new Move(), MoveValidity.InvalidMove);
     }
 }

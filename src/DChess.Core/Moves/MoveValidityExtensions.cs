@@ -1,3 +1,5 @@
+using static DChess.Core.Moves.MoveValidity;
+
 namespace DChess.Core.Moves;
 
 public static class MoveValidityExtensions

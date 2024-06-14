@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using DChess.Core.Exceptions;
 using DChess.Core.Game;
 using static DChess.Core.Game.Colour;
