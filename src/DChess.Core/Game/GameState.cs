@@ -12,13 +12,11 @@ public sealed class GameState
     private readonly MoveHandler _moveHandler;
     private readonly IErrorHandler _errorHandler;
     private readonly BoardState _boardState;
-    private readonly PiecePool _pool;
 
     public BoardState BoardState => _boardState;
     public Colour CurrentPlayer { get; set; } = White;
-    public GameState(PiecePool pool, BoardState boardState, IErrorHandler errorHandler)
+    public GameState(BoardState boardState, IErrorHandler errorHandler)
     {
-        _pool = pool;
         _moveHandler = new MoveHandler(errorHandler) ;
         _errorHandler = errorHandler;
         _boardState = BoardState.CloneOrEmptyIfNull(boardState);
@@ -54,12 +52,13 @@ public sealed class GameState
                 var props = _boardState[f, r];
                 if (props == Properties.None) continue;
                 var coordinateFromZeroOffset = Coordinate.FromZeroOffset(f, r);
-                pieces.Add(coordinateFromZeroOffset, _pool.PieceWithProperties(coordinateFromZeroOffset, props));
+                pieces.Add(coordinateFromZeroOffset, PiecePool.PieceWithProperties(coordinateFromZeroOffset, props));
             }
 
             return new ReadOnlyDictionary<Coordinate, Piece>(pieces);
         }
     }
+
 
     public void Place(Properties pieceProperties, Coordinate at)
         => _boardState[at] = pieceProperties;
@@ -71,7 +70,7 @@ public sealed class GameState
         {
             var props = _boardState[f, r];
             if (props.Colour == colour)
-                yield return _pool.PieceWithProperties(Coordinate.FromZeroOffset(f, r), props);
+                yield return PiecePool.PieceWithProperties(Coordinate.FromZeroOffset(f, r), props);
         }
     }
 
@@ -89,11 +88,11 @@ public sealed class GameState
         var p = TryGetProperties(at, out var properties) ? properties : Properties.None;
         if (p == Properties.None)
         {
-            piece = _pool.PieceWithProperties(at, properties);
+            piece = PiecePool.PieceWithProperties(at, properties);
             return false;
         }
 
-        piece = _pool.PieceWithProperties(at, properties);
+        piece = PiecePool.PieceWithProperties(at, properties);
         return true;
     }
 
@@ -139,7 +138,7 @@ public sealed class GameState
     }
 
     public GameState AsClone() =>
-        new(_pool, _boardState, _errorHandler)
+        new(_boardState, _errorHandler)
         {
             CurrentPlayer = CurrentPlayer
         };

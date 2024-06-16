@@ -58,7 +58,7 @@ public static class MovementTestingExtensions
         IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, bool shouldBeAbleToMove, IErrorHandler errorHandler,
         Action<GameState, Coordinate>? setupBoard = null)
     {
-        var gameState = new GameState(new PiecePool(), new BoardState(), errorHandler);
+        var gameState = new GameState(new BoardState(), errorHandler);
         for (byte rank = 1; rank < 8; rank++)
         for (var file = 'a'; file < 'h'; file++)
         {

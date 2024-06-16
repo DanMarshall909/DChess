@@ -1,4 +1,5 @@
-﻿using DChess.Core.Pieces;
+﻿using System.Collections.Concurrent;
+using DChess.Core.Pieces;
 
 namespace DChess.Core.Game;
 
@@ -9,20 +10,20 @@ namespace DChess.Core.Game;
 /// </summary>
 public class PiecePool()
 {
-    private readonly Dictionary<(Coordinate, Properties), Piece> _pool = new();
+    private static readonly ConcurrentDictionary<(Coordinate, Properties), Piece> Pool = new();
 
-    public Piece PieceWithProperties(Coordinate coordinate, Properties properties)
+    public static Piece PieceWithProperties(Coordinate coordinate, Properties properties)
     {
-        if (_pool.TryGetValue((coordinate, properties), out var piece))
+        if (Pool.TryGetValue((coordinate, properties), out var piece))
             return piece;
 
         piece = CreatePiece(coordinate, properties);
-        _pool[(coordinate, properties)] = piece;
+        Pool[(coordinate, properties)] = piece;
 
         return piece;
     }
 
-    private Piece CreatePiece(Coordinate coordinate, Properties properties)
+    private static Piece CreatePiece(Coordinate coordinate, Properties properties)
     {
         Piece.Arguments arguments = new(properties, coordinate);
         return properties.Type switch
@@ -36,10 +37,5 @@ public class PiecePool()
             PieceType.None => new NullPiece(arguments),
             _ => throw new ArgumentOutOfRangeException(nameof(properties.Type), properties.Type, null)
         };
-    }
-
-    public void Dispose()
-    {
-        _pool.Clear();
     }
 }

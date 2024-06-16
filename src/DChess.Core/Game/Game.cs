@@ -2,23 +2,15 @@ using DChess.Core.Moves;
 
 namespace DChess.Core.Game;
 
-public sealed class Game : IDisposable
+public sealed class Game
 {
-    public Game(IErrorHandler errorHandler, GameOptions? gameOptions = null,
-        BoardState? boardState = null)
+    public Game(IErrorHandler errorHandler, GameOptions? gameOptions = null, BoardState? boardState = null)
     {
-        _errorHandler = errorHandler;
-        _piecePool = new PiecePool();
-        GameState = new GameState(_piecePool, BoardState.CloneOrEmptyIfNull(boardState), errorHandler);
+        GameState = new GameState(BoardState.CloneOrEmptyIfNull(boardState), errorHandler);
         _gameOptions = gameOptions ?? GameOptions.DefaultGameOptions;
     }
 
     public GameState GameState { get; }
-
-    public void Dispose()
-    {
-        _piecePool.Dispose();
-    }
 
     private readonly IErrorHandler _errorHandler;
     private readonly PiecePool _piecePool;

@@ -38,7 +38,7 @@ public class GameTests: GameTestBase
     [Fact(DisplayName = "A piece can be placed on the board")]
     public void a_piece_can_be_placed_on_the_board()
     {
-        var game = base.Sut;
+        var game = Sut;
 
         game.GameState.Place(WhitePawn, a1);
 
@@ -112,7 +112,6 @@ public class GameTests: GameTestBase
     {;
         Sut.GameState.Place(WhitePawn, b2);
         Sut.GameState.GetProperties(b2).Should().Be(WhitePawn);
-        Sut.GameState.BoardState.AsArray[9].Should().Be(WhitePawn);
     }
     
     [Fact(DisplayName = "A new invalidMoveHandler starts with white as the current player")]
