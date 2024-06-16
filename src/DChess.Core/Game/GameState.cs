@@ -52,7 +52,8 @@ public sealed class GameState
                 var props = _boardState[f, r];
                 if (props == Properties.None) continue;
                 var coordinateFromZeroOffset = Coordinate.FromZeroOffset(f, r);
-                pieces.Add(coordinateFromZeroOffset, PiecePool.PieceWithProperties(coordinateFromZeroOffset, props));
+                pieces.Add(coordinateFromZeroOffset
+                    , PiecePool.PieceWithProperties(coordinateFromZeroOffset, props));
             }
 
             return new ReadOnlyDictionary<Coordinate, Piece>(pieces);
@@ -75,7 +76,7 @@ public sealed class GameState
     }
 
     public IEnumerable<Piece> OpposingPieces(Colour colour)
-        => FriendlyPieces(colour == White ? Black : White);
+        => FriendlyPieces(colour.Invert());
 
     public bool TryGetProperties(Coordinate coordinate, out Properties properties)
     {
