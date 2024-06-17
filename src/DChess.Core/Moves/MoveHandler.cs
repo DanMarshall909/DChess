@@ -40,7 +40,7 @@ public class MoveHandler(IErrorHandler errorHandler)
         return bestMove;
     }
 
-    private int GetGameStateScore(Move move, GameState gameState, Colour colour)
+    public int GetGameStateScore(Move move, GameState gameState, Colour colour)
     {
         if (gameState.Status(colour.Invert()) == Checkmate)
             return int.MaxValue;
