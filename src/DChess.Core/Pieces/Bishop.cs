@@ -12,12 +12,12 @@ internal record Bishop : Piece
 
     public override string PieceName => "Bishop";
 
-    protected override MoveResult ValidateMovement(Coordinate to, GameState gameState)
+    protected override MoveResult ValidatePath(Coordinate to, GameState gameState)
     {
         var move = new Move(Coordinate, to);
         if (!move.IsDiagonal)
-            return move.InvalidResult(BishopCanOnlyMoveDiagonally);
+            return move.AsInvalidBecause(BishopCanOnlyMoveDiagonally);
 
-        return move.OkResult();
+        return move.AsOkResult();
     }
 }

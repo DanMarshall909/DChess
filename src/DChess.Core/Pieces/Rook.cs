@@ -12,13 +12,13 @@ internal record Rook : Piece
 
     public override string PieceName => "Rook";
 
-    protected override MoveResult ValidateMovement(Coordinate to, GameState gameState)
+    protected override MoveResult ValidatePath(Coordinate to, GameState gameState)
     {
         var move = new Move(Coordinate, to);
 
         if (!(move.IsHorizontal || move.IsVertical))
-            return move.InvalidResult(RookCanOnlyMoveInAStraightLine);
+            return move.AsInvalidBecause(RookCanOnlyMoveInAStraightLine);
 
-        return move.OkResult();
+        return move.AsOkResult();
     }
 }

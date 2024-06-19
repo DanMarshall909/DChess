@@ -27,7 +27,7 @@ public abstract record Piece
         if (!generalMoveResult.IsValid)
             return generalMoveResult;
 
-        var validity = ValidateMovement(to, gameState);
+        var validity = ValidatePath(to, gameState);
 
         var moveResult = validity.IsValid ? generalMoveResult : validity;
         return moveResult;
@@ -39,22 +39,22 @@ public abstract record Piece
 
         var movedPieceColour = Properties.Colour;
         if (gameState.CurrentPlayer != Properties.Colour)
-            return move.InvalidResult(MoveValidity.CannotMoveOpponentsPiece);
+            return move.AsInvalidBecause(MoveValidity.CannotMoveOpponentsPiece);
 
         if (Coordinate == to)
-            return move.InvalidResult(MoveValidity.CannotMoveToSameCell);
+            return move.AsInvalidBecause(MoveValidity.CannotMoveToSameCell);
 
         if (gameState.TryGetPiece(to, out var piece) &&
-            piece.Colour == movedPieceColour) return move.InvalidResult(MoveValidity.CannotCaptureOwnPiece);
+            piece.Colour == movedPieceColour) return move.AsInvalidBecause(MoveValidity.CannotCaptureOwnPiece);
 
         if (this is not IIgnorePathCheck &&
             move.CoordinatesAlongPath.Any(coordinate => gameState.BoardState.HasPieceAt(coordinate)))
-            return move.InvalidResult(MoveValidity.CannotJumpOverOtherPieces);
+            return move.AsInvalidBecause(MoveValidity.CannotJumpOverOtherPieces);
 
         if (MovingIntoCheck(movedPieceColour, move, gameState))
-            return move.InvalidResult(MoveValidity.CannotMoveIntoCheck);
+            return move.AsInvalidBecause(MoveValidity.CannotMoveIntoCheck);
 
-        return move.OkResult();
+        return move.AsOkResult();
     }
 
     private bool MovingIntoCheck(Colour movedPieceColour, Move move, GameState gameState)
@@ -68,7 +68,7 @@ public abstract record Piece
     public bool CanMoveTo(Coordinate to, GameState gameState, params MoveValidity[] validationsToIgnore)
     {
         var move = new Move(Coordinate, to);
-        var val = ValidateMovement(to, gameState.AsClone());
+        var val = ValidatePath(to, gameState.AsClone());
         if (!val.IsValid)
             return false;
 
@@ -84,7 +84,7 @@ public abstract record Piece
             .Select(to => new Move(Coordinate, to));
     }
 
-    protected abstract MoveResult ValidateMovement(Coordinate to, GameState state);
+    protected abstract MoveResult ValidatePath(Coordinate to, GameState state);
 
     public void Deconstruct(out Properties properties, out Coordinate coordinate)
     {

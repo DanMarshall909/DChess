@@ -12,7 +12,7 @@ internal record Knight : Piece, IIgnorePathCheck
 
     public override string PieceName => "Knight";
 
-    protected override MoveResult ValidateMovement(Coordinate to, GameState gameState)
+    protected override MoveResult ValidatePath(Coordinate to, GameState gameState)
     {
         var move = new Move(Coordinate, to);
         return MoveMustBeLShape(to, move);
@@ -25,9 +25,9 @@ internal record Knight : Piece, IIgnorePathCheck
 
         return dx switch
         {
-            1 when dy == 2 => move.OkResult(),
-            2 when dy == 1 => move.OkResult(),
-            _ => move.InvalidResult(KnightsCanOnlyMoveInAnLShape)
+            1 when dy == 2 => move.AsOkResult(),
+            2 when dy == 1 => move.AsOkResult(),
+            _ => move.AsInvalidBecause(KnightsCanOnlyMoveInAnLShape)
         };
     }
 }

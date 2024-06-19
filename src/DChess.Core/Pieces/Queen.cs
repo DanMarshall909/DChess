@@ -12,12 +12,12 @@ public record Queen : Piece
 
     public override string PieceName => "Queen";
 
-    protected override MoveResult ValidateMovement(Coordinate to, GameState gameState)
+    protected override MoveResult ValidatePath(Coordinate to, GameState gameState)
     {
         var move = new Move(Coordinate, to);
 
         return move.IsDiagonal || move.IsVertical || move.IsHorizontal
-            ? move.OkResult()
-            : move.InvalidResult(QueenCanOnlyMoveDiagonallyOrInAStraightLine);
+            ? move.AsOkResult()
+            : move.AsInvalidBecause(QueenCanOnlyMoveDiagonallyOrInAStraightLine);
     }
 }

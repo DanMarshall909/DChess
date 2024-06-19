@@ -25,6 +25,6 @@ public readonly record struct Move(Coordinate From, Coordinate To)
 
     public override string ToString() => $"{From} -> {To}";
     private MoveOffset Offset => new(To.File - From.File, To.Rank - From.Rank);
-    public MoveResult OkResult() => new(this, Ok);
-    public MoveResult InvalidResult(MoveValidity invalidReason) => new(this, invalidReason);
+    public MoveResult AsOkResult() => new(this, Ok);
+    public MoveResult AsInvalidBecause(MoveValidity invalidReason) => new(this, invalidReason);
 }
