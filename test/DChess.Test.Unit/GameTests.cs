@@ -99,7 +99,7 @@ public class GameTests: GameTestBase
     public void board_can_be_created_with_a_standard_piece_layout(string coordinateString, PieceType type,
         Colour colour)
     {
-        Sut.SetStandardLayout();
+        Sut.Board.SetStandardLayout();
 
         Coordinate coordinate = new Coordinate(coordinateString);
         Sut.Board[coordinate].Should().BeEquivalentTo(new Properties(type, colour));
@@ -121,7 +121,7 @@ public class GameTests: GameTestBase
     [Fact (DisplayName = "After taking a turn the current player changes")]
     public void after_taking_a_turn_the_current_player_changes()
     {
-        Sut.SetStandardLayout();
+        Sut.Board.SetStandardLayout();
         Sut.Move(a2, a4);
         Sut.CurrentPlayer.Should().Be(Black);
     }
@@ -129,7 +129,7 @@ public class GameTests: GameTestBase
     [Fact (DisplayName = "After taking two turns the current player changes back to white")]
     public void after_taking_two_turns_the_current_player_changes_back_to_white()
     {
-        Sut.SetStandardLayout();
+        Sut.Board.SetStandardLayout();
         Sut.Move(a2, a4);
         Sut.Move(a7, a6);
         Sut.CurrentPlayer.Should().Be(White);
@@ -138,7 +138,7 @@ public class GameTests: GameTestBase
     [Fact (DisplayName = "A player can only move their own pieces")]
     public void a_player_can_only_move_their_own_pieces()
     {
-        Sut.SetStandardLayout();
+        Sut.Board.SetStandardLayout();
         Sut.Pieces[a7].CheckMove(a5, Sut).Validity.Should().Be(CannotMoveOpponentsPiece);
     }
     

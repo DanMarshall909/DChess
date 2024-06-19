@@ -4,10 +4,10 @@ namespace DChess.Core;
 
 public static class GameStateExtensions
 {
-    public static string RenderToText(this Game.Game game)
+    public static string RenderToText(this Game.Board board)
     {
         var renderer = new TextRenderer();
-        renderer.Render(game);
+        renderer.Render(board);
         return renderer.LastRender;
     }
 }

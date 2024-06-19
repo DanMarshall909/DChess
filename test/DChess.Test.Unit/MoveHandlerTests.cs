@@ -7,7 +7,7 @@ public class MoveHandlerTests : GameTestBase
     [Fact(DisplayName = "A move score can be calculated")]
     public void a_move_score_can_be_calculated()
     {
-        Sut.SetStandardLayout();
+        Sut.Board.SetStandardLayout();
 
         Sut.Board.RemovePieceAt(b1);
         Sut.Board.Place(WhiteKnight, c3);
@@ -23,7 +23,7 @@ public class MoveHandlerTests : GameTestBase
     [Fact(DisplayName = "The best move can be found")]
     public void the_best_move_can_be_found()
     {
-        Sut.SetStandardLayout();
+        Sut.Board.SetStandardLayout();
 
         Sut.Board.RemovePieceAt(b1);
         Sut.Board.RemovePieceAt(f8);

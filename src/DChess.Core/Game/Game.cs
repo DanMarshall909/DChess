@@ -23,8 +23,6 @@ public sealed class Game
         _board = Board.CloneOrEmptyIfNull(board);
     }
 
-    public string AsText => this.RenderToText();
-
     public bool HasLegalMoves(Colour colour) => GetLegalMoves(colour).Any();
 
     public IEnumerable<Move> GetLegalMoves(Colour colour)
@@ -38,7 +36,7 @@ public sealed class Game
     }
 
     public override string ToString() => Pieces.Where(x => x.Key != Coordinate.None)?.ToString() ?? "Not initialised";
-
+    
     public ReadOnlyDictionary<Coordinate, Piece> Pieces
     {
         get

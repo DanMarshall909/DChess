@@ -10,9 +10,7 @@ public readonly record struct Board
             : new Board();
 
     public Board()
-    {
-        Clear();
-    }
+        => Clear();
 
     private Board(Properties[] data)
         => Data = CloneOf(data);
