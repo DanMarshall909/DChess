@@ -11,32 +11,30 @@ public sealed class GameState
 {
     private readonly MoveHandler _moveHandler;
     private readonly IErrorHandler _errorHandler;
-    private readonly BoardState _board;
+    private readonly Board _board;
 
-    public BoardState Board => _board;
+    public Board Board => _board;
     public Colour CurrentPlayer { get; set; } = White;
-    public GameState(BoardState boardState, IErrorHandler errorHandler)
+
+    public GameState(Board board, IErrorHandler errorHandler)
     {
-        _moveHandler = new MoveHandler(errorHandler) ;
+        _moveHandler = new MoveHandler(errorHandler);
         _errorHandler = errorHandler;
-        _board = BoardState.CloneOrEmptyIfNull(boardState);
+        _board = Board.CloneOrEmptyIfNull(board);
     }
 
     public string AsText => this.RenderToText();
 
-    public bool HasLegalMoves(Colour colour)
+    public bool HasLegalMoves(Colour colour) => GetLegalMoves(colour).Any();
+
+    public IEnumerable<Move> GetLegalMoves(Colour colour)
     {
         foreach (var piece in FriendlyPieces(colour))
+        foreach (var moveValidity in piece.MoveValidities(this))
         {
-            foreach (var move in piece.LegalMoves(this))
-            {
-                var result = piece.CheckMove(move.To, this);
-                if (result.IsValid)
-                    return true;
-            }
+            if (moveValidity.result.IsValid)
+                yield return new Move(piece.Coordinate, moveValidity.to);
         }
-
-        return false;
     }
 
     public override string ToString() => Pieces.Where(x => x.Key != Coordinate.None)?.ToString() ?? "Not initialised";
@@ -59,9 +57,10 @@ public sealed class GameState
             return new ReadOnlyDictionary<Coordinate, Piece>(pieces);
         }
     }
-    
+
     public IEnumerable<Piece> FriendlyPieces(Colour colour)
-    {
+    {   
+        // todo: optimise
         for (var f = 0; f < 8; f++)
         for (var r = 0; r < 8; r++)
         {
@@ -123,33 +122,9 @@ public sealed class GameState
     {
         _moveHandler.Make(move, this, force);
     }
+
     public void Move(Coordinate from, Coordinate to, bool force = false)
     {
         _moveHandler.Make(new(from, to), this, force);
     }
-
-    /// <summary>
-    ///     The vertical ranks (rows) of the board, from 1 to 8
-    /// </summary>
-    public static byte[] Ranks = { 1, 2, 3, 4, 5, 6, 7, 8 };
-
-    /// <summary>
-    ///     The horizontal files (columns) of the board, from a to h
-    /// </summary>
-    public static char[] Files = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
-    
-    /// <summary>
-    /// All the coordinates on the board
-    /// </summary>
-    public static IEnumerable<Coordinate> AllCoordinates { get; } = new[]
-    {
-        a1, b1, c1, d1, e1, f1, g1, h1,
-        a2, b2, c2, d2, e2, f2, g2, h2,
-        a3, b3, c3, d3, e3, f3, g3, h3,
-        a4, b4, c4, d4, e4, f4, g4, h4,
-        a5, b5, c5, d5, e5, f5, g5, h5,
-        a6, b6, c6, d6, e6, f6, g6, h6,
-        a7, b7, c7, d7, e7, f7, g7, h7,
-        a8, b8, c8, d8, e8, f8, g8, h8
-    };
 }

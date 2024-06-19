@@ -2,21 +2,21 @@ using System.Runtime.CompilerServices;
 
 namespace DChess.Core.Game;
 
-public readonly record struct BoardState
+public readonly record struct Board
 {
     private const int TotalCellsOnBoard = 8 * 8;
 
-    public static BoardState CloneOrEmptyIfNull(BoardState? state)
+    public static Board CloneOrEmptyIfNull(Board? state)
         => state is not null
-            ? new BoardState(state!.Value.AsArray.Clone() as Properties[] ?? Array.Empty<Properties>())
-            : new BoardState();
+            ? new Board(state!.Value.AsArray.Clone() as Properties[] ?? Array.Empty<Properties>())
+            : new Board();
 
-    public BoardState()
+    public Board()
     {
         Clear();
     }
 
-    private BoardState(Properties[] data)
+    private Board(Properties[] data)
         => AsArray = CloneOf(data);
 
     private static Properties[] CloneOf(Properties[] data)

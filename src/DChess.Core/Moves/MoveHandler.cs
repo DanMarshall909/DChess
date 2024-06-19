@@ -26,17 +26,16 @@ public class MoveHandler(IErrorHandler errorHandler)
         var bestMove = new Move(Coordinate.None, Coordinate.None);
         var bestScore = int.MinValue;
 
-        foreach (var piece in gameState.FriendlyPieces(colour))
-        foreach (var move in piece.LegalMoves(gameState))
+        foreach (var legalMove in gameState.GetLegalMoves(colour))
         {
-            int score = GetGameStateScore(move, gameState, colour);
+            int score = GetGameStateScore(legalMove, gameState, colour);
             if (score > bestScore)
             {
                 bestScore = score;
-                bestMove = move;
+                bestMove = legalMove;
             }
         }
-
+        
         return bestMove;
     }
 

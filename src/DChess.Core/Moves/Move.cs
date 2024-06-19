@@ -20,8 +20,8 @@ public readonly record struct Move(Coordinate From, Coordinate To)
     public IEnumerable<Coordinate> CoordinatesAlongPath =>
         new Memo<Move, IEnumerable<Coordinate>>(PathFinder.GetPath).Execute(this);
 
-    public bool IsBlocked(BoardState boardState) =>
-        CoordinatesAlongPath.SkipLast(1).Any(coordinate => boardState.HasPieceAt(coordinate));
+    public bool IsBlocked(Board board) =>
+        CoordinatesAlongPath.SkipLast(1).Any(coordinate => board.HasPieceAt(coordinate));
 
     public override string ToString() => $"{From} -> {To}";
     private MoveOffset Offset => new(To.File - From.File, To.Rank - From.Rank);

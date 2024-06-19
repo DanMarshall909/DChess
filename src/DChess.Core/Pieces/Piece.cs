@@ -75,13 +75,15 @@ public abstract record Piece
         return move.HasPath && !move.IsBlocked(gameState.Board);
     }
 
-    public IEnumerable<Move> LegalMoves(GameState gameState)
+    // todo: restrict this per piece for performance
+    public IEnumerable<Coordinate> GetPossibleMoveCoordinates(GameState gameState) => Coordinate.All;
+
+    public IEnumerable<(Coordinate to, MoveResult result)> MoveValidities(GameState gameState)
     {
+        // todo: cache?
         var newGameState = gameState.AsClone();
-        return Coordinate
-            .All
-            .Where(to => CheckMove(to ,newGameState).IsValid)
-            .Select(to => new Move(Coordinate, to));
+        return GetPossibleMoveCoordinates(newGameState)
+            .Select(to => (to, CheckMove(to, newGameState)));
     }
 
     protected abstract MoveResult ValidatePath(Coordinate to, GameState state);
