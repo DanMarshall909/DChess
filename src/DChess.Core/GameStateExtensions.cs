@@ -1,14 +1,13 @@
-using DChess.Core.Game;
 using DChess.Core.Renderers;
 
 namespace DChess.Core;
 
 public static class GameStateExtensions
 {
-    public static string RenderToText(this GameState gameState)
+    public static string RenderToText(this Game.Game game)
     {
         var renderer = new TextRenderer();
-        renderer.Render(gameState);
+        renderer.Render(game);
         return renderer.LastRender;
     }
 }

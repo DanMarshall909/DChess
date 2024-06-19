@@ -7,7 +7,7 @@ namespace DChess.Core.Game;
 /// <summary>
 /// All the properties of a game at a specific point in play
 /// </summary>
-public sealed class GameState
+public sealed class Game
 {
     private readonly MoveHandler _moveHandler;
     private readonly IErrorHandler _errorHandler;
@@ -16,7 +16,7 @@ public sealed class GameState
     public Board Board => _board;
     public Colour CurrentPlayer { get; set; } = White;
 
-    public GameState(Board board, IErrorHandler errorHandler)
+    public Game(Board board, IErrorHandler errorHandler)
     {
         _moveHandler = new MoveHandler(errorHandler);
         _errorHandler = errorHandler;
@@ -112,7 +112,7 @@ public sealed class GameState
         Stalemate
     }
 
-    public GameState AsClone() =>
+    public Game AsClone() =>
         new(_board, _errorHandler)
         {
             CurrentPlayer = CurrentPlayer

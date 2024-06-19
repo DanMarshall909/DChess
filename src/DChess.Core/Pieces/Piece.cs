@@ -20,73 +20,73 @@ public abstract record Piece
     public Colour Colour => Properties.Colour;
     public PieceType Type => Properties.Type;
 
-    public MoveResult CheckMove(Coordinate to, GameState gameState)
+    public MoveResult CheckMove(Coordinate to, Game.Game game)
     {
-        var generalMoveResult = IsGenerallyValid(to, gameState);
+        var generalMoveResult = IsGenerallyValid(to, game);
 
         if (!generalMoveResult.IsValid)
             return generalMoveResult;
 
-        var validity = ValidatePath(to, gameState);
+        var validity = ValidatePath(to, game);
 
         var moveResult = validity.IsValid ? generalMoveResult : validity;
         return moveResult;
     }
 
-    private MoveResult IsGenerallyValid(Coordinate to, GameState gameState)
+    private MoveResult IsGenerallyValid(Coordinate to, Game.Game game)
     {
         var move = new Move(Coordinate, to);
 
         var movedPieceColour = Properties.Colour;
-        if (gameState.CurrentPlayer != Properties.Colour)
+        if (game.CurrentPlayer != Properties.Colour)
             return move.AsInvalidBecause(MoveValidity.CannotMoveOpponentsPiece);
 
         if (Coordinate == to)
             return move.AsInvalidBecause(MoveValidity.CannotMoveToSameCell);
 
-        if (gameState.TryGetPiece(to, out var piece) &&
+        if (game.TryGetPiece(to, out var piece) &&
             piece.Colour == movedPieceColour) return move.AsInvalidBecause(MoveValidity.CannotCaptureOwnPiece);
 
         if (this is not IIgnorePathCheck &&
-            move.CoordinatesAlongPath.Any(coordinate => gameState.Board.HasPieceAt(coordinate)))
+            move.CoordinatesAlongPath.Any(coordinate => game.Board.HasPieceAt(coordinate)))
             return move.AsInvalidBecause(MoveValidity.CannotJumpOverOtherPieces);
 
-        if (MovingIntoCheck(movedPieceColour, move, gameState))
+        if (MovingIntoCheck(movedPieceColour, move, game))
             return move.AsInvalidBecause(MoveValidity.CannotMoveIntoCheck);
 
         return move.AsOkResult();
     }
 
-    private bool MovingIntoCheck(Colour movedPieceColour, Move move, GameState gameState)
+    private bool MovingIntoCheck(Colour movedPieceColour, Move move, Game.Game game)
     {
-        var newGameState = gameState.AsClone();
+        var newGameState = game.AsClone();
         newGameState.Move(move, force: true);
 
         return newGameState.IsInCheck(movedPieceColour);
     }
 
-    public bool CanMoveTo(Coordinate to, GameState gameState, params MoveValidity[] validationsToIgnore)
+    public bool CanMoveTo(Coordinate to, Game.Game game, params MoveValidity[] validationsToIgnore)
     {
         var move = new Move(Coordinate, to);
-        var val = ValidatePath(to, gameState.AsClone());
+        var val = ValidatePath(to, game.AsClone());
         if (!val.IsValid)
             return false;
 
-        return move.HasPath && !move.IsBlocked(gameState.Board);
+        return move.HasPath && !move.IsBlocked(game.Board);
     }
 
     // todo: restrict this per piece for performance
-    public IEnumerable<Coordinate> GetPossibleMoveCoordinates(GameState gameState) => Coordinate.All;
+    public IEnumerable<Coordinate> GetPossibleMoveCoordinates(Game.Game game) => Coordinate.All;
 
-    public IEnumerable<(Coordinate to, MoveResult result)> MoveValidities(GameState gameState)
+    public IEnumerable<(Coordinate to, MoveResult result)> MoveValidities(Game.Game game)
     {
         // todo: cache?
-        var newGameState = gameState.AsClone();
+        var newGameState = game.AsClone();
         return GetPossibleMoveCoordinates(newGameState)
             .Select(to => (to, CheckMove(to, newGameState)));
     }
 
-    protected abstract MoveResult ValidatePath(Coordinate to, GameState state);
+    protected abstract MoveResult ValidatePath(Coordinate to, Game.Game state);
 
     public void Deconstruct(out Properties properties, out Coordinate coordinate)
     {

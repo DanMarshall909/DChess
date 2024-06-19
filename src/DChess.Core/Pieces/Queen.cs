@@ -12,7 +12,7 @@ public record Queen : Piece
 
     public override string PieceName => "Queen";
 
-    protected override MoveResult ValidatePath(Coordinate to, GameState gameState)
+    protected override MoveResult ValidatePath(Coordinate to, Game.Game game)
     {
         var move = new Move(Coordinate, to);
 

@@ -12,7 +12,7 @@ internal record Rook : Piece
 
     public override string PieceName => "Rook";
 
-    protected override MoveResult ValidatePath(Coordinate to, GameState gameState)
+    protected override MoveResult ValidatePath(Coordinate to, Game.Game game)
     {
         var move = new Move(Coordinate, to);
 

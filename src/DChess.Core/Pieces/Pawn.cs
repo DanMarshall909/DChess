@@ -13,7 +13,7 @@ public record Pawn : Piece, IIgnorePathCheck
 
     public override string PieceName => "Pawn";
 
-    protected override MoveResult ValidatePath(Coordinate to, GameState gameState)
+    protected override MoveResult ValidatePath(Coordinate to, Game.Game game)
     {
         var move = new Move(Coordinate, to);
 
@@ -25,7 +25,7 @@ public record Pawn : Piece, IIgnorePathCheck
 
         if (move.IsDiagonal)
         {
-            if (!gameState.Board.HasPieceAt(to))
+            if (!game.Board.HasPieceAt(to))
                 return move.AsInvalidBecause(PawnsCanOnlySideStepWhenCapturing);
 
             return move.Distance.Horizontal == 1

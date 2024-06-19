@@ -2,7 +2,7 @@
 
 namespace DChess.Core.Pieces;
 
-public static class NamedChessPiece
+public static class NamedPiece
 {
     public static readonly Properties WhitePawn = new(PieceType.Pawn, White);
     public static readonly Properties WhiteRook = new(PieceType.Rook, White);

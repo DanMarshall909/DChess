@@ -12,7 +12,7 @@ internal record Knight : Piece, IIgnorePathCheck
 
     public override string PieceName => "Knight";
 
-    protected override MoveResult ValidatePath(Coordinate to, GameState gameState)
+    protected override MoveResult ValidatePath(Coordinate to, Game.Game game)
     {
         var move = new Move(Coordinate, to);
         return MoveMustBeLShape(to, move);

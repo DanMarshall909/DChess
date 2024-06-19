@@ -1,8 +1,6 @@
-﻿using DChess.Core.Game;
-
-namespace DChess.Core.Renderers;
+﻿namespace DChess.Core.Renderers;
 
 public interface IBoardRenderer
 {
-    void Render(GameState gameState);
+    void Render(Game.Game game);
 }

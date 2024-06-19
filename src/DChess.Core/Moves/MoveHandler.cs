@@ -4,9 +4,9 @@ namespace DChess.Core.Moves;
 
 public class MoveHandler(IErrorHandler errorHandler)
 {
-    public void Make(Move move, GameState gameState, bool force = false)
+    public void Make(Move move, Game.Game game, bool force = false)
     {
-        if (!gameState.Board.TryGetProperties(move.From, out var props))
+        if (!game.Board.TryGetProperties(move.From, out var props))
             errorHandler.HandleInvalidMove(new MoveResult(move, MoveValidity.FromCellDoesNoteContainPiece));
 
         bool pawnIsPromoted = props.Type == PieceType.Pawn && (move.To.Rank == 1 || move.To.Rank == 8);
@@ -14,21 +14,21 @@ public class MoveHandler(IErrorHandler errorHandler)
             ? new Properties(PieceType.Queen, props.Colour)
             : props;
 
-        gameState.Board.RemovePieceAt(move.From);
-        gameState.Board.Place(updatedProperties, move.To);
+        game.Board.RemovePieceAt(move.From);
+        game.Board.Place(updatedProperties, move.To);
 
-        gameState.CurrentPlayer = gameState.CurrentPlayer == White ? Black : White;
+        game.CurrentPlayer = game.CurrentPlayer == White ? Black : White;
     }
 
     // Gets the best move for the current player
-    public Move GetBestMove(Colour colour, GameState gameState)
+    public Move GetBestMove(Colour colour, Game.Game game)
     {
         var bestMove = new Move(Coordinate.None, Coordinate.None);
         var bestScore = int.MinValue;
 
-        foreach (var legalMove in gameState.GetLegalMoves(colour))
+        foreach (var legalMove in game.GetLegalMoves(colour))
         {
-            int score = GetGameStateScore(legalMove, gameState, colour);
+            int score = GetGameStateScore(legalMove, game, colour);
             if (score > bestScore)
             {
                 bestScore = score;
@@ -39,13 +39,13 @@ public class MoveHandler(IErrorHandler errorHandler)
         return bestMove;
     }
 
-    public int GetGameStateScore(Move move, GameState gameState, Colour colour)
+    public int GetGameStateScore(Move move, Game.Game game, Colour colour)
     {
-        if (gameState.Status(colour.Invert()) == Checkmate)
+        if (game.Status(colour.Invert()) == Checkmate)
             return int.MaxValue;
 
         var score = 0;
-        var props = gameState.Board[move.To];
+        var props = game.Board[move.To];
         if (props != Properties.None)
             score += props.Type switch
             {
@@ -57,7 +57,7 @@ public class MoveHandler(IErrorHandler errorHandler)
                 _ => 0
             };
 
-        if (gameState.IsInCheck(gameState.CurrentPlayer))
+        if (game.IsInCheck(game.CurrentPlayer))
             score += 3;
 
         return score;
