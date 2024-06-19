@@ -38,22 +38,20 @@ public class GameTests: GameTestBase
     [Fact(DisplayName = "A piece can be placed on the board")]
     public void a_piece_can_be_placed_on_the_board()
     {
-        var game = Sut;
+        Sut.Place(WhitePawn, a1);
 
-        game.GameState.Place(WhitePawn, a1);
-
-        var properties = game.GameState.GetProperties(a1);
+        var properties = Sut.GetProperties(a1);
         properties.Should().BeEquivalentTo(WhitePawn);
-        game.GameState.BoardState.HasPieceAt(a2).Should().BeFalse();
+        Sut.BoardState.HasPieceAt(a2).Should().BeFalse();
     }
 
     [Fact(DisplayName = "If there are no properties on the board, a cell's properties is null")]
     public void if_there_are_no_pieces_on_the_board_a_cells_piece_is_null()
     {
-        Sut.GameState.BoardState.HasPieceAt(a1).Should().BeFalse();
+        Sut.BoardState.HasPieceAt(a1).Should().BeFalse();
     }
 
-    [Theory(DisplayName = "A properties cannot be placed outside the board")]
+    [Theory(DisplayName = "A piece cannot be placed outside the board")]
     [InlineData('a', 254)]
     [InlineData('a', 0)]
     [InlineData('a', 9)]
@@ -61,7 +59,7 @@ public class GameTests: GameTestBase
     [InlineData('1', 1)]
     public void a_piece_cannot_be_placed_outside_the_board(char column, byte row)
     {
-        var act = () => Sut.GameState.Place(WhitePawn, new Coordinate(column, row));
+        var act = () => Sut.Place(WhitePawn, new Coordinate(column, row));
 
         act.Should().Throw<InvalidCoordinateException>();
     }
@@ -102,45 +100,45 @@ public class GameTests: GameTestBase
     public void board_can_be_created_with_a_standard_piece_layout(string coordinateString, PieceType type,
         Colour colour)
     {
-        Sut.GameState.SetStandardLayout();
+        Sut.SetStandardLayout();
 
-        Sut.GameState.GetProperties(new Coordinate(coordinateString)).Should().BeEquivalentTo(new Properties(type, colour));
+        Sut.GetProperties(new Coordinate(coordinateString)).Should().BeEquivalentTo(new Properties(type, colour));
     }
 
-    [Fact(DisplayName = "A properties can be added to the board")]
+    [Fact(DisplayName = "A piece can be added to the board")]
     public void a_piece_can_be_added_to_the_board()
     {;
-        Sut.GameState.Place(WhitePawn, b2);
-        Sut.GameState.GetProperties(b2).Should().Be(WhitePawn);
+        Sut.Place(WhitePawn, b2);
+        Sut.GetProperties(b2).Should().Be(WhitePawn);
     }
     
     [Fact(DisplayName = "A new invalidMoveHandler starts with white as the current player")]
     public void a_new_game_starts_with_white_as_the_current_player()
     {
-        Sut.GameState.CurrentPlayer.Should().Be(White);
+        Sut.CurrentPlayer.Should().Be(White);
     }
     
     [Fact (DisplayName = "After taking a turn the current player changes")]
     public void after_taking_a_turn_the_current_player_changes()
     {
-        Sut.GameState.SetStandardLayout();
+        Sut.SetStandardLayout();
         Sut.Move(a2, a4);
-        Sut.GameState.CurrentPlayer.Should().Be(Black);
+        Sut.CurrentPlayer.Should().Be(Black);
     }
     
     [Fact (DisplayName = "After taking two turns the current player changes back to white")]
     public void after_taking_two_turns_the_current_player_changes_back_to_white()
     {
-        Sut.GameState.SetStandardLayout();
+        Sut.SetStandardLayout();
         Sut.Move(a2, a4);
         Sut.Move(a7, a6);
-        Sut.GameState.CurrentPlayer.Should().Be(White);
+        Sut.CurrentPlayer.Should().Be(White);
     }
     
     [Fact (DisplayName = "A player can only move their own pieces")]
     public void a_player_can_only_move_their_own_pieces()
     {
-        Sut.GameState.SetStandardLayout();
-        Sut.GameState.Pieces[a7].CheckMove(a5, Sut.GameState).Validity.Should().Be(CannotMoveOpponentsPiece);
+        Sut.SetStandardLayout();
+        Sut.Pieces[a7].CheckMove(a5, Sut).Validity.Should().Be(CannotMoveOpponentsPiece);
     }
 }

@@ -10,7 +10,7 @@ public class RenderingTests : GameTestBase
     {
         var renderer = new TextRenderer();
 
-        renderer.Render(Sut.GameState);
+        renderer.Render(Sut);
         renderer.LastRender.Should().BeEquivalentTo(
             """
              abcdefgh
@@ -28,10 +28,10 @@ public class RenderingTests : GameTestBase
     [Fact(DisplayName = "A standard  board should be displayed correctly with chess pieces")]
     public void a_standard_board_should_be_displayed_correctly_with_pieces()
     {
-        Sut.GameState.SetStandardLayout();
+        Sut.SetStandardLayout();
         var renderer = new TextRenderer();
 
-        renderer.Render(Sut.GameState);
+        renderer.Render(Sut);
         (Environment.NewLine + renderer.LastRender).Should().BeEquivalentTo(
             """
             

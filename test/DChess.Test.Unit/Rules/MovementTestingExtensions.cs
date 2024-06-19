@@ -7,7 +7,7 @@ public static class MovementTestingExtensions
     public const int LegalPositionValue = 1;
 
     /// <summary>
-    ///     Test that a properties can move to a given set of offsets from its current position. Offsets resulting in invalid
+    ///     Test that A piece can move to a given set of offsets from its current position. Offsets resulting in invalid
     ///     coordinates are ignored.
     /// </summary>
     /// <param name="properties">The properties that will be evaluated e.g. WhiteKnight</param>
@@ -46,7 +46,7 @@ public static class MovementTestingExtensions
     }
 
     /// <summary>
-    ///     Tests if a properties can move to a given set of offsets from its current position. Offsets resulting in invalid
+    ///     Tests if A piece can move to a given set of offsets from its current position. Offsets resulting in invalid
     ///     coordinates are ignored.
     /// </summary>
     /// <param name="properties"></param>

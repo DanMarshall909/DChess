@@ -122,8 +122,6 @@ public sealed class GameState
 
     public GameStatus Status(Colour colour)
     {
-        GameStatus status;
-
         bool isInCheck = IsInCheck(colour);
         if (!HasLegalMoves(colour)) return isInCheck ? Checkmate : Stalemate;
 
@@ -147,6 +145,10 @@ public sealed class GameState
     public void Move(Move move, bool force = false)
     {
         _moveHandler.Make(move, this, force);
+    }
+    public void Move(Coordinate from, Coordinate to, bool force = false)
+    {
+        _moveHandler.Make(new(from, to), this, force);
     }
 
     /// <summary>

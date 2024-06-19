@@ -10,7 +10,7 @@ public class MoveHandlerTests: GameTestBase
         SetupBlackBishopCanBeTakenByWhiteKnight();
 
         var move = new Move(c3, d5);
-        var score = MoveHandler.GetGameStateScore(move, Sut.GameState, Colour.White);
+        var score = MoveHandler.GetGameStateScore(move, Sut, Colour.White);
 
         score.Should().Be(3);
     }
@@ -20,19 +20,19 @@ public class MoveHandlerTests: GameTestBase
     {
         SetupBlackBishopCanBeTakenByWhiteKnight();
 
-        var bestMove = MoveHandler.GetBestMove(Colour.White, Sut.GameState);
+        var bestMove = MoveHandler.GetBestMove(Colour.White, Sut);
 
         bestMove.Should().Be(new Move(c3, d5));
     }
 
     private void SetupBlackBishopCanBeTakenByWhiteKnight()
     {
-        Sut.GameState.SetStandardLayout();
+        Sut.SetStandardLayout();
         
-        Sut.GameState.BoardState.RemovePieceAt(b1);
-        Sut.GameState.BoardState.SetPiece(c3, WhiteKnight);
+        Sut.BoardState.RemovePieceAt(b1);
+        Sut.BoardState.SetPiece(c3, WhiteKnight);
         
-        Sut.GameState.BoardState.RemovePieceAt(f8);
-        Sut.GameState.BoardState.SetPiece(d5, BlackBishop);
+        Sut.BoardState.RemovePieceAt(f8);
+        Sut.BoardState.SetPiece(d5, BlackBishop);
     }
 }
