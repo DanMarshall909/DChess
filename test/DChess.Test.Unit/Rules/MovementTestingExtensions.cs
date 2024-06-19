@@ -64,8 +64,8 @@ public static class MovementTestingExtensions
         {
             var from = new Coordinate(file, rank);
 
-            gameState.Clear();
-            gameState.Place(properties, from);
+            gameState.Board.Clear();
+            gameState.Board.Place(properties, from);
             setupBoard?.Invoke(gameState, from);
 
             var pieceAtFrom = gameState.Pieces[from];
@@ -86,7 +86,7 @@ public static class MovementTestingExtensions
     {
         foreach (var offset in offsets)
             if (from.TryApplyOffset(offset, out var to))
-                gameState.Place(properties, to);
+                gameState.Board.Place(properties, to);
     }
 
     /// <summary>

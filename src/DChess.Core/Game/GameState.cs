@@ -11,15 +11,15 @@ public sealed class GameState
 {
     private readonly MoveHandler _moveHandler;
     private readonly IErrorHandler _errorHandler;
-    private readonly BoardState _boardState;
+    private readonly BoardState _board;
 
-    public BoardState BoardState => _boardState;
+    public BoardState Board => _board;
     public Colour CurrentPlayer { get; set; } = White;
     public GameState(BoardState boardState, IErrorHandler errorHandler)
     {
         _moveHandler = new MoveHandler(errorHandler) ;
         _errorHandler = errorHandler;
-        _boardState = BoardState.CloneOrEmptyIfNull(boardState);
+        _board = BoardState.CloneOrEmptyIfNull(boardState);
     }
 
     public string AsText => this.RenderToText();
@@ -49,7 +49,7 @@ public sealed class GameState
             for (var f = 0; f < 8; f++)
             for (var r = 0; r < 8; r++)
             {
-                var props = _boardState[f, r];
+                var props = _board[f, r];
                 if (props == Properties.None) continue;
                 var coordinateFromZeroOffset = Coordinate.FromZeroOffset(f, r);
                 pieces.Add(coordinateFromZeroOffset
@@ -59,17 +59,13 @@ public sealed class GameState
             return new ReadOnlyDictionary<Coordinate, Piece>(pieces);
         }
     }
-
-
-    public void Place(Properties pieceProperties, Coordinate at)
-        => _boardState[at] = pieceProperties;
-
+    
     public IEnumerable<Piece> FriendlyPieces(Colour colour)
     {
         for (var f = 0; f < 8; f++)
         for (var r = 0; r < 8; r++)
         {
-            var props = _boardState[f, r];
+            var props = _board[f, r];
             if (props.Colour == colour)
                 yield return PiecePool.PieceWithProperties(Coordinate.FromZeroOffset(f, r), props);
         }
@@ -78,15 +74,9 @@ public sealed class GameState
     public IEnumerable<Piece> OpposingPieces(Colour colour)
         => FriendlyPieces(colour.Invert());
 
-    public bool TryGetProperties(Coordinate coordinate, out Properties properties)
-    {
-        properties = _boardState[coordinate];
-        return properties != Properties.None;
-    }
-
     public bool TryGetPiece(Coordinate at, out Piece piece)
     {
-        var p = TryGetProperties(at, out var properties) ? properties : Properties.None;
+        var p = _board.TryGetProperties(at, out var properties) ? properties : Properties.None;
         if (p == Properties.None)
         {
             piece = PiecePool.PieceWithProperties(at, properties);
@@ -97,22 +87,9 @@ public sealed class GameState
         return true;
     }
 
-    public void Clear()
-    {
-        _boardState.Clear();
-    }
-
-    public Coordinate KingCoordinate(Colour colour)
-    {
-        return _boardState.Find(props => props.Type == PieceType.King && props.Colour == colour);
-    }
-
-    public Properties GetProperties(Coordinate coordinate) =>
-        _boardState[coordinate];
-
     public bool IsInCheck(Colour colour)
     {
-        var king = KingCoordinate(colour);
+        var king = Board.KingCoordinate(colour);
         if (king != Coordinate.None)
             return OpposingPieces(colour).Any(piece => piece.CanMoveTo(king, this));
 
@@ -137,7 +114,7 @@ public sealed class GameState
     }
 
     public GameState AsClone() =>
-        new(_boardState, _errorHandler)
+        new(_board, _errorHandler)
         {
             CurrentPlayer = CurrentPlayer
         };

@@ -38,17 +38,17 @@ public class GameTests: GameTestBase
     [Fact(DisplayName = "A piece can be placed on the board")]
     public void a_piece_can_be_placed_on_the_board()
     {
-        Sut.Place(WhitePawn, a1);
+        Sut.Board.Place(WhitePawn, a1);
 
-        var properties = Sut.GetProperties(a1);
+        var properties = Sut.Board[a1];
         properties.Should().BeEquivalentTo(WhitePawn);
-        Sut.BoardState.HasPieceAt(a2).Should().BeFalse();
+        Sut.Board.HasPieceAt(a2).Should().BeFalse();
     }
 
     [Fact(DisplayName = "If there are no properties on the board, a cell's properties is null")]
     public void if_there_are_no_pieces_on_the_board_a_cells_piece_is_null()
     {
-        Sut.BoardState.HasPieceAt(a1).Should().BeFalse();
+        Sut.Board.HasPieceAt(a1).Should().BeFalse();
     }
 
     [Theory(DisplayName = "A piece cannot be placed outside the board")]
@@ -59,7 +59,7 @@ public class GameTests: GameTestBase
     [InlineData('1', 1)]
     public void a_piece_cannot_be_placed_outside_the_board(char column, byte row)
     {
-        var act = () => Sut.Place(WhitePawn, new Coordinate(column, row));
+        var act = () => Sut.Board.Place(WhitePawn, new Coordinate(column, row));
 
         act.Should().Throw<InvalidCoordinateException>();
     }
@@ -102,14 +102,15 @@ public class GameTests: GameTestBase
     {
         Sut.SetStandardLayout();
 
-        Sut.GetProperties(new Coordinate(coordinateString)).Should().BeEquivalentTo(new Properties(type, colour));
+        Coordinate coordinate = new Coordinate(coordinateString);
+        Sut.Board[coordinate].Should().BeEquivalentTo(new Properties(type, colour));
     }
 
     [Fact(DisplayName = "A piece can be added to the board")]
     public void a_piece_can_be_added_to_the_board()
     {;
-        Sut.Place(WhitePawn, b2);
-        Sut.GetProperties(b2).Should().Be(WhitePawn);
+        Sut.Board.Place(WhitePawn, b2);
+        Sut.Board[b2].Should().Be(WhitePawn);
     }
     
     [Fact(DisplayName = "A new invalidMoveHandler starts with white as the current player")]

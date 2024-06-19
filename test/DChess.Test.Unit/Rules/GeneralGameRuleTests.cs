@@ -9,8 +9,8 @@ public class GeneralGameRuleTests: GameTestBase
     {
         var whitePawn = new Properties(PieceType.Pawn, Colour.White);
 
-        Sut.Place(whitePawn, a1);
-        Sut.Place(whitePawn, b2);
+        Sut.Board.Place(whitePawn, a1);
+        Sut.Board.Place(whitePawn, b2);
 
         var piece = Sut.Pieces[a1];
         var result = piece.CheckMove(b2, Sut);

@@ -35,7 +35,7 @@ public class TextRenderer : IBoardRenderer
 
     private static char PieceChar(char file, byte rank, GameState game)
     {
-        if (game.TryGetProperties(new Coordinate(file, rank), out var chessPiece))
+        if (game.Board.TryGetProperties(new Coordinate(file, rank), out var chessPiece))
             return DisplayChar(chessPiece!);
 
         bool isOddSquare = (rank + file) % 2 == 0;

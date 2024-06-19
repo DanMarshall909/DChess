@@ -6,7 +6,7 @@ public class MoveHandler(IErrorHandler errorHandler)
 {
     public void Make(Move move, GameState gameState, bool force = false)
     {
-        if (!gameState.TryGetProperties(move.From, out var props))
+        if (!gameState.Board.TryGetProperties(move.From, out var props))
             errorHandler.HandleInvalidMove(new MoveResult(move, MoveValidity.FromCellDoesNoteContainPiece));
 
         bool pawnIsPromoted = props.Type == PieceType.Pawn && (move.To.Rank == 1 || move.To.Rank == 8);
@@ -14,8 +14,8 @@ public class MoveHandler(IErrorHandler errorHandler)
             ? new Properties(PieceType.Queen, props.Colour)
             : props;
 
-        gameState.BoardState.RemovePieceAt(move.From);
-        gameState.BoardState.SetPiece(move.To, updatedProperties);
+        gameState.Board.RemovePieceAt(move.From);
+        gameState.Board.Place(updatedProperties, move.To);
 
         gameState.CurrentPlayer = gameState.CurrentPlayer == White ? Black : White;
     }
@@ -46,7 +46,7 @@ public class MoveHandler(IErrorHandler errorHandler)
             return int.MaxValue;
 
         var score = 0;
-        var props = gameState.BoardState[move.To];
+        var props = gameState.Board[move.To];
         if (props != Properties.None)
             score += props.Type switch
             {

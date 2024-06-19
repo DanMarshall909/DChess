@@ -10,8 +10,8 @@ public class PieceTests : GameTestBase
     [Fact(DisplayName = "A piece can be moved")]
     public void a_piece_can_be_moved()
     {
-        Sut.Place(WhitePawn, a2);
-        Sut.Place(WhiteKing, f1);
+        Sut.Board.Place(WhitePawn, a2);
+        Sut.Board.Place(WhiteKing, f1);
         Sut.Move(a2,b3);
 
         // ReSharper disable once HeapView.BoxingAllocation
@@ -25,8 +25,8 @@ public class PieceTests : GameTestBase
     [Fact(DisplayName = "A queen can move backwards")]
     public void a_queen_can_move_backwards()
     {
-        Sut.Place(WhiteQueen, b2);
-        Sut.Place(WhiteKing, f1);
+        Sut.Board.Place(WhiteQueen, b2);
+        Sut.Board.Place(WhiteKing, f1);
         Sut.FriendlyPieces(White).Count().Should().Be(2);
 
         Sut.Move(b2, a3);
@@ -43,8 +43,8 @@ public class PieceTests : GameTestBase
     [Fact(DisplayName = "Invalid move should not be allowed")]
     public void invalid_move_should_not_be_allowed()
     {
-        Sut.Place(WhiteKing, f1);
-        Sut.Place(new Properties(PieceType.Pawn, White), a1);
+        Sut.Board.Place(WhiteKing, f1);
+        Sut.Board.Place(new Properties(PieceType.Pawn, White), a1);
         var piece = Sut.Pieces[a1];
 
         piece.CheckMove(a6, Sut).IsValid.Should().BeFalse();

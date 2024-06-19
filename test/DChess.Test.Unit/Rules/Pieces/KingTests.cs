@@ -30,9 +30,9 @@ public class KingTests: GameTestBase
     [Fact(DisplayName = "A piece cannot move such that the king is in check")]
     public void a_piece_cannot_move_such_that_the_king_is_in_check()
     {
-        Sut.Place(WhiteKing, a1);
-        Sut.Place(WhiteBishop, a2);
-        Sut.Place(BlackRook, a8);
+        Sut.Board.Place(WhiteKing, a1);
+        Sut.Board.Place(WhiteBishop, a2);
+        Sut.Board.Place(BlackRook, a8);
 
         var result = Sut.Pieces[a2].CheckMove(b3, Sut);
 

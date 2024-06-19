@@ -81,4 +81,18 @@ public readonly record struct BoardState
     {
         this[coordinate] = properties;
     }
+
+    public void Place(Properties pieceProperties, Coordinate at)
+    {
+        this[at] = pieceProperties;
+    }
+
+    public bool TryGetProperties(Coordinate coordinate, out Properties properties)
+    {
+        properties = this[coordinate];
+        return properties != Properties.None;
+    }
+    
+    public Coordinate KingCoordinate(Colour colour)
+        => Find(props => props.Type == PieceType.King && props.Colour == colour);
 }

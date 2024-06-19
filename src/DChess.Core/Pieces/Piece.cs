@@ -48,7 +48,7 @@ public abstract record Piece
             piece.Colour == movedPieceColour) return move.AsInvalidBecause(MoveValidity.CannotCaptureOwnPiece);
 
         if (this is not IIgnorePathCheck &&
-            move.CoordinatesAlongPath.Any(coordinate => gameState.BoardState.HasPieceAt(coordinate)))
+            move.CoordinatesAlongPath.Any(coordinate => gameState.Board.HasPieceAt(coordinate)))
             return move.AsInvalidBecause(MoveValidity.CannotJumpOverOtherPieces);
 
         if (MovingIntoCheck(movedPieceColour, move, gameState))
@@ -72,7 +72,7 @@ public abstract record Piece
         if (!val.IsValid)
             return false;
 
-        return move.HasPath && !move.IsBlocked(gameState.BoardState);
+        return move.HasPath && !move.IsBlocked(gameState.Board);
     }
 
     public IEnumerable<Move> LegalMoves(GameState gameState)
