@@ -1,12 +1,12 @@
 using System.Diagnostics.CodeAnalysis;
-using DChess.Core.Exceptions;
+using DChess.Core.Errors;
 using DChess.Core.Game;
 using static DChess.Core.Game.Colour;
 
 namespace DChess.Test.Unit;
 
 [SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
-public class GameTests: GameTestBase
+public class GameTests : GameTestBase
 {
     [Theory(DisplayName = "An invalid position should throw an exception")]
     [InlineData("a")]
@@ -107,26 +107,27 @@ public class GameTests: GameTestBase
 
     [Fact(DisplayName = "A piece can be added to the board")]
     public void a_piece_can_be_added_to_the_board()
-    {;
+    {
+        ;
         Sut.Board.Place(WhitePawn, b2);
         Sut.Board[b2].Should().Be(WhitePawn);
     }
-    
+
     [Fact(DisplayName = "A new invalidMoveHandler starts with white as the current player")]
     public void a_new_game_starts_with_white_as_the_current_player()
     {
         Sut.CurrentPlayer.Should().Be(White);
     }
-    
-    [Fact (DisplayName = "After taking a turn the current player changes")]
+
+    [Fact(DisplayName = "After taking a turn the current player changes")]
     public void after_taking_a_turn_the_current_player_changes()
     {
         Sut.Board.SetStandardLayout();
         Sut.Move(a2, a4);
         Sut.CurrentPlayer.Should().Be(Black);
     }
-    
-    [Fact (DisplayName = "After taking two turns the current player changes back to white")]
+
+    [Fact(DisplayName = "After taking two turns the current player changes back to white")]
     public void after_taking_two_turns_the_current_player_changes_back_to_white()
     {
         Sut.Board.SetStandardLayout();
@@ -134,14 +135,14 @@ public class GameTests: GameTestBase
         Sut.Move(a7, a6);
         Sut.CurrentPlayer.Should().Be(White);
     }
-    
-    [Fact (DisplayName = "A player can only move their own pieces")]
+
+    [Fact(DisplayName = "A player can only move their own pieces")]
     public void a_player_can_only_move_their_own_pieces()
     {
         Sut.Board.SetStandardLayout();
         Sut.Pieces[a7].CheckMove(a5, Sut).Validity.Should().Be(CannotMoveOpponentsPiece);
     }
-    
+
     [Fact(DisplayName = "Legal moves are detected")]
     public void legal_moves_are_detected()
     {

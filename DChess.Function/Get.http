@@ -1,0 +1,5 @@
+### GET request to example server
+GET http://localhost:7071/api/game?bitboard=4k3/8/8/8/8/8/8/4K3&name=Dan&colour=white&current-player=white&level=1&render=true&move=e2e4
+
+
+###

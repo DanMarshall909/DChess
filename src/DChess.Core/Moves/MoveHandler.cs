@@ -1,3 +1,4 @@
+using DChess.Core.Errors;
 using DChess.Core.Game;
 
 namespace DChess.Core.Moves;
@@ -17,7 +18,7 @@ public class MoveHandler(IErrorHandler errorHandler)
         game.Board.RemovePieceAt(move.From);
         game.Board.Place(updatedProperties, move.To);
 
-        game.CurrentPlayer = game.CurrentPlayer == White ? Black : White;
+        game.CurrentPlayer = game.CurrentPlayer.Invert();
     }
 
     // Gets the best move for the current player

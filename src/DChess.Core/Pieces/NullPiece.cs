@@ -1,3 +1,4 @@
+using DChess.Core.Errors;
 using DChess.Core.Game;
 using DChess.Core.Moves;
 

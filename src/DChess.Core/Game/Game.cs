@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using DChess.Core.Errors;
 using DChess.Core.Moves;
 using DChess.Core.Pieces;
 
@@ -56,6 +57,8 @@ public sealed class Game
         }
     }
 
+    public Move LastMove { get; set; }
+
     public IEnumerable<Piece> FriendlyPieces(Colour colour)
     {   
         // todo: optimise
@@ -90,7 +93,7 @@ public sealed class Game
         if (king != Coordinate.None)
             return OpposingPieces(colour).Any(piece => piece.CanMoveTo(king, this));
 
-        _errorHandler.HandleNoKingFound();
+        _errorHandler.HandleNoKingFound(colour);
         return false;
     }
 
@@ -124,5 +127,14 @@ public sealed class Game
     public void Move(Coordinate from, Coordinate to, bool force = false)
     {
         _moveHandler.Make(new(from, to), this, force);
+    }
+
+    public Task MakeBestMove(Colour colour, CancellationToken token = default)
+    {
+        var move = _moveHandler.GetBestMove(colour, this);
+        Move(move);
+        LastMove = move;
+        
+        return Task.CompletedTask;
     }
 }

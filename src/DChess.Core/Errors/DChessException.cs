@@ -1,4 +1,4 @@
-﻿namespace DChess.Core.Exceptions;
+﻿namespace DChess.Core.Errors;
 
 public class DChessException : Exception
 {

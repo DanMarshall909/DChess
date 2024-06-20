@@ -1,5 +1,5 @@
 using System.Text;
-using DChess.Core.Exceptions;
+using DChess.Core.Errors;
 using DChess.Core.Moves;
 
 namespace DChess.Core.Game;
@@ -7,7 +7,7 @@ namespace DChess.Core.Game;
 public record struct Coordinate
 {
     public static Coordinate None => new(255);
-
+    
     public static IEnumerable<Coordinate> All { get; } = new[]
     {
         a1, b1, c1, d1, e1, f1, g1, h1,
@@ -184,5 +184,16 @@ public record struct Coordinate
     public readonly void Deconstruct(out byte Value)
     {
         Value = this.Value;
+    }
+}
+
+public static class CoordinateExtenions
+{
+    public static Coordinate ToCoordinate(this string colourString)
+    {
+        char file = char.ToLower(colourString[0]);
+        byte rank = byte.Parse(colourString[1].ToString());
+        
+        return new Coordinate(file, rank);
     }
 }

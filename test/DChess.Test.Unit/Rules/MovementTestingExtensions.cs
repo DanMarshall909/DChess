@@ -1,4 +1,5 @@
-﻿using DChess.Core.Game;
+﻿using DChess.Core.Errors;
+using DChess.Core.Game;
 
 namespace DChess.Test.Unit.Rules;
 
