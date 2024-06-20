@@ -101,7 +101,7 @@ public class GameTests : GameTestBase
     {
         Sut.Board.SetStandardLayout();
 
-        Coordinate coordinate = new Coordinate(coordinateString);
+        var coordinate = new Coordinate(coordinateString);
         Sut.Board[coordinate].Should().BeEquivalentTo(new Properties(type, colour));
     }
 

@@ -23,7 +23,8 @@ public static class MovementTestingExtensions
     ///     the board and the coordinate of the properties being tested
     /// </param>
     public static void ShouldBeAbleToMoveTo(this Properties properties,
-        IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, IErrorHandler testErrorHandler, Action<Game, Coordinate>? setupBoard = null)
+        IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, IErrorHandler testErrorHandler,
+        Action<Game, Coordinate>? setupBoard = null)
         => AbleToMoveWhenOffsetBy(properties, offsetsFromCurrentPosition, true, testErrorHandler, setupBoard);
 
     /// <summary>
@@ -35,11 +36,13 @@ public static class MovementTestingExtensions
     /// <param name="errorHandler"></param>
     /// <param name="setupBoard"></param>
     public static void ShouldNotBeAbleToMoveTo(this Properties properties,
-        IReadOnlyCollection<MoveOffset> invalidOffsetsFromCurrentPosition, IErrorHandler errorHandler, Action<Game, Coordinate>? setupBoard = null)
+        IReadOnlyCollection<MoveOffset> invalidOffsetsFromCurrentPosition, IErrorHandler errorHandler,
+        Action<Game, Coordinate>? setupBoard = null)
         => AbleToMoveWhenOffsetBy(properties, invalidOffsetsFromCurrentPosition, false, errorHandler, setupBoard);
 
     public static void ShouldOnlyBeAbleToMoveTo(this Properties properties,
-        IReadOnlyCollection<MoveOffset> validOffsetsFromCurrentPosition, IErrorHandler errorHandler, Action<Game, Coordinate>? setupBoard = null)
+        IReadOnlyCollection<MoveOffset> validOffsetsFromCurrentPosition, IErrorHandler errorHandler,
+        Action<Game, Coordinate>? setupBoard = null)
     {
         properties.ShouldBeAbleToMoveTo(validOffsetsFromCurrentPosition, errorHandler, setupBoard);
         var invalidOffsetsFromCurrentPosition = validOffsetsFromCurrentPosition.Inverse().ToList().AsReadOnly();

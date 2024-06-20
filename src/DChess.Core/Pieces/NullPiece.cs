@@ -5,15 +5,15 @@ using DChess.Core.Moves;
 namespace DChess.Core.Pieces;
 
 /// <summary>
-/// Represents a non-existent piece.
+///     Represents a non-existent piece.
 /// </summary>
 public record NullPiece : Piece
 {
     public NullPiece(Arguments arguments) : base(arguments)
     {
     }
-    
-    public NullPiece(IErrorHandler errorHandler) 
+
+    public NullPiece(IErrorHandler errorHandler)
         : base(new Arguments(new Properties(PieceType.None, None), Coordinate.None))
     {
     }

@@ -98,7 +98,7 @@ DChess is a chess engine designed to be:
 ## Game Status
 
 - [X] Implement a system to keep track of the game status (e.g., ongoing, check, checkmate, stalemate).
-- [ ] Store state in a tree structure to allow for undoing moves and exploring possible future moves.  
+- [ ] Store state in a tree structure to allow for undoing moves and exploring possible future moves.
 - [ ] Implement a turn system to ensure that players alternate turns correctly.
 
 ## Allow the User to Move Pieces Using Algebraic Notation

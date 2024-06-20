@@ -2,7 +2,7 @@
 
 namespace DChess.Test.Unit.Rules;
 
-public class GeneralGameRuleTests: GameTestBase
+public class GeneralGameRuleTests : GameTestBase
 {
     [Fact(DisplayName = "A piece cannot take its own properties")]
     public void a_piece_cannot_take_its_own_piece()
@@ -18,4 +18,3 @@ public class GeneralGameRuleTests: GameTestBase
         result.IsValid.Should().BeFalse();
     }
 }
-

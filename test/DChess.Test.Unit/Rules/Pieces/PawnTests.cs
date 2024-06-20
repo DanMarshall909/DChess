@@ -45,5 +45,5 @@ public class PawnTests : GameTestBase
         Sut.Board[f8].Should().Be(WhiteQueen, "white pawns are promoted to queens");
         Sut.Move(f2, f1);
         Sut.Board[f1].Should().Be(BlackQueen, "black pawns are promoted to queens");
-        }
+    }
 }

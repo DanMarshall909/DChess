@@ -9,8 +9,5 @@ public readonly record struct MoveResult(Move Move, MoveValidity Validity)
     public override string ToString() =>
         IsValid ? $"Validity move {Move}" : $"Invalid move {Move}: {Validity.Message()}";
 
-    public static MoveResult InvalidMove(string noKingFound)
-    {
-        return new(new Move(), MoveValidity.InvalidMove);
-    }
+    public static MoveResult InvalidMove(string noKingFound) => new(new Move(), MoveValidity.InvalidMove);
 }

@@ -14,7 +14,7 @@ public class MoveValidityTests
             message.Should().NotBeNullOrWhiteSpace();
         }
     }
-    
+
     [Fact(DisplayName = "Message for move validity works as expected")]
     public void OkMessageIsOk()
     {

@@ -6,16 +6,21 @@ using DChess.Core.Pieces;
 namespace DChess.Core.Game;
 
 /// <summary>
-/// All the properties of a game at a specific point in play
+///     All the properties of a game at a specific point in play
 /// </summary>
 public sealed class Game
 {
-    private readonly MoveHandler _moveHandler;
-    private readonly IErrorHandler _errorHandler;
-    private readonly Board _board;
+    public enum GameStatus
+    {
+        InPlay,
+        Check,
+        Checkmate,
+        Stalemate
+    }
 
-    public Board Board => _board;
-    public Colour CurrentPlayer { get; set; } = White;
+    private readonly Board _board;
+    private readonly IErrorHandler _errorHandler;
+    private readonly MoveHandler _moveHandler;
 
     public Game(Board board, IErrorHandler errorHandler)
     {
@@ -24,20 +29,9 @@ public sealed class Game
         _board = Board.CloneOrEmptyIfNull(board);
     }
 
-    public bool HasLegalMoves(Colour colour) => GetLegalMoves(colour).Any();
+    public Board Board => _board;
+    public Colour CurrentPlayer { get; set; } = White;
 
-    public IEnumerable<Move> GetLegalMoves(Colour colour)
-    {
-        foreach (var piece in FriendlyPieces(colour))
-        foreach (var moveValidity in piece.MoveValidities(this))
-        {
-            if (moveValidity.result.IsValid)
-                yield return new Move(piece.Coordinate, moveValidity.to);
-        }
-    }
-
-    public override string ToString() => Pieces.Where(x => x.Key != Coordinate.None)?.ToString() ?? "Not initialised";
-    
     public ReadOnlyDictionary<Coordinate, Piece> Pieces
     {
         get
@@ -59,8 +53,20 @@ public sealed class Game
 
     public Move LastMove { get; set; }
 
+    public bool HasLegalMoves(Colour colour) => GetLegalMoves(colour).Any();
+
+    public IEnumerable<Move> GetLegalMoves(Colour colour)
+    {
+        foreach (var piece in FriendlyPieces(colour))
+        foreach (var moveValidity in piece.MoveValidities(this))
+            if (moveValidity.result.IsValid)
+                yield return new Move(piece.Coordinate, moveValidity.to);
+    }
+
+    public override string ToString() => Pieces.Where(x => x.Key != Coordinate.None)?.ToString() ?? "Not initialised";
+
     public IEnumerable<Piece> FriendlyPieces(Colour colour)
-    {   
+    {
         // todo: optimise
         for (var f = 0; f < 8; f++)
         for (var r = 0; r < 8; r++)
@@ -105,14 +111,6 @@ public sealed class Game
         return isInCheck ? Check : InPlay;
     }
 
-    public enum GameStatus
-    {
-        InPlay,
-        Check,
-        Checkmate,
-        Stalemate
-    }
-
     public Game AsClone() =>
         new(_board, _errorHandler)
         {
@@ -126,7 +124,7 @@ public sealed class Game
 
     public void Move(Coordinate from, Coordinate to, bool force = false)
     {
-        _moveHandler.Make(new(from, to), this, force);
+        _moveHandler.Make(new Move(from, to), this, force);
     }
 
     public Task MakeBestMove(Colour colour, CancellationToken token = default)
@@ -134,7 +132,7 @@ public sealed class Game
         var move = _moveHandler.GetBestMove(colour, this);
         Move(move);
         LastMove = move;
-        
+
         return Task.CompletedTask;
     }
 }

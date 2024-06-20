@@ -6,8 +6,8 @@ namespace DChess.Test.Unit;
 public class TestErrorHandler : IErrorHandler
 {
     public readonly List<MoveResult> InvalidMoves = new();
-    public bool NoKingFoundExceptionThrown { get; private set; } = false;
-    public bool NoPieceAtExceptionThrown { get; private set; } = false;
+    public bool NoKingFoundExceptionThrown { get; private set; }
+    public bool NoPieceAtExceptionThrown { get; private set; }
 
     public void HandleInvalidMove(MoveResult result)
     {

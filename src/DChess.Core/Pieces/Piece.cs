@@ -4,7 +4,7 @@ using DChess.Core.Moves;
 namespace DChess.Core.Pieces;
 
 /// <summary>
-/// Abstract class for handling piece specific logic. 
+///     Abstract class for handling piece specific logic.
 /// </summary>
 public abstract record Piece
 {
@@ -60,7 +60,7 @@ public abstract record Piece
     private bool MovingIntoCheck(Colour movedPieceColour, Move move, Game.Game game)
     {
         var newGameState = game.AsClone();
-        newGameState.Move(move, force: true);
+        newGameState.Move(move, true);
 
         return newGameState.IsInCheck(movedPieceColour);
     }

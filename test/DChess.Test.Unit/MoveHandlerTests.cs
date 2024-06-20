@@ -15,7 +15,7 @@ public class MoveHandlerTests : GameTestBase
         Sut.Board.Place(BlackBishop, d5);
 
         var moveToTakeBishop = new Move(c3, d5);
-        var score = MoveHandler.GetGameStateScore(moveToTakeBishop, Sut, Colour.White);
+        int score = MoveHandler.GetGameStateScore(moveToTakeBishop, Sut, Colour.White);
 
         score.Should().Be(3);
     }

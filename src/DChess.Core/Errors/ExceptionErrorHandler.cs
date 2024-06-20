@@ -17,6 +17,6 @@ public class ExceptionErrorHandler : IErrorHandler
 
     public void HandleNoPieceAt(Coordinate moveFrom)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 }

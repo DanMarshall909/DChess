@@ -6,13 +6,12 @@ namespace DChess.Test.Unit;
 
 public class PieceTests : GameTestBase
 {
-
     [Fact(DisplayName = "A piece can be moved")]
     public void a_piece_can_be_moved()
     {
         Sut.Board.Place(WhitePawn, a2);
         Sut.Board.Place(WhiteKing, f1);
-        Sut.Move(a2,b3);
+        Sut.Move(a2, b3);
 
         // ReSharper disable once HeapView.BoxingAllocation
         Sut.Pieces[b3].Properties.Should()
@@ -21,7 +20,7 @@ public class PieceTests : GameTestBase
         Sut.FriendlyPieces(White).Count().Should()
             .Be(2, "the properties should be moved, not duplicated");
     }
-    
+
     [Fact(DisplayName = "A queen can move backwards")]
     public void a_queen_can_move_backwards()
     {

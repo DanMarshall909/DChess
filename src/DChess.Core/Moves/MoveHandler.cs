@@ -36,7 +36,7 @@ public class MoveHandler(IErrorHandler errorHandler)
                 bestMove = legalMove;
             }
         }
-        
+
         return bestMove;
     }
 

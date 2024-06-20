@@ -16,6 +16,6 @@
         </None>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\src\DChess.Core\DChess.Core.csproj" />
+        <ProjectReference Include="..\src\DChess.Core\DChess.Core.csproj"/>
     </ItemGroup>
 </Project>

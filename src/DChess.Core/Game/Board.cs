@@ -4,37 +4,16 @@ public readonly record struct Board
 {
     private const int TotalCellsOnBoard = 8 * 8;
 
-    public static Board CloneOrEmptyIfNull(Board? board)
-        => board is not null
-            ? new Board(board!.Value.Data.Clone() as Properties[] ?? Array.Empty<Properties>())
-            : new Board();
-
     public Board()
         => Clear();
 
     private Board(Properties[] data)
         => Data = CloneOf(data);
 
-    private static Properties[] CloneOf(Properties[] properties)
-        => properties.Clone() as Properties[] ?? Array.Empty<Properties>();
-
     private Properties[] Data { get; } = new Properties[TotalCellsOnBoard];
 
     /// <summary>
-    ///   Converts a file and rank to a zero-indexed index for accessing the data array.
-    /// </summary>
-    /// <param name="file"></param>
-    /// <param name="rank"></param>
-    /// <returns></returns>
-    private static int ToIndex(int file, int rank) => file + (rank << 3);
-    public void Clear()
-    {
-        var rowSpan = new Span<Properties>(Data, 0, TotalCellsOnBoard);
-        rowSpan.Fill(Properties.None);
-    }
-
-    /// <summary>
-    ///  Gets or sets the properties at the specified coordinate.
+    ///     Gets or sets the properties at the specified coordinate.
     /// </summary>
     /// <param name="coordinate"></param>
     public Properties this[Coordinate coordinate]
@@ -44,7 +23,7 @@ public readonly record struct Board
     }
 
     /// <summary>
-    ///   Gets or sets the properties at the specified file and rank.
+    ///     Gets or sets the properties at the specified file and rank.
     /// </summary>
     /// <param name="file"></param>
     /// <param name="rank"></param>
@@ -55,7 +34,7 @@ public readonly record struct Board
     }
 
     /// <summary>
-    ///    Gets or sets the properties at the specified zero-indexed file and rank.
+    ///     Gets or sets the properties at the specified zero-indexed file and rank.
     /// </summary>
     /// <param name="fileIndex"></param>
     /// <param name="rankIndex"></param>
@@ -65,8 +44,30 @@ public readonly record struct Board
         set => Data[ToIndex(fileIndex, rankIndex)] = value;
     }
 
+    public static Board CloneOrEmptyIfNull(Board? board)
+        => board is not null
+            ? new Board(board!.Value.Data.Clone() as Properties[] ?? Array.Empty<Properties>())
+            : new Board();
+
+    private static Properties[] CloneOf(Properties[] properties)
+        => properties.Clone() as Properties[] ?? Array.Empty<Properties>();
+
     /// <summary>
-    ///  Finds the first coordinate that matches the predicate.
+    ///     Converts a file and rank to a zero-indexed index for accessing the data array.
+    /// </summary>
+    /// <param name="file"></param>
+    /// <param name="rank"></param>
+    /// <returns></returns>
+    private static int ToIndex(int file, int rank) => file + (rank << 3);
+
+    public void Clear()
+    {
+        var rowSpan = new Span<Properties>(Data, 0, TotalCellsOnBoard);
+        rowSpan.Fill(Properties.None);
+    }
+
+    /// <summary>
+    ///     Finds the first coordinate that matches the predicate.
     /// </summary>
     /// <param name="predicate"></param>
     /// <returns>The first coordinate that matches the predicate, or NullCoordinate if none match.</returns>
@@ -105,7 +106,7 @@ public readonly record struct Board
         properties = this[coordinate];
         return properties != Properties.None;
     }
-    
+
     public Coordinate KingCoordinate(Colour colour)
         => Find(props => props.Type == PieceType.King && props.Colour == colour);
 }
