@@ -10,33 +10,33 @@ namespace DChess.Core.Game;
 /// </summary>
 public class PiecePool
 {
-    private static readonly ConcurrentDictionary<Pieces.PiecePosition, Piece> Pool = new();
+    private static readonly ConcurrentDictionary<Pieces.PieceContext, Piece> Pool = new();
 
-    public static Piece PieceWithProperties(Pieces.PiecePosition piecePosition)
+    public static Piece PieceWithProperties(Pieces.PieceContext pieceContext)
     {
-        if (Pool.TryGetValue(piecePosition, out var piece))
+        if (Pool.TryGetValue(pieceContext, out var piece))
             return piece;
 
-        var (coordinate, properties) = piecePosition;
+        var (coordinate, properties) = pieceContext;
         
-        piece = CreatePiece(piecePosition);
-        Pool[piecePosition] = piece;
+        piece = CreatePiece(pieceContext);
+        Pool[pieceContext] = piece;
 
         return piece;
     }
 
-    private static Piece CreatePiece(PiecePosition piecePosition)
+    private static Piece CreatePiece(PieceContext pieceContext)
     {
-        var props = piecePosition.PieceAttributes;
+        var props = pieceContext.PieceAttributes;
         return props.Type switch
         {
-            PieceType.Pawn => new Pawn(piecePosition),
-            PieceType.Rook => new Rook(piecePosition),
-            PieceType.Knight => new Knight(piecePosition),
-            PieceType.Bishop => new Bishop(piecePosition),
-            PieceType.Queen => new Queen(piecePosition),
-            PieceType.King => new King(piecePosition),
-            PieceType.None => new NullPiece(piecePosition),
+            PieceType.Pawn => new Pawn(pieceContext),
+            PieceType.Rook => new Rook(pieceContext),
+            PieceType.Knight => new Knight(pieceContext),
+            PieceType.Bishop => new Bishop(pieceContext),
+            PieceType.Queen => new Queen(pieceContext),
+            PieceType.King => new King(pieceContext),
+            PieceType.None => new NullPiece(pieceContext),
             _ => throw new ArgumentOutOfRangeException(nameof(props), props, null)
         };
     }

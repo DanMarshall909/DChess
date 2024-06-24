@@ -8,10 +8,10 @@ namespace DChess.Core.Pieces;
 /// </summary>
 public abstract record Piece
 {
-    protected Piece(PiecePosition piecePosition)
+    protected Piece(PieceContext pieceContext)
     {
-        PieceAttributes = piecePosition.PieceAttributes;
-        Coordinate = piecePosition.Coordinate;
+        PieceAttributes = pieceContext.PieceAttributes;
+        Coordinate = pieceContext.Coordinate;
     }
 
     public abstract string PieceName { get; }
@@ -95,8 +95,8 @@ public abstract record Piece
     }
 }
 
-public record struct PiecePosition(PieceAttributes PieceAttributes, Coordinate Coordinate)
+public record struct PieceContext(PieceAttributes PieceAttributes, Coordinate Coordinate)
 {
-    public PiecePosition(Coordinate Coordinate, PieceAttributes PieceAttributes) : this(PieceAttributes, Coordinate) { }
+    public PieceContext(Coordinate Coordinate, PieceAttributes PieceAttributes) : this(PieceAttributes, Coordinate) { }
     
 };

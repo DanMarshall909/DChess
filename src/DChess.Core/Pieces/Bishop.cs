@@ -6,7 +6,7 @@ namespace DChess.Core.Pieces;
 
 internal record Bishop : Piece
 {
-    public Bishop(PiecePosition piecePosition) : base(piecePosition)
+    public Bishop(PieceContext pieceContext) : base(pieceContext)
     {
     }
 

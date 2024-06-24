@@ -6,7 +6,7 @@ namespace DChess.Core.Pieces;
 
 internal record King : Piece, IIgnorePathCheck
 {
-    public King(PiecePosition piecePosition) : base(piecePosition)
+    public King(PieceContext pieceContext) : base(pieceContext)
     {
     }
 
