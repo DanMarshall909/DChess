@@ -1,12 +1,15 @@
 ﻿namespace DChess.Core.Game;
 
-public enum PieceType
+public static class ChessPiece
 {
-    None,
-    Pawn,
-    Rook,
-    Knight,
-    Bishop,
-    Queen,
-    King
+    public enum Type
+    {
+        None,
+        Pawn,
+        Rook,
+        Knight,
+        Bishop,
+        Queen,
+        King
+    }
 }

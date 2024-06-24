@@ -4,7 +4,7 @@ using static DChess.Core.Moves.MoveValidity;
 
 namespace DChess.Core.Pieces;
 
-internal record Knight : Piece, IIgnorePathCheck
+internal record Knight : PieceFlyweight, IIgnorePathCheck
 {
     public Knight(PieceContext pieceContext) : base(pieceContext)
     {

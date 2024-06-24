@@ -4,7 +4,7 @@ using static DChess.Core.Moves.MoveValidity;
 
 namespace DChess.Core.Pieces;
 
-public record Pawn : Piece, IIgnorePathCheck
+public record Pawn : PieceFlyweight, IIgnorePathCheck
 {
     public Pawn(PieceContext pieceContext)
         : base(pieceContext)

@@ -1,6 +1,6 @@
 ﻿namespace DChess.Core.Moves;
 
-// Marker interface to indicate that A piece should ignore path checks
+// Marker interface to indicate that A pieceFlyweight should ignore path checks
 internal interface IIgnorePathCheck
 {
 }

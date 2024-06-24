@@ -1,14 +1,14 @@
 namespace DChess.Core.Game;
 
-public static class PieceTypeExtensions
+public static class ChessPieceTypeExtensions
 {
-    public static int Value(this PieceType pieceType) => pieceType switch
+    public static int Value(this ChessPiece.Type pieceType) => pieceType switch
     {
-        PieceType.Pawn => 1,
-        PieceType.Knight => 3,
-        PieceType.Bishop => 3,
-        PieceType.Rook => 5,
-        PieceType.Queen => 9,
+        ChessPiece.Type.Pawn => 1,
+        ChessPiece.Type.Knight => 3,
+        ChessPiece.Type.Bishop => 3,
+        ChessPiece.Type.Rook => 5,
+        ChessPiece.Type.Queen => 9,
         _ => 0
     };
 }

@@ -32,11 +32,11 @@ public sealed class Game
     public Board Board => _board;
     public Colour CurrentPlayer { get; set; } = White;
 
-    public ReadOnlyDictionary<Coordinate, Piece> Pieces
+    public ReadOnlyDictionary<Coordinate, PieceFlyweight> Pieces
     {
         get
         {
-            var pieces = new Dictionary<Coordinate, Piece>();
+            var pieces = new Dictionary<Coordinate, PieceFlyweight>();
             for (var f = 0; f < 8; f++)
             for (var r = 0; r < 8; r++)
             {
@@ -44,10 +44,10 @@ public sealed class Game
                 if (props == PieceAttributes.None) continue;
                 var coordinateFromZeroOffset = Coordinate.FromZeroOffset(f, r);
                 pieces.Add(coordinateFromZeroOffset
-                    , PiecePool.PieceWithProperties(new(coordinateFromZeroOffset, props)));
+                    , PieceFlyweightPool.PieceWithProperties(new(coordinateFromZeroOffset, props)));
             }
 
-            return new ReadOnlyDictionary<Coordinate, Piece>(pieces);
+            return new ReadOnlyDictionary<Coordinate, PieceFlyweight>(pieces);
         }
     }
 
@@ -61,7 +61,7 @@ public sealed class Game
 
     public override string ToString() => Pieces.Where(x => x.Key != Coordinate.None)?.ToString() ?? "Not initialised";
 
-    public IEnumerable<Piece> FriendlyPieces(Colour colour)
+    public IEnumerable<PieceFlyweight> FriendlyPieces(Colour colour)
     {
         // todo: optimise
         for (var f = 0; f < 8; f++)
@@ -69,23 +69,23 @@ public sealed class Game
         {
             var props = _board[f, r];
             if (props.Colour == colour)
-                yield return PiecePool.PieceWithProperties(new(Coordinate.FromZeroOffset(f, r), props));
+                yield return PieceFlyweightPool.PieceWithProperties(new(Coordinate.FromZeroOffset(f, r), props));
         }
     }
 
-    public IEnumerable<Piece> OpposingPieces(Colour colour)
+    public IEnumerable<PieceFlyweight> OpposingPieces(Colour colour)
         => FriendlyPieces(colour.Invert());
 
-    public bool TryGetPiece(Coordinate at, out Piece piece)
+    public bool TryGetPiece(Coordinate at, out PieceFlyweight pieceFlyweight)
     {
         var p = _board.TryGetProperties(at, out var properties) ? properties : PieceAttributes.None;
         if (p == PieceAttributes.None)
         {
-            piece = PiecePool.PieceWithProperties(new(at, properties));
+            pieceFlyweight = PieceFlyweightPool.PieceWithProperties(new(at, properties));
             return false;
         }
 
-        piece = PiecePool.PieceWithProperties(new(at, properties));
+        pieceFlyweight = PieceFlyweightPool.PieceWithProperties(new(at, properties));
         return true;
     }
 

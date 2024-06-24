@@ -6,9 +6,9 @@ namespace DChess.Core.Pieces;
 /// <summary>
 ///     Abstract class for handling piece specific logic.
 /// </summary>
-public abstract record Piece
+public abstract record PieceFlyweight
 {
-    protected Piece(PieceContext pieceContext)
+    protected PieceFlyweight(PieceContext pieceContext)
     {
         PieceAttributes = pieceContext.PieceAttributes;
         Coordinate = pieceContext.Coordinate;
@@ -18,7 +18,7 @@ public abstract record Piece
     public PieceAttributes PieceAttributes { get; init; }
     public Coordinate Coordinate { get; init; }
     public Colour Colour => PieceAttributes.Colour;
-    public PieceType Type => PieceAttributes.Type;
+    public ChessPiece.Type Type => PieceAttributes.Type;
 
     public MoveResult CheckMove(Coordinate to, Game.Game game)
     {

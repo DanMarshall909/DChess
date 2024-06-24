@@ -4,7 +4,7 @@ using static DChess.Core.Moves.MoveValidity;
 
 namespace DChess.Core.Pieces;
 
-internal record Rook : Piece
+internal record Rook : PieceFlyweight
 {
     public Rook(PieceContext pieceContext) : base(pieceContext)
     {

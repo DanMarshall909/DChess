@@ -8,11 +8,11 @@ namespace DChess.Core.Game;
 ///     This allows us to use structs to store the pieceAttributes internally, but expose classes
 ///     to the outside world to allow for polymorphism.
 /// </summary>
-public class PiecePool
+public class PieceFlyweightPool
 {
-    private static readonly ConcurrentDictionary<Pieces.PieceContext, Piece> Pool = new();
+    private static readonly ConcurrentDictionary<Pieces.PieceContext, PieceFlyweight> Pool = new();
 
-    public static Piece PieceWithProperties(Pieces.PieceContext pieceContext)
+    public static PieceFlyweight PieceWithProperties(Pieces.PieceContext pieceContext)
     {
         if (Pool.TryGetValue(pieceContext, out var piece))
             return piece;
@@ -25,18 +25,18 @@ public class PiecePool
         return piece;
     }
 
-    private static Piece CreatePiece(PieceContext pieceContext)
+    private static PieceFlyweight CreatePiece(PieceContext pieceContext)
     {
         var props = pieceContext.PieceAttributes;
         return props.Type switch
         {
-            PieceType.Pawn => new Pawn(pieceContext),
-            PieceType.Rook => new Rook(pieceContext),
-            PieceType.Knight => new Knight(pieceContext),
-            PieceType.Bishop => new Bishop(pieceContext),
-            PieceType.Queen => new Queen(pieceContext),
-            PieceType.King => new King(pieceContext),
-            PieceType.None => new NullPiece(pieceContext),
+            ChessPiece.Type.Pawn => new Pawn(pieceContext),
+            ChessPiece.Type.Rook => new Rook(pieceContext),
+            ChessPiece.Type.Knight => new Knight(pieceContext),
+            ChessPiece.Type.Bishop => new Bishop(pieceContext),
+            ChessPiece.Type.Queen => new Queen(pieceContext),
+            ChessPiece.Type.King => new King(pieceContext),
+            ChessPiece.Type.None => new NullPieceFlyweight(pieceContext),
             _ => throw new ArgumentOutOfRangeException(nameof(props), props, null)
         };
     }

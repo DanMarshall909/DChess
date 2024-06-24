@@ -7,7 +7,7 @@ public class GeneralGameRuleTests : GameTestBase
     [Fact(DisplayName = "A piece cannot take its own pieceAttributes")]
     public void a_piece_cannot_take_its_own_piece()
     {
-        var whitePawn = new PieceAttributes(PieceType.Pawn, Colour.White);
+        var whitePawn = new PieceAttributes(ChessPiece.Type.Pawn, Colour.White);
 
         Sut.Board.Place(whitePawn, a1);
         Sut.Board.Place(whitePawn, b2);

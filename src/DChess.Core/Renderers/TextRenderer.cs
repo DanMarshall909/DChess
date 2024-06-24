@@ -48,22 +48,22 @@ public class TextRenderer : IBoardRenderer
         {
             Black => pieceAttributes.Type switch
             {
-                PieceType.Pawn => '♙',
-                PieceType.Rook => '♖',
-                PieceType.Knight => '♘',
-                PieceType.Bishop => '♗',
-                PieceType.Queen => '♕',
-                PieceType.King => '♔',
+                ChessPiece.Type.Pawn => '♙',
+                ChessPiece.Type.Rook => '♖',
+                ChessPiece.Type.Knight => '♘',
+                ChessPiece.Type.Bishop => '♗',
+                ChessPiece.Type.Queen => '♕',
+                ChessPiece.Type.King => '♔',
                 _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceAttributes.Type, "Unknown pieceAttributes type")
             },
             _ => pieceAttributes.Type switch
             {
-                PieceType.Pawn => '♟',
-                PieceType.Rook => '♜',
-                PieceType.Knight => '♞',
-                PieceType.Bishop => '♝',
-                PieceType.Queen => '♛',
-                PieceType.King => '♚',
+                ChessPiece.Type.Pawn => '♟',
+                ChessPiece.Type.Rook => '♜',
+                ChessPiece.Type.Knight => '♞',
+                ChessPiece.Type.Bishop => '♝',
+                ChessPiece.Type.Queen => '♛',
+                ChessPiece.Type.King => '♚',
                 _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceAttributes.Type, "Unknown pieceAttributes type")
             }
         };

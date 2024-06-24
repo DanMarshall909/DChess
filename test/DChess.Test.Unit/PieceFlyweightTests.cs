@@ -4,7 +4,7 @@ using static DChess.Core.Game.Colour;
 
 namespace DChess.Test.Unit;
 
-public class PieceTests : GameTestBase
+public class PieceFlyweightTests : GameTestBase
 {
     [Fact(DisplayName = "A piece can be moved")]
     public void a_piece_can_be_moved()
@@ -43,7 +43,7 @@ public class PieceTests : GameTestBase
     public void invalid_move_should_not_be_allowed()
     {
         Sut.Board.Place(WhiteKing, f1);
-        Sut.Board.Place(new PieceAttributes(PieceType.Pawn, White), a1);
+        Sut.Board.Place(new PieceAttributes(ChessPiece.Type.Pawn, White), a1);
         var piece = Sut.Pieces[a1];
 
         piece.CheckMove(a6, Sut).IsValid.Should().BeFalse();

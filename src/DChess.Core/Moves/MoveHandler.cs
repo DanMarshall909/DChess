@@ -17,9 +17,9 @@ public class MoveHandler(IErrorHandler errorHandler)
         if (!game.Board.TryGetProperties(move.From, out var props))
             errorHandler.HandleInvalidMove(new MoveResult(move, MoveValidity.FromCellDoesNoteContainPiece));
 
-        bool pawnIsPromoted = props.Type == PieceType.Pawn && (move.To.Rank == 1 || move.To.Rank == 8);
+        bool pawnIsPromoted = props.Type == ChessPiece.Type.Pawn && (move.To.Rank == 1 || move.To.Rank == 8);
         var updatedProperties = pawnIsPromoted
-            ? new PieceAttributes(PieceType.Queen, props.Colour)
+            ? new PieceAttributes(ChessPiece.Type.Queen, props.Colour)
             : props;
 
         game.Board.RemovePieceAt(move.From);

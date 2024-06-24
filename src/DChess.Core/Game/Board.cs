@@ -108,5 +108,5 @@ public readonly record struct Board
     }
 
     public Coordinate KingCoordinate(Colour colour)
-        => Find(props => props.Type == PieceType.King && props.Colour == colour);
+        => Find(props => props.Type == ChessPiece.Type.King && props.Colour == colour);
 }
