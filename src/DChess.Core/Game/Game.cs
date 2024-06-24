@@ -53,15 +53,11 @@ public sealed class Game
 
     public Move LastMove { get; set; }
 
-    public bool HasLegalMoves(Colour colour) => GetLegalMoves(colour).Any();
-
-    public IEnumerable<Move> GetLegalMoves(Colour colour)
-    {
-        foreach (var piece in FriendlyPieces(colour))
-        foreach (var moveValidity in piece.MoveValidities(this))
-            if (moveValidity.result.IsValid)
-                yield return new Move(piece.Coordinate, moveValidity.to);
-    }
+    public Game AsClone() =>
+        new(_board, _errorHandler)
+        {
+            CurrentPlayer = CurrentPlayer
+        };
 
     public override string ToString() => Pieces.Where(x => x.Key != Coordinate.None)?.ToString() ?? "Not initialised";
 
@@ -106,23 +102,17 @@ public sealed class Game
     public GameStatus Status(Colour colour)
     {
         bool isInCheck = IsInCheck(colour);
-        if (!HasLegalMoves(colour)) return isInCheck ? Checkmate : Stalemate;
+        if (!MoveHandler.HasLegalMoves(colour, this)) return isInCheck ? Checkmate : Stalemate;
 
         return isInCheck ? Check : InPlay;
     }
 
-    public Game AsClone() =>
-        new(_board, _errorHandler)
-        {
-            CurrentPlayer = CurrentPlayer
-        };
-
-    public void Move(Move move, bool force = false)
+    public void Move(Move move)
     {
         _moveHandler.Make(move, this);
     }
 
-    public void Move(Coordinate from, Coordinate to, bool force = false)
+    public void Move(Coordinate from, Coordinate to)
     {
         _moveHandler.Make(new Move(from, to), this);
     }

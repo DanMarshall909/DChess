@@ -149,7 +149,7 @@ public class GameTests : GameTestBase
         Sut.Board.Place(WhiteKing, f1);
         Sut.Board.Place(BlackQueen, a2);
         Sut.Board.Place(BlackKing, f8);
-        Sut.HasLegalMoves(White).Should().BeTrue("White king can move to e1 or g1");
+        MoveHandler.HasLegalMoves(White, Sut).Should().BeTrue("White king can move to e1 or g1");
     }
 
     [Fact(DisplayName = "Game state reflects king in check")]

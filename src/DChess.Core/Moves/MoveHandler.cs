@@ -25,6 +25,16 @@ public class MoveHandler(IErrorHandler errorHandler)
         game.Board.RemovePieceAt(move.From);
         game.Board.Place(updatedProperties, move.To);
     }
+    
+    public static bool HasLegalMoves(Colour colour, Game.Game game) => GetLegalMoves(colour, game).Any();
+
+    public static IEnumerable<Move> GetLegalMoves(Colour colour, Game.Game game)
+    {
+        foreach (var piece in game.FriendlyPieces(colour))
+        foreach (var moveValidity in piece.MoveValidities(game))
+            if (moveValidity.result.IsValid)
+                yield return new Move(piece.Coordinate, moveValidity.to);
+    }
 
     // Gets the best move for the current player
     public Move GetBestMove(Game.Game game, Colour playerColour, int depth = 1)
@@ -33,7 +43,7 @@ public class MoveHandler(IErrorHandler errorHandler)
         var bestScore = int.MinValue;
 
         var oppositeColour = playerColour.Invert();
-        foreach (var move in game.GetLegalMoves(playerColour))
+        foreach (var move in GetLegalMoves(playerColour, game))
         {
             var clonedGame = game.AsClone();
             clonedGame.Move(move);

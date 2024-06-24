@@ -60,7 +60,7 @@ public abstract record Piece
     private bool MovingIntoCheck(Colour movedPieceColour, Move move, Game.Game game)
     {
         var newGameState = game.AsClone();
-        newGameState.Move(move, true);
+        newGameState.Move(move);
 
         return newGameState.IsInCheck(movedPieceColour);
     }
