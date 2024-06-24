@@ -1,6 +1,4 @@
-﻿using DChess.Core.Moves;
-
-namespace DChess.Core.Errors;
+﻿namespace DChess.Core.Errors;
 
 public class InvalidMoveException(Move move, string? message = null) : DChessException
 {

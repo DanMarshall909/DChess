@@ -9,7 +9,7 @@ public class PieceFlyweightPoolTests : GameTestBase
     [Fact(DisplayName = "A piece can be retrieved from the pool")]
     public void a_piece_can_be_retrieved_from_the_pool()
     {
-        var chessPiece = new PieceAttributes(ChessPiece.Type.Pawn, White);
+        var chessPiece = new PieceAttributes(Piece.Kind.Pawn, White);
 
         var piece = PieceFlyweightPool.PieceWithProperties(new(a1, chessPiece));
         var secondPieceWithSameDefinition = PieceFlyweightPool.PieceWithProperties(new(a1, chessPiece));

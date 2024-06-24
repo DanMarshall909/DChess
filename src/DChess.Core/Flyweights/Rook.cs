@@ -1,8 +1,4 @@
-﻿using DChess.Core.Game;
-using DChess.Core.Moves;
-using static DChess.Core.Moves.MoveValidity;
-
-namespace DChess.Core.Pieces;
+﻿namespace DChess.Core.Pieces;
 
 internal record Rook : PieceFlyweight
 {

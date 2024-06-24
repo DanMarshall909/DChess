@@ -1,5 +1,3 @@
-using DChess.Core.Game;
-
 namespace DChess.Core.Moves;
 
 public static class MoveExtensions

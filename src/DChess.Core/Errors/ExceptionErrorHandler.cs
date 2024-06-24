@@ -1,6 +1,3 @@
-using DChess.Core.Game;
-using DChess.Core.Moves;
-
 namespace DChess.Core.Errors;
 
 public class ExceptionErrorHandler : IErrorHandler

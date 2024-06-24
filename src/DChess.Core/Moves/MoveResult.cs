@@ -1,6 +1,4 @@
-﻿using static DChess.Core.Moves.MoveValidity;
-
-namespace DChess.Core.Moves;
+﻿namespace DChess.Core.Moves;
 
 public readonly record struct MoveResult(Move Move, MoveValidity Validity)
 {

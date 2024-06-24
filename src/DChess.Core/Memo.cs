@@ -1,6 +1,4 @@
-﻿using System.Collections.Concurrent;
-
-namespace DChess.Core;
+﻿namespace DChess.Core;
 
 /// <summary>
 ///     Utility class to memoize a function that takes in

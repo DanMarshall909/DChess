@@ -1,7 +1,4 @@
-﻿using System.Text;
-using DChess.Core.Game;
-
-namespace DChess.Core.Renderers;
+﻿namespace DChess.Core.Renderers;
 
 public class TextRenderer : IBoardRenderer
 {
@@ -46,25 +43,25 @@ public class TextRenderer : IBoardRenderer
     {
         return pieceAttributes.Colour switch
         {
-            Black => pieceAttributes.Type switch
+            Black => pieceAttributes.Kind switch
             {
-                ChessPiece.Type.Pawn => '♙',
-                ChessPiece.Type.Rook => '♖',
-                ChessPiece.Type.Knight => '♘',
-                ChessPiece.Type.Bishop => '♗',
-                ChessPiece.Type.Queen => '♕',
-                ChessPiece.Type.King => '♔',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceAttributes.Type, "Unknown pieceAttributes type")
+                Piece.Kind.Pawn => '♙',
+                Piece.Kind.Rook => '♖',
+                Piece.Kind.Knight => '♘',
+                Piece.Kind.Bishop => '♗',
+                Piece.Kind.Queen => '♕',
+                Piece.Kind.King => '♔',
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceAttributes.Kind, "Unknown pieceAttributes kind")
             },
-            _ => pieceAttributes.Type switch
+            _ => pieceAttributes.Kind switch
             {
-                ChessPiece.Type.Pawn => '♟',
-                ChessPiece.Type.Rook => '♜',
-                ChessPiece.Type.Knight => '♞',
-                ChessPiece.Type.Bishop => '♝',
-                ChessPiece.Type.Queen => '♛',
-                ChessPiece.Type.King => '♚',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceAttributes.Type, "Unknown pieceAttributes type")
+                Piece.Kind.Pawn => '♟',
+                Piece.Kind.Rook => '♜',
+                Piece.Kind.Knight => '♞',
+                Piece.Kind.Bishop => '♝',
+                Piece.Kind.Queen => '♛',
+                Piece.Kind.King => '♚',
+                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceAttributes.Kind, "Unknown pieceAttributes kind")
             }
         };
     }

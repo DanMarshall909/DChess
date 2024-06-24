@@ -1,5 +1,5 @@
 using DChess.Core.Game;
-using static DChess.Core.Game.ChessPiece.Type;
+using static DChess.Core.Game.Piece.Kind;
 
 namespace DChess.Test.Unit;
 

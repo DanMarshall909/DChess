@@ -1,7 +1,3 @@
-using DChess.Core.Errors;
-using DChess.Core.Game;
-using static DChess.Core.Moves.Move;
-
 namespace DChess.Core.Moves;
 
 public class MoveHandler(IErrorHandler errorHandler)
@@ -17,9 +13,9 @@ public class MoveHandler(IErrorHandler errorHandler)
         if (!game.Board.TryGetProperties(move.From, out var props))
             errorHandler.HandleInvalidMove(new MoveResult(move, MoveValidity.FromCellDoesNoteContainPiece));
 
-        bool pawnIsPromoted = props.Type == ChessPiece.Type.Pawn && (move.To.Rank == 1 || move.To.Rank == 8);
+        bool pawnIsPromoted = props.Kind == Piece.Kind.Pawn && (move.To.Rank == 1 || move.To.Rank == 8);
         var updatedProperties = pawnIsPromoted
-            ? new PieceAttributes(ChessPiece.Type.Queen, props.Colour)
+            ? new PieceAttributes(Piece.Kind.Queen, props.Colour)
             : props;
 
         game.Board.RemovePieceAt(move.From);
@@ -91,9 +87,9 @@ public class MoveHandler(IErrorHandler errorHandler)
         foreach (var (_, piece) in clonedGame.Pieces)
         {
             if (piece.PieceAttributes.Colour == playerColour)
-                result += piece.Type.Value();
+                result += piece.Kind.Value();
             else if (piece.PieceAttributes.Colour == opponentColour)
-                result -= piece.Type.Value();
+                result -= piece.Kind.Value();
         }
 
         return result;

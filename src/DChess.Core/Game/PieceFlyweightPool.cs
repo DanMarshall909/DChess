@@ -1,7 +1,4 @@
-﻿using System.Collections.Concurrent;
-using DChess.Core.Pieces;
-
-namespace DChess.Core.Game;
+﻿namespace DChess.Core.Game;
 
 /// <summary>
 ///     A pool of pieces that can be reused to reduce memory allocation / GC pressure
@@ -28,15 +25,15 @@ public class PieceFlyweightPool
     private static PieceFlyweight CreatePiece(PieceContext pieceContext)
     {
         var props = pieceContext.PieceAttributes;
-        return props.Type switch
+        return props.Kind switch
         {
-            ChessPiece.Type.Pawn => new Pawn(pieceContext),
-            ChessPiece.Type.Rook => new Rook(pieceContext),
-            ChessPiece.Type.Knight => new Knight(pieceContext),
-            ChessPiece.Type.Bishop => new Bishop(pieceContext),
-            ChessPiece.Type.Queen => new Queen(pieceContext),
-            ChessPiece.Type.King => new King(pieceContext),
-            ChessPiece.Type.None => new NullPieceFlyweight(pieceContext),
+            Piece.Kind.Pawn => new Pawn(pieceContext),
+            Piece.Kind.Rook => new Rook(pieceContext),
+            Piece.Kind.Knight => new Knight(pieceContext),
+            Piece.Kind.Bishop => new Bishop(pieceContext),
+            Piece.Kind.Queen => new Queen(pieceContext),
+            Piece.Kind.King => new King(pieceContext),
+            Piece.Kind.None => new NullPieceFlyweight(pieceContext),
             _ => throw new ArgumentOutOfRangeException(nameof(props), props, null)
         };
     }

@@ -1,6 +1,3 @@
-using DChess.Core.Game;
-using DChess.Core.Renderers;
-
 namespace DChess.Core;
 
 public static class GameStateExtensions

@@ -1,8 +1,3 @@
-using System.Collections.ObjectModel;
-using DChess.Core.Errors;
-using DChess.Core.Moves;
-using DChess.Core.Pieces;
-
 namespace DChess.Core.Game;
 
 /// <summary>

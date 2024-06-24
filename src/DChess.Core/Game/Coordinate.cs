@@ -1,7 +1,3 @@
-using System.Text;
-using DChess.Core.Errors;
-using DChess.Core.Moves;
-
 namespace DChess.Core.Game;
 
 public record struct Coordinate

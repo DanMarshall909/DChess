@@ -1,7 +1,3 @@
-using DChess.Core.Errors;
-using DChess.Core.Game;
-using DChess.Core.Moves;
-
 namespace DChess.Core.Pieces;
 
 /// <summary>
@@ -14,7 +10,7 @@ public record NullPieceFlyweight : PieceFlyweight
     }
 
     public NullPieceFlyweight(IErrorHandler errorHandler)
-        : base(new PieceContext(new PieceAttributes(ChessPiece.Type.None, None), Coordinate.None))
+        : base(new PieceContext(new PieceAttributes(Piece.Kind.None, None), Coordinate.None))
     {
     }
 

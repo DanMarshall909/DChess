@@ -1,6 +1,3 @@
-using DChess.Core.Game;
-using DChess.Core.Moves;
-
 namespace DChess.Core.Pieces;
 
 /// <summary>
@@ -18,7 +15,7 @@ public abstract record PieceFlyweight
     public PieceAttributes PieceAttributes { get; init; }
     public Coordinate Coordinate { get; init; }
     public Colour Colour => PieceAttributes.Colour;
-    public ChessPiece.Type Type => PieceAttributes.Type;
+    public Piece.Kind Kind => PieceAttributes.Kind;
 
     public MoveResult CheckMove(Coordinate to, Game.Game game)
     {
