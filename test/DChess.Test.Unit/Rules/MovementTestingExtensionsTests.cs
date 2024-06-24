@@ -1,3 +1,5 @@
+using DChess.Core.Game;
+
 namespace DChess.Test.Unit.Rules;
 
 public class MovementTestingExtensionsTests
@@ -42,5 +44,26 @@ public class MovementTestingExtensionsTests
             { new(1, 1), new(-1, -1), new(-7, -7), new(7, -7), new(7, 7), new(-7, 7) });
         inverse.Should().NotContain(new MoveOffset[]
             { new(-8, -8), new(8, -8), new(8, 8), new(-8, 8) });
+    }
+    
+    [Fact(DisplayName = "A text board can be converted to a board")]
+    public void a_text_board_can_be_converted_to_a_board()
+    {
+        var text = @"
+         abcdefgh
+        8♖♘♗♕♔♗♘♖
+        7♙♙♙♙♙♙♙♙
+        6█░█░█░█░
+        5░█░█░█░█
+        4█░█░█░█░
+        3░█░█░█░█
+        2♟♟♟♟♟♟♟♟
+        1♜♞♝♛♚♝♞♜
+        ";
+        var board = BoardExtensions.FromText(text);
+        board[a1].Should().Be(PieceAttributes.BlackRook);
+        board[h8].Should().Be(PieceAttributes.WhiteRook);
+        board[e1].Should().Be(PieceAttributes.BlackKing);
+        board[e8].Should().Be(PieceAttributes.WhiteKing);
     }
 }

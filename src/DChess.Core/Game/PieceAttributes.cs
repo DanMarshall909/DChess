@@ -20,19 +20,31 @@ public readonly struct PieceAttributes(Kind kind, Colour colour) : IEquatable<Pi
 
     public static readonly Dictionary<PieceAttributes, char> CharByAttributes = new()
     {
-        { new PieceAttributes(Kind.Pawn, White), '♟' },
-        { new PieceAttributes(Kind.Rook, White), '♜' },
-        { new PieceAttributes(Kind.Knight, White), '♞' },
-        { new PieceAttributes(Kind.Bishop, White), '♝' },
-        { new PieceAttributes(Kind.Queen, White), '♛' },
-        { new PieceAttributes(Kind.King, White), '♚' },
-        { new PieceAttributes(Kind.Pawn, Black), '♙' },
-        { new PieceAttributes(Kind.Rook, Black), '♖' },
-        { new PieceAttributes(Kind.Knight, Black), '♘' },
-        { new PieceAttributes(Kind.Bishop, Black), '♗' },
-        { new PieceAttributes(Kind.Queen, Black), '♕' },
-        { new PieceAttributes(Kind.King, Black), '♔' }
+        { WhitePawn, '♟' },
+        { WhiteRook, '♜' },
+        { WhiteKnight, '♞' },
+        { WhiteBishop, '♝' },
+        { WhiteQueen, '♛' },
+        { WhiteKing, '♚' },
+        { BlackPawn, '♙' },
+        { BlackRook, '♖' },
+        { BlackKnight, '♘' },
+        { BlackBishop, '♗' },
+        { BlackQueen, '♕' },
+        { BlackKing, '♔' }
     };
+
+    public static PieceAttributes WhiteRook => new(Kind.Rook, White);
+    public static PieceAttributes WhiteKnight => new(Kind.Knight, White);
+    public static PieceAttributes WhiteBishop => new(Kind.Bishop, White);
+    public static PieceAttributes WhiteQueen => new(Kind.Queen, White);
+    public static PieceAttributes WhiteKing => new(Kind.King, White);
+    public static PieceAttributes BlackPawn => new(Kind.Pawn, Black);
+    public static PieceAttributes BlackRook => new(Kind.Rook, Black);
+    public static PieceAttributes BlackKnight => new(Kind.Knight, Black);
+    public static PieceAttributes BlackBishop => new(Kind.Bishop, Black);
+    public static PieceAttributes BlackQueen => new(Kind.Queen, Black);
+    public static PieceAttributes BlackKing => new(Kind.King, Black);
 
     public static readonly Dictionary<char, PieceAttributes> AttributesByChar =
         CharByAttributes.ToDictionary(x => x.Value, x => x.Key);
