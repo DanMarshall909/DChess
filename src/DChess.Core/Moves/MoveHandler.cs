@@ -19,7 +19,7 @@ public class MoveHandler(IErrorHandler errorHandler)
 
         bool pawnIsPromoted = props.Type == PieceType.Pawn && (move.To.Rank == 1 || move.To.Rank == 8);
         var updatedProperties = pawnIsPromoted
-            ? new Properties(PieceType.Queen, props.Colour)
+            ? new PieceAttributes(PieceType.Queen, props.Colour)
             : props;
 
         game.Board.RemovePieceAt(move.From);
@@ -90,9 +90,9 @@ public class MoveHandler(IErrorHandler errorHandler)
         var result = 0;
         foreach (var (_, piece) in clonedGame.Pieces)
         {
-            if (piece.Properties.Colour == playerColour)
+            if (piece.PieceAttributes.Colour == playerColour)
                 result += piece.Type.Value();
-            else if (piece.Properties.Colour == opponentColour)
+            else if (piece.PieceAttributes.Colour == opponentColour)
                 result -= piece.Type.Value();
         }
 

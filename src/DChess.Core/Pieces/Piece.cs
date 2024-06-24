@@ -10,15 +10,15 @@ public abstract record Piece
 {
     protected Piece(PiecePosition piecePosition)
     {
-        Properties = piecePosition.Properties;
+        PieceAttributes = piecePosition.PieceAttributes;
         Coordinate = piecePosition.Coordinate;
     }
 
     public abstract string PieceName { get; }
-    public Properties Properties { get; init; }
+    public PieceAttributes PieceAttributes { get; init; }
     public Coordinate Coordinate { get; init; }
-    public Colour Colour => Properties.Colour;
-    public PieceType Type => Properties.Type;
+    public Colour Colour => PieceAttributes.Colour;
+    public PieceType Type => PieceAttributes.Type;
 
     public MoveResult CheckMove(Coordinate to, Game.Game game)
     {
@@ -37,8 +37,8 @@ public abstract record Piece
     {
         var move = new Move(Coordinate, to);
 
-        var movedPieceColour = Properties.Colour;
-        if (game.CurrentPlayer != Properties.Colour)
+        var movedPieceColour = PieceAttributes.Colour;
+        if (game.CurrentPlayer != PieceAttributes.Colour)
             return move.AsInvalidBecause(MoveValidity.CannotMoveOpponentsPiece);
 
         if (Coordinate == to)
@@ -88,15 +88,15 @@ public abstract record Piece
 
     protected abstract MoveResult ValidatePath(Coordinate to, Game.Game state);
 
-    public void Deconstruct(out Properties properties, out Coordinate coordinate)
+    public void Deconstruct(out PieceAttributes pieceAttributes, out Coordinate coordinate)
     {
-        properties = Properties;
+        pieceAttributes = PieceAttributes;
         coordinate = Coordinate;
     }
 }
 
-public record struct PiecePosition(Properties Properties, Coordinate Coordinate)
+public record struct PiecePosition(PieceAttributes PieceAttributes, Coordinate Coordinate)
 {
-    public PiecePosition(Coordinate Coordinate, Properties Properties) : this(Properties, Coordinate) { }
+    public PiecePosition(Coordinate Coordinate, PieceAttributes PieceAttributes) : this(PieceAttributes, Coordinate) { }
     
 };

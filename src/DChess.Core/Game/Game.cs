@@ -6,7 +6,7 @@ using DChess.Core.Pieces;
 namespace DChess.Core.Game;
 
 /// <summary>
-///     All the properties of a game at a specific point in play
+///     All the pieceAttributes of a game at a specific point in play
 /// </summary>
 public sealed class Game
 {
@@ -41,7 +41,7 @@ public sealed class Game
             for (var r = 0; r < 8; r++)
             {
                 var props = _board[f, r];
-                if (props == Properties.None) continue;
+                if (props == PieceAttributes.None) continue;
                 var coordinateFromZeroOffset = Coordinate.FromZeroOffset(f, r);
                 pieces.Add(coordinateFromZeroOffset
                     , PiecePool.PieceWithProperties(new(coordinateFromZeroOffset, props)));
@@ -78,8 +78,8 @@ public sealed class Game
 
     public bool TryGetPiece(Coordinate at, out Piece piece)
     {
-        var p = _board.TryGetProperties(at, out var properties) ? properties : Properties.None;
-        if (p == Properties.None)
+        var p = _board.TryGetProperties(at, out var properties) ? properties : PieceAttributes.None;
+        if (p == PieceAttributes.None)
         {
             piece = PiecePool.PieceWithProperties(new(at, properties));
             return false;

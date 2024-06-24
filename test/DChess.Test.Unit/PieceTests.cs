@@ -14,11 +14,11 @@ public class PieceTests : GameTestBase
         Sut.Move(a2, b3);
 
         // ReSharper disable once HeapView.BoxingAllocation
-        Sut.Pieces[b3].Properties.Should()
-            .BeEquivalentTo(WhitePawn, "the properties should be moved");
+        Sut.Pieces[b3].PieceAttributes.Should()
+            .BeEquivalentTo(WhitePawn, "the pieceAttributes should be moved");
 
         Sut.FriendlyPieces(White).Count().Should()
-            .Be(2, "the properties should be moved, not duplicated");
+            .Be(2, "the pieceAttributes should be moved, not duplicated");
     }
 
     [Fact(DisplayName = "A queen can move backwards")]
@@ -32,10 +32,10 @@ public class PieceTests : GameTestBase
 
         var args = new PiecePosition(WhiteQueen, a3);
         Sut.Pieces[a3].Should()
-            .BeEquivalentTo(new Queen(args), "the properties should be moved");
+            .BeEquivalentTo(new Queen(args), "the pieceAttributes should be moved");
 
         Sut.FriendlyPieces(White).Count().Should()
-            .Be(2, "the properties should be moved, not duplicated");
+            .Be(2, "the pieceAttributes should be moved, not duplicated");
     }
 
 
@@ -43,7 +43,7 @@ public class PieceTests : GameTestBase
     public void invalid_move_should_not_be_allowed()
     {
         Sut.Board.Place(WhiteKing, f1);
-        Sut.Board.Place(new Properties(PieceType.Pawn, White), a1);
+        Sut.Board.Place(new PieceAttributes(PieceType.Pawn, White), a1);
         var piece = Sut.Pieces[a1];
 
         piece.CheckMove(a6, Sut).IsValid.Should().BeFalse();

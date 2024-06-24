@@ -5,7 +5,7 @@ namespace DChess.Core.Game;
 
 /// <summary>
 ///     A pool of pieces that can be reused to reduce memory allocation / GC pressure
-///     This allows us to use structs to store the properties internally, but expose classes
+///     This allows us to use structs to store the pieceAttributes internally, but expose classes
 ///     to the outside world to allow for polymorphism.
 /// </summary>
 public class PiecePool
@@ -27,7 +27,7 @@ public class PiecePool
 
     private static Piece CreatePiece(PiecePosition piecePosition)
     {
-        var props = piecePosition.Properties;
+        var props = piecePosition.PieceAttributes;
         return props.Type switch
         {
             PieceType.Pawn => new Pawn(piecePosition),

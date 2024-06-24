@@ -44,7 +44,7 @@ public class GameTests : GameTestBase
         Sut.Board.HasPieceAt(a2).Should().BeFalse();
     }
 
-    [Fact(DisplayName = "If there are no properties on the board, a cell's properties is null")]
+    [Fact(DisplayName = "If there are no pieceAttributes on the board, a cell's pieceAttributes is null")]
     public void if_there_are_no_pieces_on_the_board_a_cells_piece_is_null()
     {
         Sut.Board.HasPieceAt(a1).Should().BeFalse();
@@ -63,7 +63,7 @@ public class GameTests : GameTestBase
         act.Should().Throw<InvalidCoordinateException>();
     }
 
-    [Theory(DisplayName = "Board can be created with a standard properties layout")]
+    [Theory(DisplayName = "Board can be created with a standard pieceAttributes layout")]
     [InlineData("a8", PieceType.Rook, Black)]
     [InlineData("b8", PieceType.Knight, Black)]
     [InlineData("c8", PieceType.Bishop, Black)]
@@ -102,13 +102,12 @@ public class GameTests : GameTestBase
         Sut.Board.SetStandardLayout();
 
         var coordinate = new Coordinate(coordinateString);
-        Sut.Board[coordinate].Should().BeEquivalentTo(new Properties(type, colour));
+        Sut.Board[coordinate].Should().BeEquivalentTo(new PieceAttributes(type, colour));
     }
 
     [Fact(DisplayName = "A piece can be added to the board")]
     public void a_piece_can_be_added_to_the_board()
     {
-        ;
         Sut.Board.Place(WhitePawn, b2);
         Sut.Board[b2].Should().Be(WhitePawn);
     }

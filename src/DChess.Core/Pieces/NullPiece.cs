@@ -14,7 +14,7 @@ public record NullPiece : Piece
     }
 
     public NullPiece(IErrorHandler errorHandler)
-        : base(new PiecePosition(new Properties(PieceType.None, None), Coordinate.None))
+        : base(new PiecePosition(new PieceAttributes(PieceType.None, None), Coordinate.None))
     {
     }
 
