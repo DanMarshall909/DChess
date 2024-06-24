@@ -1,3 +1,5 @@
+using DChess.Core.Flyweights;
+
 namespace DChess.Core.Game;
 
 /// <summary>

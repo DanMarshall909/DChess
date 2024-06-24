@@ -11,11 +11,11 @@ public class MoveHandler(IErrorHandler errorHandler)
     private void ApplyMove(Move move, Game.Game game)
     {
         if (!game.Board.TryGetProperties(move.From, out var props))
-            errorHandler.HandleInvalidMove(new MoveResult(move, MoveValidity.FromCellDoesNoteContainPiece));
+            errorHandler.HandleInvalidMove(new MoveResult(move, FromCellDoesNoteContainPiece));
 
-        bool pawnIsPromoted = props.Kind == Piece.Kind.Pawn && (move.To.Rank == 1 || move.To.Rank == 8);
+        bool pawnIsPromoted = props.Kind == Kind.Pawn && (move.To.Rank == 1 || move.To.Rank == 8);
         var updatedProperties = pawnIsPromoted
-            ? new PieceAttributes(Piece.Kind.Queen, props.Colour)
+            ? new PieceAttributes(Kind.Queen, props.Colour)
             : props;
 
         game.Board.RemovePieceAt(move.From);

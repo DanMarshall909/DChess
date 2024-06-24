@@ -1,4 +1,6 @@
-﻿namespace DChess.Core.Game;
+﻿using DChess.Core.Flyweights;
+
+namespace DChess.Core.Game;
 
 /// <summary>
 ///     A pool of pieces that can be reused to reduce memory allocation / GC pressure
@@ -7,9 +9,9 @@
 /// </summary>
 public class PieceFlyweightPool
 {
-    private static readonly ConcurrentDictionary<Pieces.PieceContext, PieceFlyweight> Pool = new();
+    private static readonly ConcurrentDictionary<PieceContext, PieceFlyweight> Pool = new();
 
-    public static PieceFlyweight PieceWithProperties(Pieces.PieceContext pieceContext)
+    public static PieceFlyweight PieceWithProperties(PieceContext pieceContext)
     {
         if (Pool.TryGetValue(pieceContext, out var piece))
             return piece;
@@ -27,13 +29,13 @@ public class PieceFlyweightPool
         var props = pieceContext.PieceAttributes;
         return props.Kind switch
         {
-            Piece.Kind.Pawn => new Pawn(pieceContext),
-            Piece.Kind.Rook => new Rook(pieceContext),
-            Piece.Kind.Knight => new Knight(pieceContext),
-            Piece.Kind.Bishop => new Bishop(pieceContext),
-            Piece.Kind.Queen => new Queen(pieceContext),
-            Piece.Kind.King => new King(pieceContext),
-            Piece.Kind.None => new NullPieceFlyweight(pieceContext),
+            Kind.Pawn => new Pawn(pieceContext),
+            Kind.Rook => new Rook(pieceContext),
+            Kind.Knight => new Knight(pieceContext),
+            Kind.Bishop => new Bishop(pieceContext),
+            Kind.Queen => new Queen(pieceContext),
+            Kind.King => new King(pieceContext),
+            Kind.None => new NullPieceFlyweight(pieceContext),
             _ => throw new ArgumentOutOfRangeException(nameof(props), props, null)
         };
     }

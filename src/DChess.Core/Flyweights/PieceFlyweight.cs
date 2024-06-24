@@ -1,4 +1,4 @@
-namespace DChess.Core.Pieces;
+namespace DChess.Core.Flyweights;
 
 /// <summary>
 ///     Abstract class for handling piece specific logic.
@@ -15,7 +15,7 @@ public abstract record PieceFlyweight
     public PieceAttributes PieceAttributes { get; init; }
     public Coordinate Coordinate { get; init; }
     public Colour Colour => PieceAttributes.Colour;
-    public Piece.Kind Kind => PieceAttributes.Kind;
+    public Kind Kind => PieceAttributes.Kind;
 
     public MoveResult CheckMove(Coordinate to, Game.Game game)
     {
@@ -36,20 +36,20 @@ public abstract record PieceFlyweight
 
         var movedPieceColour = PieceAttributes.Colour;
         if (game.CurrentPlayer != PieceAttributes.Colour)
-            return move.AsInvalidBecause(MoveValidity.CannotMoveOpponentsPiece);
+            return move.AsInvalidBecause(CannotMoveOpponentsPiece);
 
         if (Coordinate == to)
-            return move.AsInvalidBecause(MoveValidity.CannotMoveToSameCell);
+            return move.AsInvalidBecause(CannotMoveToSameCell);
 
         if (game.TryGetPiece(to, out var piece) &&
-            piece.Colour == movedPieceColour) return move.AsInvalidBecause(MoveValidity.CannotCaptureOwnPiece);
+            piece.Colour == movedPieceColour) return move.AsInvalidBecause(CannotCaptureOwnPiece);
 
         if (this is not IIgnorePathCheck &&
             move.CoordinatesAlongPath.Any(coordinate => game.Board.HasPieceAt(coordinate)))
-            return move.AsInvalidBecause(MoveValidity.CannotJumpOverOtherPieces);
+            return move.AsInvalidBecause(CannotJumpOverOtherPieces);
 
         if (MovingIntoCheck(movedPieceColour, move, game))
-            return move.AsInvalidBecause(MoveValidity.CannotMoveIntoCheck);
+            return move.AsInvalidBecause(CannotMoveIntoCheck);
 
         return move.AsOkResult();
     }

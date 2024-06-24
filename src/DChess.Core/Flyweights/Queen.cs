@@ -1,4 +1,4 @@
-﻿namespace DChess.Core.Pieces;
+﻿namespace DChess.Core.Flyweights;
 
 public record Queen : PieceFlyweight
 {

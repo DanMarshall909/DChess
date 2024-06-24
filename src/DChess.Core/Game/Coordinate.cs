@@ -175,9 +175,9 @@ public record struct Coordinate
         return newCoordinate != None;
     }
 
-    public readonly void Deconstruct(out byte Value)
+    public readonly void Deconstruct(out byte coordinate)
     {
-        Value = this.Value;
+        coordinate = this.Value;
     }
 }
 

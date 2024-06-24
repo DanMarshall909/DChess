@@ -1,9 +1,9 @@
 ﻿namespace DChess.Core.Game;
 
-public readonly struct PieceAttributes(Piece.Kind kind, Colour colour) : IEquatable<PieceAttributes>
+public readonly struct PieceAttributes(Kind kind, Colour colour) : IEquatable<PieceAttributes>
 {
     public static readonly PieceAttributes None = default;
-    public Piece.Kind Kind { get; } = kind;
+    public Kind Kind { get; } = kind;
     public Colour Colour { get; } = colour;
 
     public override string ToString() => $"{Colour} {Kind}";

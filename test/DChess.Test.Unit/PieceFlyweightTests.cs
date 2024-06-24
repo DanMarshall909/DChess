@@ -1,5 +1,5 @@
-﻿using DChess.Core.Game;
-using DChess.Core.Pieces;
+﻿using DChess.Core.Flyweights;
+using DChess.Core.Game;
 using static DChess.Core.Game.Colour;
 
 namespace DChess.Test.Unit;
