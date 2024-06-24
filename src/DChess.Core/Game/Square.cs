@@ -106,7 +106,7 @@ public record struct Square
                     var squares = new Square(file, r);
                     if (squares == this)
                     {
-                        sb.Append("X");
+                        sb.Append('X');
                     }
                     else
                     {
@@ -127,7 +127,7 @@ public record struct Square
     /// </summary>
     public byte AsByte => Value;
 
-    public byte Value { get; set; }
+    public byte Value { get; init; }
 
     public bool Equals(Square other) =>
         Value == other.Value;
@@ -149,38 +149,35 @@ public record struct Square
     public override string ToString() => this == NullSquare ? "Null Square" : $"{File}{Rank}";
 
     public static bool IsValid(char file, byte rank) => file is >= 'a' and <= 'h' && rank is >= 1 and <= 8;
-    public bool IsValid() => IsValid(File, Rank);
-
+    
     /// <summary>
     ///     Returns a new Square that is offset by the given offset
     /// </summary>
     /// <param name="offset">the offset to apply</param>
     /// <returns></returns>
-    public Square OffsetBy(MoveOffset moveOffset) =>
-        new((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
+    public Square OffsetBy(MoveOffset offset) =>
+        new((char)(File + offset.FileOffset), (byte)(Rank + offset.RankOffset));
 
 
     /// <summary>
     ///     Returns true if the given offset is a valid square on a chess board
     /// </summary>
-    /// <param name="dFile"></param>
-    /// <param name="dRank"></param>
+    /// <param name="offset">the offset to check</param>
     /// <returns></returns>
-    public bool IsValidOffset(MoveOffset moveOffset) =>
-        IsValid((char)(File + moveOffset.FileOffset), (byte)(Rank + moveOffset.RankOffset));
+    public bool IsValidOffset(MoveOffset offset) =>
+        IsValid((char)(File + offset.FileOffset), (byte)(Rank + offset.RankOffset));
 
     public bool TryApplyOffset(MoveOffset moveOffset, out Square newSquare)
     {
-        if (IsValidOffset(moveOffset))
-            newSquare = OffsetBy(moveOffset);
-        else
-            newSquare = None;
+        newSquare = IsValidOffset(moveOffset)
+            ? OffsetBy(moveOffset)
+            : None;
         return newSquare != None;
     }
 
     public readonly void Deconstruct(out byte square)
     {
-        square = this.Value;
+        square = Value;
     }
 }
 

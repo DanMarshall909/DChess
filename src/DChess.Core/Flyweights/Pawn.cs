@@ -13,31 +13,16 @@ public record Pawn : PieceFlyweight, IIgnorePathCheck
     {
         var move = new Move(Square, to);
 
-        if (IsMoveHorizontal(move))
+        if (move.IsHorizontal)
             return move.AsInvalidBecause(PawnsCannotMoveHorizontally);
 
-        if (IsMoveBackwards(move))
+        if (move.IsBackwards(Colour))
             return move.AsInvalidBecause(PawnsCanOnlyMoveForward);
 
-        if (IsMoveDiagonal(move))
+        if (move.IsDiagonal)
             return ValidateDiagonalMove(move, game);
 
         return ValidateStraightMove(move);
-    }
-
-    private bool IsMoveHorizontal(Move move)
-    {
-        return move.IsHorizontal;
-    }
-
-    private bool IsMoveBackwards(Move move)
-    {
-        return move.IsBackwards(Colour);
-    }
-
-    private bool IsMoveDiagonal(Move move)
-    {
-        return move.IsDiagonal;
     }
 
     private MoveResult ValidateDiagonalMove(Move move, Game.Game game)

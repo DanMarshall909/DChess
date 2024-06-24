@@ -13,7 +13,7 @@ public class PathFinderTests
         var move = new Move(new Square(from), new Square(to));
         var path = move.SquaresAlongPath.ToList();
 
-        Assert.Equal(expectedLength, path.Count());
+        Assert.Equal(expectedLength, path.Count);
     }
 
     [Theory(DisplayName = "A horizontal move has a path")]
@@ -25,7 +25,7 @@ public class PathFinderTests
         var move = new Move(new Square(from), new Square(to));
         var path = move.SquaresAlongPath.ToList();
 
-        Assert.Equal(expectedLength, path.Count());
+        Assert.Equal(expectedLength, path.Count);
     }
 
     [Theory(DisplayName = "A diagonal move has a path")]
@@ -37,6 +37,6 @@ public class PathFinderTests
         var move = new Move(new Square(from), new Square(to));
         var path = move.SquaresAlongPath.ToList();
 
-        Assert.Equal(expectedLength, path.Count());
+        Assert.Equal(expectedLength, path.Count);
     }
 }

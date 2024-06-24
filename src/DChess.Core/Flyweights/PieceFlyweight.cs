@@ -12,8 +12,8 @@ public abstract record PieceFlyweight
     }
 
     public abstract string PieceName { get; }
-    public PieceAttributes PieceAttributes { get; init; }
-    public Square Square { get; init; }
+    public PieceAttributes PieceAttributes { get; }
+    public Square Square { get; }
     public Colour Colour => PieceAttributes.Colour;
     public Kind Kind => PieceAttributes.Kind;
 
@@ -62,7 +62,7 @@ public abstract record PieceFlyweight
         return newGameState.IsInCheck(movedPieceColour);
     }
 
-    public bool CanMoveTo(Square to, Game.Game game, params MoveValidity[] validationsToIgnore)
+    public bool CanMoveTo(Square to, Game.Game game)
     {
         var move = new Move(Square, to);
         var val = ValidatePath(to, game.AsClone());
@@ -76,12 +76,12 @@ public abstract record PieceFlyweight
     {
         // todo: cache?
         var newGameState = game.AsClone();
-        return SquaresToCheckForMoveValidities(newGameState)
+        return SquaresToCheckForMoveValidities()
             .Select(to => (to, CheckMove(to, newGameState)));
     }
 
     // todo: We don't need to check very square dependent on piece. Optimise this to check only those that need to be.
-    private IEnumerable<Square> SquaresToCheckForMoveValidities(Game.Game game) => Square.All;
+    private IEnumerable<Square> SquaresToCheckForMoveValidities() => Square.All;
 
     protected abstract MoveResult ValidatePath(Square to, Game.Game state);
 

@@ -46,11 +46,11 @@ public readonly record struct Board
 
     public static Board CloneOrEmptyIfNull(Board? board)
         => board is not null
-            ? new Board(board.Value.Data.Clone() as PieceAttributes[] ?? Array.Empty<PieceAttributes>())
+            ? new Board(board.Value.Data.Clone() as PieceAttributes[] ?? [])
             : new Board();
 
     private static PieceAttributes[] CloneOf(PieceAttributes[] properties)
-        => properties.Clone() as PieceAttributes[] ?? Array.Empty<PieceAttributes>();
+        => properties.Clone() as PieceAttributes[] ?? [];
 
     /// <summary>
     ///     Converts a file and rank to a zero-indexed index for accessing the data array.
@@ -101,7 +101,7 @@ public readonly record struct Board
         this[at] = piecePieceAttributes;
     }
 
-    public bool TryGetProperties(Square square, out PieceAttributes pieceAttributes)
+    public bool TryGetAtrributes(Square square, out PieceAttributes pieceAttributes)
     {
         pieceAttributes = this[square];
         return pieceAttributes != PieceAttributes.None;

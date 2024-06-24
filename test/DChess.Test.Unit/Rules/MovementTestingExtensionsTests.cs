@@ -2,9 +2,7 @@ namespace DChess.Test.Unit.Rules;
 
 public class MovementTestingExtensionsTests
 {
-    private const byte X = LegalPositionValue;
-
-    public byte[,] Matrix = new byte[,]
+    public readonly byte[,] Matrix =
     {
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },

@@ -41,14 +41,14 @@ public sealed class Game
                 if (props == PieceAttributes.None) continue;
                 var squareFromZeroOffset = Square.FromZeroOffset(f, r);
                 pieces.Add(squareFromZeroOffset
-                    , PieceFlyweightPool.PieceWithProperties(new(squareFromZeroOffset, props)));
+                    , PieceFlyweightPool.PieceWithContext(new PieceContext(squareFromZeroOffset, props)));
             }
 
             return new ReadOnlyDictionary<Square, PieceFlyweight>(pieces);
         }
     }
 
-    public Move LastMove { get; set; }
+    public Move LastMove { get; private set; }
 
     public Game AsClone() =>
         new(_board, _errorHandler)
@@ -66,7 +66,7 @@ public sealed class Game
         {
             var props = _board[f, r];
             if (props.Colour == colour)
-                yield return PieceFlyweightPool.PieceWithProperties(new(Square.FromZeroOffset(f, r), props));
+                yield return PieceFlyweightPool.PieceWithContext(new PieceContext(Square.FromZeroOffset(f, r), props));
         }
     }
 
@@ -75,14 +75,14 @@ public sealed class Game
 
     public bool TryGetPiece(Square at, out PieceFlyweight pieceFlyweight)
     {
-        var p = _board.TryGetProperties(at, out var properties) ? properties : PieceAttributes.None;
-        if (p == PieceAttributes.None)
+        var a = _board.TryGetAtrributes(at, out var properties) ? properties : PieceAttributes.None;
+        if (a == PieceAttributes.None)
         {
-            pieceFlyweight = PieceFlyweightPool.PieceWithProperties(new(at, properties));
+            pieceFlyweight = PieceFlyweightPool.PieceWithContext(new(at, properties));
             return false;
         }
 
-        pieceFlyweight = PieceFlyweightPool.PieceWithProperties(new(at, properties));
+        pieceFlyweight = PieceFlyweightPool.PieceWithContext(new(at, properties));
         return true;
     }
 
@@ -114,7 +114,7 @@ public sealed class Game
         _moveHandler.Make(new Move(from, to), this);
     }
 
-    public Task MakeBestMove(Colour colour, CancellationToken token = default)
+    public Task MakeBestMove(Colour colour)
     {
         var move = _moveHandler.GetBestMove(this, colour);
         Move(move);

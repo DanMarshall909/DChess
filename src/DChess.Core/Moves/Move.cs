@@ -13,8 +13,6 @@ public readonly record struct Move(Square From, Square To)
     public IEnumerable<Square> SquaresAlongPath =>
         new Memo<Move, IEnumerable<Square>>(PathFinder.GetPath).Execute(this);
 
-    private MoveOffset Offset => new(To.File - From.File, To.Rank - From.Rank);
-
     public bool IsBackwards(Colour colour) => colour == White
         ? To.Rank < From.Rank
         : To.Rank > From.Rank;

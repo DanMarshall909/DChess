@@ -13,7 +13,7 @@ public static class PathFinder
         if (move.IsDiagonal)
             return DiagonalPath(move);
 
-        return Enumerable.Empty<Square>();
+        return [];
     }
 
     private static IEnumerable<Square> VerticalPath(Move move)

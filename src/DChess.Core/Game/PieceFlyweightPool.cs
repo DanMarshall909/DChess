@@ -7,11 +7,11 @@ namespace DChess.Core.Game;
 ///     This allows us to use structs to store the pieceAttributes internally, but expose classes
 ///     to the outside world to allow for polymorphism.
 /// </summary>
-public class PieceFlyweightPool
+public static class PieceFlyweightPool
 {
     private static readonly ConcurrentDictionary<PieceContext, PieceFlyweight> Pool = new();
 
-    public static PieceFlyweight PieceWithProperties(PieceContext pieceContext)
+    public static PieceFlyweight PieceWithContext(PieceContext pieceContext)
     {
         if (Pool.TryGetValue(pieceContext, out var piece))
             return piece;

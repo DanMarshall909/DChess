@@ -10,10 +10,10 @@ public class MoveHandler(IErrorHandler errorHandler)
 
     private void ApplyMove(Move move, Game.Game game)
     {
-        if (!game.Board.TryGetProperties(move.From, out var props))
+        if (!game.Board.TryGetAtrributes(move.From, out var props))
             errorHandler.HandleInvalidMove(new MoveResult(move, FromCellDoesNoteContainPiece));
 
-        bool pawnIsPromoted = props.Kind == Kind.Pawn && (move.To.Rank == 1 || move.To.Rank == 8);
+        bool pawnIsPromoted = props.Kind is Kind.Pawn && move.To.Rank is 1 or 8;
         var updatedProperties = pawnIsPromoted
             ? new PieceAttributes(Kind.Queen, props.Colour)
             : props;
@@ -22,9 +22,9 @@ public class MoveHandler(IErrorHandler errorHandler)
         game.Board.Place(updatedProperties, move.To);
     }
     
-    public static bool HasLegalMoves(Colour colour, Game.Game game) => GetLegalMoves(colour, game).Any();
+    public static bool HasLegalMoves(Colour colour, Game.Game game) => LegalMoves(colour, game).Any();
 
-    public static IEnumerable<Move> GetLegalMoves(Colour colour, Game.Game game)
+    public static IEnumerable<Move> LegalMoves(Colour colour, Game.Game game)
     {
         foreach (var piece in game.FriendlyPieces(colour))
         foreach (var moveValidity in piece.MoveValidities(game))
@@ -39,7 +39,7 @@ public class MoveHandler(IErrorHandler errorHandler)
         var bestScore = int.MinValue;
 
         var oppositeColour = playerColour.Invert();
-        foreach (var move in GetLegalMoves(playerColour, game))
+        foreach (var move in LegalMoves(playerColour, game))
         {
             var clonedGame = game.AsClone();
             clonedGame.Move(move);
@@ -50,15 +50,14 @@ public class MoveHandler(IErrorHandler errorHandler)
                 bestMove = move;
             }
 
-            if (depth > 1)
-            {
-                int opponentScore = -GetGameStateScore(clonedGame, oppositeColour);
-                if (opponentScore > bestScore)
-                {
-                    bestScore = opponentScore;
-                    bestMove = move;
-                }
-            }
+            if (depth <= 1) continue;
+            
+            int opponentScore = -GetGameStateScore(clonedGame, oppositeColour);
+            
+            if (opponentScore <= bestScore) continue;
+            
+            bestScore = opponentScore;
+            bestMove = move;
         }
 
         return bestMove;
@@ -70,10 +69,14 @@ public class MoveHandler(IErrorHandler errorHandler)
         var oppositeColour = playerColour.Invert();
         
         var status = game.Status(oppositeColour);
-        if (status == Checkmate)
-            return int.MinValue;
-        if (status == Check)
-            score += 10;
+        switch (status)
+        {
+            case Checkmate:
+                return int.MinValue;
+            case Check:
+                score += 10;
+                break;
+        }
 
         score += MaterialScore(playerColour, game);
 

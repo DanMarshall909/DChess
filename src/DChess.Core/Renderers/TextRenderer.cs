@@ -32,7 +32,7 @@ public class TextRenderer : IBoardRenderer
 
     private static char PieceChar(char file, byte rank, Board board)
     {
-        if (board.TryGetProperties(new Square(file, rank), out var chessPiece))
+        if (board.TryGetAtrributes(new Square(file, rank), out var chessPiece))
             return DisplayChar(chessPiece);
 
         bool isOddSquare = (rank + file) % 2 == 0;
@@ -51,7 +51,7 @@ public class TextRenderer : IBoardRenderer
                 Kind.Bishop => '♗',
                 Kind.Queen => '♕',
                 Kind.King => '♔',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceAttributes.Kind, "Unknown pieceAttributes kind")
+                _ => throw new ArgumentOutOfRangeException(nameof(Kind), pieceAttributes.Kind, "Unknown pieceAttributes kind")
             },
             _ => pieceAttributes.Kind switch
             {
@@ -61,7 +61,7 @@ public class TextRenderer : IBoardRenderer
                 Kind.Bishop => '♝',
                 Kind.Queen => '♛',
                 Kind.King => '♚',
-                _ => throw new ArgumentOutOfRangeException(nameof(Type), pieceAttributes.Kind, "Unknown pieceAttributes kind")
+                _ => throw new ArgumentOutOfRangeException(nameof(Kind), pieceAttributes.Kind, "Unknown pieceAttributes kind")
             }
         };
     }

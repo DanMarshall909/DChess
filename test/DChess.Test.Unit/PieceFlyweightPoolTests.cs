@@ -11,8 +11,8 @@ public class PieceFlyweightPoolTests : GameTestBase
     {
         var chessPiece = new PieceAttributes(Piece.Kind.Pawn, White);
 
-        var piece = PieceFlyweightPool.PieceWithProperties(new(a1, chessPiece));
-        var secondPieceWithSameDefinition = PieceFlyweightPool.PieceWithProperties(new(a1, chessPiece));
+        var piece = PieceFlyweightPool.PieceWithContext(new(a1, chessPiece));
+        var secondPieceWithSameDefinition = PieceFlyweightPool.PieceWithContext(new(a1, chessPiece));
 
         piece.Should().BeEquivalentTo(new Pawn(new PieceContext(chessPiece, a1)));
         piece.Should().Be(secondPieceWithSameDefinition, "the pieceAttributes should be the same instance");
