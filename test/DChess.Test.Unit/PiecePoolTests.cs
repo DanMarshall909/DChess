@@ -11,10 +11,10 @@ public class PiecePoolTests : GameTestBase
     {
         var chessPiece = new Properties(PieceType.Pawn, White);
 
-        var piece = PiecePool.PieceWithProperties(a1, chessPiece);
-        var secondPieceWithSameDefinition = PiecePool.PieceWithProperties(a1, chessPiece);
+        var piece = PiecePool.PieceWithProperties(new(a1, chessPiece));
+        var secondPieceWithSameDefinition = PiecePool.PieceWithProperties(new(a1, chessPiece));
 
-        piece.Should().BeEquivalentTo(new Pawn(new Piece.Arguments(chessPiece, a1)));
+        piece.Should().BeEquivalentTo(new Pawn(new PiecePosition(chessPiece, a1)));
         piece.Should().Be(secondPieceWithSameDefinition, "the properties should be the same instance");
 
         piece.GetType().Should().Be<Pawn>();

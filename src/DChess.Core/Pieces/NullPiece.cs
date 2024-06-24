@@ -9,12 +9,12 @@ namespace DChess.Core.Pieces;
 /// </summary>
 public record NullPiece : Piece
 {
-    public NullPiece(Arguments arguments) : base(arguments)
+    public NullPiece(PiecePosition piecePosition) : base(piecePosition)
     {
     }
 
     public NullPiece(IErrorHandler errorHandler)
-        : base(new Arguments(new Properties(PieceType.None, None), Coordinate.None))
+        : base(new PiecePosition(new Properties(PieceType.None, None), Coordinate.None))
     {
     }
 

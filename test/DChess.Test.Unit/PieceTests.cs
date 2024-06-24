@@ -30,7 +30,7 @@ public class PieceTests : GameTestBase
 
         Sut.Move(b2, a3);
 
-        var args = new Piece.Arguments(WhiteQueen, a3);
+        var args = new PiecePosition(WhiteQueen, a3);
         Sut.Pieces[a3].Should()
             .BeEquivalentTo(new Queen(args), "the properties should be moved");
 

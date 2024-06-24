@@ -6,8 +6,8 @@ namespace DChess.Core.Pieces;
 
 public record Pawn : Piece, IIgnorePathCheck
 {
-    public Pawn(Arguments arguments)
-        : base(arguments)
+    public Pawn(PiecePosition piecePosition)
+        : base(piecePosition)
     {
     }
 

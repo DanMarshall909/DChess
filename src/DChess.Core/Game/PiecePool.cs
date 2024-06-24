@@ -10,32 +10,34 @@ namespace DChess.Core.Game;
 /// </summary>
 public class PiecePool
 {
-    private static readonly ConcurrentDictionary<(Coordinate, Properties), Piece> Pool = new();
+    private static readonly ConcurrentDictionary<Pieces.PiecePosition, Piece> Pool = new();
 
-    public static Piece PieceWithProperties(Coordinate coordinate, Properties properties)
+    public static Piece PieceWithProperties(Pieces.PiecePosition piecePosition)
     {
-        if (Pool.TryGetValue((coordinate, properties), out var piece))
+        if (Pool.TryGetValue(piecePosition, out var piece))
             return piece;
 
-        piece = CreatePiece(coordinate, properties);
-        Pool[(coordinate, properties)] = piece;
+        var (coordinate, properties) = piecePosition;
+        
+        piece = CreatePiece(piecePosition);
+        Pool[piecePosition] = piece;
 
         return piece;
     }
 
-    private static Piece CreatePiece(Coordinate coordinate, Properties properties)
+    private static Piece CreatePiece(PiecePosition piecePosition)
     {
-        Piece.Arguments arguments = new(properties, coordinate);
-        return properties.Type switch
+        var props = piecePosition.Properties;
+        return props.Type switch
         {
-            PieceType.Pawn => new Pawn(arguments),
-            PieceType.Rook => new Rook(arguments),
-            PieceType.Knight => new Knight(arguments),
-            PieceType.Bishop => new Bishop(arguments),
-            PieceType.Queen => new Queen(arguments),
-            PieceType.King => new King(arguments),
-            PieceType.None => new NullPiece(arguments),
-            _ => throw new ArgumentOutOfRangeException(nameof(properties.Type), properties.Type, null)
+            PieceType.Pawn => new Pawn(piecePosition),
+            PieceType.Rook => new Rook(piecePosition),
+            PieceType.Knight => new Knight(piecePosition),
+            PieceType.Bishop => new Bishop(piecePosition),
+            PieceType.Queen => new Queen(piecePosition),
+            PieceType.King => new King(piecePosition),
+            PieceType.None => new NullPiece(piecePosition),
+            _ => throw new ArgumentOutOfRangeException(nameof(props), props, null)
         };
     }
 }

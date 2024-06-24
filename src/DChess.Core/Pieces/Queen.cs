@@ -6,7 +6,7 @@ namespace DChess.Core.Pieces;
 
 public record Queen : Piece
 {
-    public Queen(Arguments arguments) : base(arguments)
+    public Queen(PiecePosition piecePosition) : base(piecePosition)
     {
     }
 

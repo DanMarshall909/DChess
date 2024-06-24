@@ -44,7 +44,7 @@ public sealed class Game
                 if (props == Properties.None) continue;
                 var coordinateFromZeroOffset = Coordinate.FromZeroOffset(f, r);
                 pieces.Add(coordinateFromZeroOffset
-                    , PiecePool.PieceWithProperties(coordinateFromZeroOffset, props));
+                    , PiecePool.PieceWithProperties(new(coordinateFromZeroOffset, props)));
             }
 
             return new ReadOnlyDictionary<Coordinate, Piece>(pieces);
@@ -73,7 +73,7 @@ public sealed class Game
         {
             var props = _board[f, r];
             if (props.Colour == colour)
-                yield return PiecePool.PieceWithProperties(Coordinate.FromZeroOffset(f, r), props);
+                yield return PiecePool.PieceWithProperties(new(Coordinate.FromZeroOffset(f, r), props));
         }
     }
 
@@ -85,11 +85,11 @@ public sealed class Game
         var p = _board.TryGetProperties(at, out var properties) ? properties : Properties.None;
         if (p == Properties.None)
         {
-            piece = PiecePool.PieceWithProperties(at, properties);
+            piece = PiecePool.PieceWithProperties(new(at, properties));
             return false;
         }
 
-        piece = PiecePool.PieceWithProperties(at, properties);
+        piece = PiecePool.PieceWithProperties(new(at, properties));
         return true;
     }
 
@@ -119,17 +119,17 @@ public sealed class Game
 
     public void Move(Move move, bool force = false)
     {
-        _moveHandler.Make(move, this, force);
+        _moveHandler.Make(move, this);
     }
 
     public void Move(Coordinate from, Coordinate to, bool force = false)
     {
-        _moveHandler.Make(new Move(from, to), this, force);
+        _moveHandler.Make(new Move(from, to), this);
     }
 
     public Task MakeBestMove(Colour colour, CancellationToken token = default)
     {
-        var move = _moveHandler.GetBestMove(colour, this);
+        var move = _moveHandler.GetBestMove(this, colour);
         Move(move);
         LastMove = move;
 

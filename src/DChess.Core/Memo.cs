@@ -15,7 +15,7 @@ public class Memo<TInput, TOutput> where TInput : notnull
     /// <summary>
     ///     Create a new memoized function
     /// </summary>
-    /// <param name="function">The function to memoize</param>
+    /// <param name="function">The function to memoize</param >
     public Memo(Func<TInput, TOutput> function) => _function = function;
 
     public TOutput Execute(TInput input)

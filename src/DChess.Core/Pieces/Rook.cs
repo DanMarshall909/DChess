@@ -6,7 +6,7 @@ namespace DChess.Core.Pieces;
 
 internal record Rook : Piece
 {
-    public Rook(Arguments arguments) : base(arguments)
+    public Rook(PiecePosition piecePosition) : base(piecePosition)
     {
     }
 

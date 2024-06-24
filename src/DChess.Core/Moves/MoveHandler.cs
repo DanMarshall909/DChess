@@ -1,11 +1,18 @@
 using DChess.Core.Errors;
 using DChess.Core.Game;
+using static DChess.Core.Moves.Move;
 
 namespace DChess.Core.Moves;
 
 public class MoveHandler(IErrorHandler errorHandler)
 {
-    public void Make(Move move, Game.Game game, bool force = false)
+    public void Make(Move move, Game.Game game)
+    {
+        ApplyMove(move, game);
+        game.CurrentPlayer = game.CurrentPlayer.Invert();
+    }
+
+    private void ApplyMove(Move move, Game.Game game)
     {
         if (!game.Board.TryGetProperties(move.From, out var props))
             errorHandler.HandleInvalidMove(new MoveResult(move, MoveValidity.FromCellDoesNoteContainPiece));
@@ -17,50 +24,68 @@ public class MoveHandler(IErrorHandler errorHandler)
 
         game.Board.RemovePieceAt(move.From);
         game.Board.Place(updatedProperties, move.To);
-
-        game.CurrentPlayer = game.CurrentPlayer.Invert();
     }
 
     // Gets the best move for the current player
-    public Move GetBestMove(Colour colour, Game.Game game)
+    public Move GetBestMove(Game.Game game, Colour playerColour, int depth = 1)
     {
-        var bestMove = new Move(Coordinate.None, Coordinate.None);
+        var bestMove = NullMove;
         var bestScore = int.MinValue;
 
-        foreach (var legalMove in game.GetLegalMoves(colour))
+        var oppositeColour = playerColour.Invert();
+        foreach (var move in game.GetLegalMoves(playerColour))
         {
-            int score = GetGameStateScore(legalMove, game, colour);
+            var clonedGame = game.AsClone();
+            clonedGame.Move(move);
+            int score = GetGameStateScore(clonedGame, playerColour);
             if (score > bestScore)
             {
                 bestScore = score;
-                bestMove = legalMove;
+                bestMove = move;
+            }
+
+            if (depth > 1)
+            {
+                int opponentScore = -GetGameStateScore(clonedGame, oppositeColour);
+                if (opponentScore > bestScore)
+                {
+                    bestScore = opponentScore;
+                    bestMove = move;
+                }
             }
         }
 
         return bestMove;
     }
 
-    public int GetGameStateScore(Move move, Game.Game game, Colour colour)
+    public int GetGameStateScore(Game.Game game, Colour playerColour)
     {
-        if (game.Status(colour.Invert()) == Checkmate)
-            return int.MaxValue;
-
         var score = 0;
-        var props = game.Board[move.To];
-        if (props != Properties.None)
-            score += props.Type switch
-            {
-                PieceType.Pawn => 1,
-                PieceType.Knight => 3,
-                PieceType.Bishop => 3,
-                PieceType.Rook => 5,
-                PieceType.Queen => 9,
-                _ => 0
-            };
+        var oppositeColour = playerColour.Invert();
+        
+        var status = game.Status(oppositeColour);
+        if (status == Checkmate)
+            return int.MinValue;
+        if (status == Check)
+            score += 10;
 
-        if (game.IsInCheck(game.CurrentPlayer))
-            score += 3;
+        score += MaterialScore(playerColour, game);
 
         return score;
+    }
+
+    private static int MaterialScore(Colour playerColour, Game.Game clonedGame)
+    {
+        var opponentColour = playerColour.Invert();
+        var result = 0;
+        foreach (var (_, piece) in clonedGame.Pieces)
+        {
+            if (piece.Properties.Colour == playerColour)
+                result += piece.Type.Value();
+            else if (piece.Properties.Colour == opponentColour)
+                result -= piece.Type.Value();
+        }
+
+        return result;
     }
 }

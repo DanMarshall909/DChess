@@ -6,7 +6,7 @@ namespace DChess.Core.Pieces;
 
 internal record Bishop : Piece
 {
-    public Bishop(Arguments arguments) : base(arguments)
+    public Bishop(PiecePosition piecePosition) : base(piecePosition)
     {
     }
 
