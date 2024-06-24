@@ -102,7 +102,7 @@ public class GameTests : GameTestBase
         Sut.Board.SetStandardLayout();
 
         var square = new Square(squareString);
-        Sut.Board[square].Should().BeEquivalentTo(new PieceAttributes(kind, colour));
+        Sut.Board[square].Should().BeEquivalentTo(new PieceAttributes(colour, kind));
     }
 
     [Fact(DisplayName = "A piece can be added to the board")]

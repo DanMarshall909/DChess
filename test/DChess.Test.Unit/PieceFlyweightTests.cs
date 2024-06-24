@@ -43,7 +43,7 @@ public class PieceFlyweightTests : GameTestBase
     public void invalid_move_should_not_be_allowed()
     {
         Sut.Board.Place(WhiteKing, f1);
-        Sut.Board.Place(new PieceAttributes(Piece.Kind.Pawn, White), a1);
+        Sut.Board.Place(new PieceAttributes(White, Piece.Kind.Pawn), a1);
         var piece = Sut.Pieces[a1];
 
         piece.CheckMove(a6, Sut).IsValid.Should().BeFalse();

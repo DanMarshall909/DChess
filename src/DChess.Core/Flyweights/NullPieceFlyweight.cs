@@ -10,7 +10,7 @@ public record NullPieceFlyweight : PieceFlyweight
     }
 
     public NullPieceFlyweight()
-        : base(new PieceContext(new PieceAttributes(Kind.None, None), Square.None))
+        : base(new PieceContext(new PieceAttributes(None, Kind.None), Square.None))
     {
     }
 

@@ -15,7 +15,7 @@ public class MoveHandler(IErrorHandler errorHandler)
 
         bool pawnIsPromoted = props.Kind is Kind.Pawn && move.To.Rank is 1 or 8;
         var updatedProperties = pawnIsPromoted
-            ? new PieceAttributes(Kind.Queen, props.Colour)
+            ? new PieceAttributes(props.Colour, Kind.Queen)
             : props;
 
         game.Board.RemovePieceAt(move.From);
