@@ -20,18 +20,18 @@ public readonly struct PieceAttributes(Colour colour, Kind kind) : IEquatable<Pi
 
     public static readonly Dictionary<PieceAttributes, char> CharByAttributes = new()
     {
-        { WhitePawn, '♟' },
-        { WhiteRook, '♜' },
-        { WhiteKnight, '♞' },
-        { WhiteBishop, '♝' },
-        { WhiteQueen, '♛' },
-        { WhiteKing, '♚' },
-        { BlackPawn, '♙' },
-        { BlackRook, '♖' },
-        { BlackKnight, '♘' },
-        { BlackBishop, '♗' },
-        { BlackQueen, '♕' },
-        { BlackKing, '♔' }
+        { WhitePawn, 'P' },
+        { WhiteRook, 'R' },
+        { WhiteKnight, 'N' },
+        { WhiteBishop, 'B' },
+        { WhiteQueen, 'Q' },
+        { WhiteKing, 'K' },
+        { BlackPawn, 'p' },
+        { BlackRook, 'r' },
+        { BlackKnight, 'n' },
+        { BlackBishop, 'b' },
+        { BlackQueen, 'q' },
+        { BlackKing, 'k' }
     };
     
     public static readonly Dictionary<char, PieceAttributes> AttributesByChar =

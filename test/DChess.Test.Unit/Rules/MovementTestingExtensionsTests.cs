@@ -48,14 +48,14 @@ public class MovementTestingExtensionsTests
     public void a_text_board_can_be_converted_to_a_board()
     {
         var text = """
-                   ♖♘♗♕♔♗♘♖
-                   ♙♙♙♙♙♙♙♙
+                   rnbqkbnr
+                   pppppppp
                    █░█░█░█░
                    ░█░█░█░█
                    █░█░█░█░
                    ░█░█░█░█
-                   ♟♟♟♟♟♟♟♟
-                   ♜♞♝♛♚♝♞♜
+                   PPPPPPPP
+                   RNBQKBNR
                    """;
         var board = BoardExtensions.FromText(text);
         board[a1].Should().Be(WhiteRook);
