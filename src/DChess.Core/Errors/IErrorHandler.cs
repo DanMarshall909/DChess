@@ -4,5 +4,5 @@ public interface IErrorHandler
 {
     void HandleInvalidMove(MoveResult result);
     void HandleNoKingFound(Colour missingKingColour);
-    void HandleNoPieceAt(Coordinate moveFrom);
+    void HandleNoPieceAt(Square moveFrom);
 }

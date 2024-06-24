@@ -7,7 +7,7 @@ public class QueenTests : GameTestBase
     [Fact(DisplayName = "Queens can only move diagonally, vertically or horizontally")]
     public void queens_can_only_move_diagonally_vertically_or_horizontally()
     {
-        WhiteQueen.ShouldOnlyBeAbleToMoveTo(new byte[15, 15]
+        WhiteQueen.ShouldOnlyBeAbleToMoveTo(new byte[,]
         {
             { X, 0, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, 0, X },
             { 0, X, 0, 0, 0, 0, 0, X, 0, 0, 0, 0, 0, X, 0 },
@@ -30,7 +30,7 @@ public class QueenTests : GameTestBase
     [Fact(DisplayName = "Queens cannot jump over other pieces")]
     public void queens_cannot_jump_over_other_pieces()
     {
-        WhiteQueen.ShouldOnlyBeAbleToMoveTo(new byte[15, 15]
+        WhiteQueen.ShouldOnlyBeAbleToMoveTo(new byte[,]
         {
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -47,7 +47,7 @@ public class QueenTests : GameTestBase
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-        }.ToMoveOffsets(), ErrorHandler, (board, coordinate) =>
-            board.Surround2CellsFrom(coordinate, WhitePawn));
+        }.ToMoveOffsets(), ErrorHandler, (board, square) =>
+            board.Surround2CellsFrom(square, WhitePawn));
     }
 }

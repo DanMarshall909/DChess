@@ -2,7 +2,7 @@
 
 public static class PathFinder
 {
-    public static IEnumerable<Coordinate> GetPath(Move move)
+    public static IEnumerable<Square> GetPath(Move move)
     {
         if (move.IsHorizontal)
             return HorizontalPath(move);
@@ -13,26 +13,26 @@ public static class PathFinder
         if (move.IsDiagonal)
             return DiagonalPath(move);
 
-        return Enumerable.Empty<Coordinate>();
+        return Enumerable.Empty<Square>();
     }
 
-    private static IEnumerable<Coordinate> VerticalPath(Move move)
+    private static IEnumerable<Square> VerticalPath(Move move)
     {
         int step = Math.Sign(move.To.Rank - move.From.Rank);
         for (int r = move.From.Rank + step; r != move.To.Rank; r += step)
-            yield return new Coordinate(move.From.File, (byte)r);
+            yield return new Square(move.From.File, (byte)r);
         yield return move.To;
     }
 
-    private static IEnumerable<Coordinate> HorizontalPath(Move move)
+    private static IEnumerable<Square> HorizontalPath(Move move)
     {
         var step = (char)Math.Sign(move.To.File - move.From.File);
         for (var f = (char)(move.From.File + step); f != move.To.File; f += step)
-            yield return new Coordinate(f, move.From.Rank);
+            yield return new Square(f, move.From.Rank);
         yield return move.To;
     }
 
-    private static IEnumerable<Coordinate> DiagonalPath(Move move)
+    private static IEnumerable<Square> DiagonalPath(Move move)
     {
         int stepFile = Math.Sign(move.To.File - move.From.File);
         int stepRank = Math.Sign(move.To.Rank - move.From.Rank);
@@ -41,7 +41,7 @@ public static class PathFinder
 
         while (f != move.To.File && r != move.To.Rank)
         {
-            yield return new Coordinate(f, r);
+            yield return new Square(f, r);
             f += (char)stepFile;
             r += (byte)stepRank;
         }

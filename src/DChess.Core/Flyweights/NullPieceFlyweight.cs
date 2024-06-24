@@ -10,12 +10,12 @@ public record NullPieceFlyweight : PieceFlyweight
     }
 
     public NullPieceFlyweight(IErrorHandler errorHandler)
-        : base(new PieceContext(new PieceAttributes(Kind.None, None), Coordinate.None))
+        : base(new PieceContext(new PieceAttributes(Kind.None, None), Square.None))
     {
     }
 
     public override string PieceName { get; } = "NullPieceFlyweight";
 
-    protected override MoveResult ValidatePath(Coordinate to, Game.Game game) =>
+    protected override MoveResult ValidatePath(Square to, Game.Game game) =>
         new(NullMove, FromCellDoesNoteContainPiece);
 }

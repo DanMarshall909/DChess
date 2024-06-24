@@ -13,13 +13,13 @@ public readonly record struct Board
     private PieceAttributes[] Data { get; } = new PieceAttributes[TotalCellsOnBoard];
 
     /// <summary>
-    ///     Gets or sets the pieceAttributes at the specified coordinate.
+    ///     Gets or sets the pieceAttributes at the specified square.
     /// </summary>
-    /// <param name="coordinate"></param>
-    public PieceAttributes this[Coordinate coordinate]
+    /// <param name="square"></param>
+    public PieceAttributes this[Square square]
     {
-        get => this[coordinate.File, coordinate.Rank];
-        set => this[coordinate.File, coordinate.Rank] = value;
+        get => this[square.File, square.Rank];
+        set => this[square.File, square.Rank] = value;
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ public readonly record struct Board
 
     public static Board CloneOrEmptyIfNull(Board? board)
         => board is not null
-            ? new Board(board!.Value.Data.Clone() as PieceAttributes[] ?? Array.Empty<PieceAttributes>())
+            ? new Board(board.Value.Data.Clone() as PieceAttributes[] ?? Array.Empty<PieceAttributes>())
             : new Board();
 
     private static PieceAttributes[] CloneOf(PieceAttributes[] properties)
@@ -67,46 +67,46 @@ public readonly record struct Board
     }
 
     /// <summary>
-    ///     Finds the first coordinate that matches the predicate.
+    ///     Finds the first square that matches the predicate.
     /// </summary>
     /// <param name="predicate"></param>
-    /// <returns>The first coordinate that matches the predicate, or NullCoordinate if none match.</returns>
-    public Coordinate Find(Func<PieceAttributes, bool> predicate)
+    /// <returns>The first square that matches the predicate, or NullSquare if none match.</returns>
+    public Square Find(Func<PieceAttributes, bool> predicate)
     {
         for (byte f = 0; f < 8; f++)
         for (byte r = 0; r < 8; r++)
         {
             var props = this[f, r];
             if (predicate(props))
-                return new Coordinate(f, r);
+                return new Square(f, r);
         }
 
-        return NullCoordinate;
+        return NullSquare;
     }
 
-    public bool HasPieceAt(Coordinate coordinate) => this[coordinate] != PieceAttributes.None;
+    public bool HasPieceAt(Square square) => this[square] != PieceAttributes.None;
 
-    public void RemovePieceAt(Coordinate coordinate)
+    public void RemovePieceAt(Square square)
     {
-        this[coordinate] = PieceAttributes.None;
+        this[square] = PieceAttributes.None;
     }
 
-    public void SetPiece(Coordinate coordinate, PieceAttributes pieceAttributes)
+    public void SetPiece(Square square, PieceAttributes pieceAttributes)
     {
-        this[coordinate] = pieceAttributes;
+        this[square] = pieceAttributes;
     }
 
-    public void Place(PieceAttributes piecePieceAttributes, Coordinate at)
+    public void Place(PieceAttributes piecePieceAttributes, Square at)
     {
         this[at] = piecePieceAttributes;
     }
 
-    public bool TryGetProperties(Coordinate coordinate, out PieceAttributes pieceAttributes)
+    public bool TryGetProperties(Square square, out PieceAttributes pieceAttributes)
     {
-        pieceAttributes = this[coordinate];
+        pieceAttributes = this[square];
         return pieceAttributes != PieceAttributes.None;
     }
 
-    public Coordinate KingCoordinate(Colour colour)
+    public Square KingSquare(Colour colour)
         => Find(props => props.Kind == Kind.King && props.Colour == colour);
 }

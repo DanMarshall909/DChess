@@ -9,30 +9,53 @@ public record Pawn : PieceFlyweight, IIgnorePathCheck
 
     public override string PieceName => "Pawn";
 
-    protected override MoveResult ValidatePath(Coordinate to, Game.Game game)
+    protected override MoveResult ValidatePath(Square to, Game.Game game)
     {
-        var move = new Move(Coordinate, to);
+        var move = new Move(Square, to);
 
-        if (move.IsHorizontal)
+        if (IsMoveHorizontal(move))
             return move.AsInvalidBecause(PawnsCannotMoveHorizontally);
 
-        if (move.IsBackwards(Colour))
+        if (IsMoveBackwards(move))
             return move.AsInvalidBecause(PawnsCanOnlyMoveForward);
 
-        if (move.IsDiagonal)
-        {
-            if (!game.Board.HasPieceAt(to))
-                return move.AsInvalidBecause(PawnsCanOnlySideStepWhenCapturing);
+        if (IsMoveDiagonal(move))
+            return ValidateDiagonalMove(move, game);
 
-            return move.Distance.Horizontal == 1
-                ? move.AsOkResult()
-                : move.AsInvalidBecause(PawnsCanOnlySideStepWhenCapturing);
-        }
+        return ValidateStraightMove(move);
+    }
 
+    private bool IsMoveHorizontal(Move move)
+    {
+        return move.IsHorizontal;
+    }
+
+    private bool IsMoveBackwards(Move move)
+    {
+        return move.IsBackwards(Colour);
+    }
+
+    private bool IsMoveDiagonal(Move move)
+    {
+        return move.IsDiagonal;
+    }
+
+    private MoveResult ValidateDiagonalMove(Move move, Game.Game game)
+    {
+        if (!game.Board.HasPieceAt(move.To))
+            return move.AsInvalidBecause(PawnsCanOnlySideStepWhenCapturing);
+
+        return move.Distance.Horizontal == 1
+            ? move.AsOkResult()
+            : move.AsInvalidBecause(PawnsCanOnlySideStepWhenCapturing);
+    }
+
+    private MoveResult ValidateStraightMove(Move move)
+    {
         int verticalDistance = move.Distance.Vertical;
 
-        bool isFirstMove = (Coordinate.Rank == 2 && Colour == White) ||
-                           (Coordinate.Rank == 7 && Colour == Black);
+        bool isFirstMove = (Square.Rank == 2 && Colour == White) ||
+                           (Square.Rank == 7 && Colour == Black);
 
         if (verticalDistance > 2)
             return move.AsInvalidBecause(PawnsCanOnlyMove1Or2SquaresForward);

@@ -39,11 +39,11 @@ DChess is a chess engine designed to be:
 
 ## Allow a piece to be moved
 
-- [X] Add a method on the piece base class to move by coordinate.
+- [X] Add a method on the piece base class to move by square.
 - [X] Add a method to check if the move is generally valid.
 - [X] Add a virtual method to check if a move for the particular piece type is valid.
 - [X] Disallow taking your own pieces.
-- [X] ~~Disallow moving off the board. Already handled by Coordinate validation~~
+- [X] ~~Disallow moving off the board. Already handled by square validation~~
 
 ## Specific Piece Movement Rules
 
@@ -103,7 +103,7 @@ DChess is a chess engine designed to be:
 
 ## Allow the User to Move Pieces Using Algebraic Notation
 
-- [ ] Parse algebraic notation into board coordinates.
+- [ ] Parse algebraic notation into board squares.
 - [ ] Create a function to update the board based on the parsed move.
 - [ ] Develop input validation to ensure notation is syntactically correct.
 
@@ -163,7 +163,7 @@ This endpoint returns a board with a given game state.
   will be returned.
 - `move` (optional): The move to be made by the player. If the move is valid, the board will be updated with the new
   move and the AI will make its move. `move` can be specified as a string in algebraic notation (
-  see https://en.wikipedia.org/wiki/Algebraic_notation_(chess)) or as a pair of coordinates e.g. `e2e4`.
+  see https://en.wikipedia.org/wiki/Algebraic_notation_(chess)) or as a pair of squares e.g. `e2e4`.
 
 # Optimisation
 

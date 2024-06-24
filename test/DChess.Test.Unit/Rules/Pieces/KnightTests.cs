@@ -4,7 +4,7 @@ public class KnightTests : GameTestBase
 {
     private const int X = LegalPositionValue;
 
-    private static MoveOffset[] LegalOffsets => new byte[15, 15]
+    private static MoveOffset[] LegalOffsets => new byte[,]
     {
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -33,6 +33,6 @@ public class KnightTests : GameTestBase
     public void knights_can_jump_over_other_pieces()
     {
         WhiteKnight.ShouldOnlyBeAbleToMoveTo(LegalOffsets, ErrorHandler,
-            (board, coordinate) => board.Surround(coordinate, WhitePawn));
+            (board, square) => board.Surround(square, WhitePawn));
     }
 }

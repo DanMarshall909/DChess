@@ -12,7 +12,7 @@ public class ExceptionErrorHandler : IErrorHandler
         throw new NoKingFoundException(missingKingColour);
     }
 
-    public void HandleNoPieceAt(Coordinate moveFrom)
+    public void HandleNoPieceAt(Square moveFrom)
     {
         throw new NotImplementedException();
     }

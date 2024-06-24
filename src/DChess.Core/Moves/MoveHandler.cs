@@ -29,7 +29,7 @@ public class MoveHandler(IErrorHandler errorHandler)
         foreach (var piece in game.FriendlyPieces(colour))
         foreach (var moveValidity in piece.MoveValidities(game))
             if (moveValidity.result.IsValid)
-                yield return new Move(piece.Coordinate, moveValidity.to);
+                yield return new Move(piece.Square, moveValidity.to);
     }
 
     // Gets the best move for the current player

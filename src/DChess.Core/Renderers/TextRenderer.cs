@@ -32,8 +32,8 @@ public class TextRenderer : IBoardRenderer
 
     private static char PieceChar(char file, byte rank, Board board)
     {
-        if (board.TryGetProperties(new Coordinate(file, rank), out var chessPiece))
-            return DisplayChar(chessPiece!);
+        if (board.TryGetProperties(new Square(file, rank), out var chessPiece))
+            return DisplayChar(chessPiece);
 
         bool isOddSquare = (rank + file) % 2 == 0;
         return isOddSquare ? BlackSquare : WhiteSquare;

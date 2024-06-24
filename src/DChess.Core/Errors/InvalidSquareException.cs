@@ -1,15 +1,15 @@
 ﻿namespace DChess.Core.Errors;
 
-public class InvalidCoordinateException : DChessException
+public class InvalidSquareException : DChessException
 {
-    public InvalidCoordinateException(char file, byte rank, string message = "")
+    public InvalidSquareException(char file, byte rank, string message = "")
     {
         File = file;
         Rank = rank;
         Message = message;
     }
 
-    public InvalidCoordinateException(string positionNameMustBeCharactersLong) =>
+    public InvalidSquareException(string positionNameMustBeCharactersLong) =>
         Message = positionNameMustBeCharactersLong;
 
     public char? File { get; set; }

@@ -8,16 +8,16 @@ internal record Knight : PieceFlyweight, IIgnorePathCheck
 
     public override string PieceName => "Knight";
 
-    protected override MoveResult ValidatePath(Coordinate to, Game.Game game)
+    protected override MoveResult ValidatePath(Square to, Game.Game game)
     {
-        var move = new Move(Coordinate, to);
+        var move = new Move(Square, to);
         return MoveMustBeLShape(to, move);
     }
 
-    private MoveResult MoveMustBeLShape(Coordinate to, Move move)
+    private MoveResult MoveMustBeLShape(Square to, Move move)
     {
-        int dx = Math.Abs(to.File - Coordinate.File);
-        int dy = Math.Abs(to.Rank - Coordinate.Rank);
+        int dx = Math.Abs(to.File - Square.File);
+        int dy = Math.Abs(to.Rank - Square.Rank);
 
         return dx switch
         {

@@ -1,17 +1,17 @@
 namespace DChess.Core.Moves;
 
-public readonly record struct Move(Coordinate From, Coordinate To)
+public readonly record struct Move(Square From, Square To)
 {
-    public static Move NullMove => new(NullCoordinate, NullCoordinate);
+    public static Move NullMove => new(NullSquare, NullSquare);
     public Distance Distance => new Memo<Move, Distance>(move => new Distance(move)).Execute(this);
-    public bool HasPath => CoordinatesAlongPath.Any();
+    public bool HasPath => SquaresAlongPath.Any();
     public bool IsDiagonal => Math.Abs(To.File - From.File) == Math.Abs(To.Rank - From.Rank);
     public bool IsVertical => From.File == To.File;
     public bool IsHorizontal => From.Rank == To.Rank;
     public bool IsAdjacent => Distance.Total == 1;
 
-    public IEnumerable<Coordinate> CoordinatesAlongPath =>
-        new Memo<Move, IEnumerable<Coordinate>>(PathFinder.GetPath).Execute(this);
+    public IEnumerable<Square> SquaresAlongPath =>
+        new Memo<Move, IEnumerable<Square>>(PathFinder.GetPath).Execute(this);
 
     private MoveOffset Offset => new(To.File - From.File, To.Rank - From.Rank);
 
@@ -20,7 +20,7 @@ public readonly record struct Move(Coordinate From, Coordinate To)
         : To.Rank > From.Rank;
 
     public bool IsBlocked(Board board) =>
-        CoordinatesAlongPath.SkipLast(1).Any(coordinate => board.HasPieceAt(coordinate));
+        SquaresAlongPath.SkipLast(1).Any(square => board.HasPieceAt(square));
 
     public override string ToString() => $"{From} -> {To}";
     public MoveResult AsOkResult() => new(this, Ok);

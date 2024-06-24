@@ -4,7 +4,7 @@ public class MovementTestingExtensionsTests
 {
     private const byte X = LegalPositionValue;
 
-    public byte[,] Matrix = new byte[15, 15]
+    public byte[,] Matrix = new byte[,]
     {
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },

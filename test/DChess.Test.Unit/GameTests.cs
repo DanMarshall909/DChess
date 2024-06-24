@@ -16,19 +16,19 @@ public class GameTests : GameTestBase
     [InlineData("a9")]
     [InlineData("1a")]
     [InlineData("9a")]
-    public void an_invalid_position_should_throw_an_exception(string coordinateString)
+    public void an_invalid_position_should_throw_an_exception(string squareString)
     {
         // ReSharper disable once ObjectCreationAsStatement
 #pragma warning disable CA1806
-        Action act = () => new Coordinate(coordinateString);
+        Action act = () => new Square(squareString);
 #pragma warning restore CA1806
-        act.Should().Throw<InvalidCoordinateException>();
+        act.Should().Throw<InvalidSquareException>();
     }
 
     [Fact(DisplayName = "A position can be described by a file and rank")]
     public void a_position_can_be_described_by_a_file_and_rank()
     {
-        var position = new Coordinate("a1");
+        var position = new Square("a1");
 
         position.File.Should().Be('a');
         position.Rank.Should().Be(1);
@@ -58,9 +58,9 @@ public class GameTests : GameTestBase
     [InlineData('1', 1)]
     public void a_piece_cannot_be_placed_outside_the_board(char column, byte row)
     {
-        var act = () => Sut.Board.Place(WhitePawn, new Coordinate(column, row));
+        var act = () => Sut.Board.Place(WhitePawn, new Square(column, row));
 
-        act.Should().Throw<InvalidCoordinateException>();
+        act.Should().Throw<InvalidSquareException>();
     }
 
     [Theory(DisplayName = "Board can be created with a standard pieceAttributes layout")]
@@ -96,13 +96,13 @@ public class GameTests : GameTestBase
     [InlineData("f1", Piece.Kind.Bishop, White)]
     [InlineData("g1", Piece.Kind.Knight, White)]
     [InlineData("h1", Piece.Kind.Rook, White)]
-    public void board_can_be_created_with_a_standard_piece_layout(string coordinateString, Piece.Kind kind,
+    public void board_can_be_created_with_a_standard_piece_layout(string squareString, Piece.Kind kind,
         Colour colour)
     {
         Sut.Board.SetStandardLayout();
 
-        var coordinate = new Coordinate(coordinateString);
-        Sut.Board[coordinate].Should().BeEquivalentTo(new PieceAttributes(kind, colour));
+        var square = new Square(squareString);
+        Sut.Board[square].Should().BeEquivalentTo(new PieceAttributes(kind, colour));
     }
 
     [Fact(DisplayName = "A piece can be added to the board")]

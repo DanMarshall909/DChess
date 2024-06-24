@@ -29,22 +29,22 @@ public sealed class Game
     public Board Board => _board;
     public Colour CurrentPlayer { get; set; } = White;
 
-    public ReadOnlyDictionary<Coordinate, PieceFlyweight> Pieces
+    public ReadOnlyDictionary<Square, PieceFlyweight> Pieces
     {
         get
         {
-            var pieces = new Dictionary<Coordinate, PieceFlyweight>();
+            var pieces = new Dictionary<Square, PieceFlyweight>();
             for (var f = 0; f < 8; f++)
             for (var r = 0; r < 8; r++)
             {
                 var props = _board[f, r];
                 if (props == PieceAttributes.None) continue;
-                var coordinateFromZeroOffset = Coordinate.FromZeroOffset(f, r);
-                pieces.Add(coordinateFromZeroOffset
-                    , PieceFlyweightPool.PieceWithProperties(new(coordinateFromZeroOffset, props)));
+                var squareFromZeroOffset = Square.FromZeroOffset(f, r);
+                pieces.Add(squareFromZeroOffset
+                    , PieceFlyweightPool.PieceWithProperties(new(squareFromZeroOffset, props)));
             }
 
-            return new ReadOnlyDictionary<Coordinate, PieceFlyweight>(pieces);
+            return new ReadOnlyDictionary<Square, PieceFlyweight>(pieces);
         }
     }
 
@@ -56,7 +56,7 @@ public sealed class Game
             CurrentPlayer = CurrentPlayer
         };
 
-    public override string ToString() => Pieces.Where(x => x.Key != Coordinate.None)?.ToString() ?? "Not initialised";
+    public override string ToString() => Pieces.Where(x => x.Key != Square.None).ToString() ?? "Not initialised";
 
     public IEnumerable<PieceFlyweight> FriendlyPieces(Colour colour)
     {
@@ -66,14 +66,14 @@ public sealed class Game
         {
             var props = _board[f, r];
             if (props.Colour == colour)
-                yield return PieceFlyweightPool.PieceWithProperties(new(Coordinate.FromZeroOffset(f, r), props));
+                yield return PieceFlyweightPool.PieceWithProperties(new(Square.FromZeroOffset(f, r), props));
         }
     }
 
     public IEnumerable<PieceFlyweight> OpposingPieces(Colour colour)
         => FriendlyPieces(colour.Invert());
 
-    public bool TryGetPiece(Coordinate at, out PieceFlyweight pieceFlyweight)
+    public bool TryGetPiece(Square at, out PieceFlyweight pieceFlyweight)
     {
         var p = _board.TryGetProperties(at, out var properties) ? properties : PieceAttributes.None;
         if (p == PieceAttributes.None)
@@ -88,8 +88,8 @@ public sealed class Game
 
     public bool IsInCheck(Colour colour)
     {
-        var king = Board.KingCoordinate(colour);
-        if (king != Coordinate.None)
+        var king = Board.KingSquare(colour);
+        if (king != Square.None)
             return OpposingPieces(colour).Any(piece => piece.CanMoveTo(king, this));
 
         _errorHandler.HandleNoKingFound(colour);
@@ -109,7 +109,7 @@ public sealed class Game
         _moveHandler.Make(move, this);
     }
 
-    public void Move(Coordinate from, Coordinate to)
+    public void Move(Square from, Square to)
     {
         _moveHandler.Make(new Move(from, to), this);
     }

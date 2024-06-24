@@ -8,9 +8,9 @@ public record Queen : PieceFlyweight
 
     public override string PieceName => "Queen";
 
-    protected override MoveResult ValidatePath(Coordinate to, Game.Game game)
+    protected override MoveResult ValidatePath(Square to, Game.Game game)
     {
-        var move = new Move(Coordinate, to);
+        var move = new Move(Square, to);
 
         return move.IsDiagonal || move.IsVertical || move.IsHorizontal
             ? move.AsOkResult()

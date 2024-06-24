@@ -8,9 +8,9 @@ internal record Bishop : PieceFlyweight
 
     public override string PieceName => "Bishop";
 
-    protected override MoveResult ValidatePath(Coordinate to, Game.Game game)
+    protected override MoveResult ValidatePath(Square to, Game.Game game)
     {
-        var move = new Move(Coordinate, to);
+        var move = new Move(Square, to);
         if (!move.IsDiagonal)
             return move.AsInvalidBecause(BishopCanOnlyMoveDiagonally);
 

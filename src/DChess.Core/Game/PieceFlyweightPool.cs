@@ -16,8 +16,6 @@ public class PieceFlyweightPool
         if (Pool.TryGetValue(pieceContext, out var piece))
             return piece;
 
-        var (coordinate, properties) = pieceContext;
-        
         piece = CreatePiece(pieceContext);
         Pool[pieceContext] = piece;
 

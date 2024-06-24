@@ -7,7 +7,7 @@ public class KingTests : GameTestBase
     [Fact(DisplayName = "Kings can only move diagonally, vertically or horizontally")]
     public void kings_can_only_move_diagonally_vertically_or_horizontally()
     {
-        WhiteKing.ShouldOnlyBeAbleToMoveTo(new byte[15, 15]
+        WhiteKing.ShouldOnlyBeAbleToMoveTo(new byte[,]
         {
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },

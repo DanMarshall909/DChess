@@ -8,16 +8,16 @@ public abstract record PieceFlyweight
     protected PieceFlyweight(PieceContext pieceContext)
     {
         PieceAttributes = pieceContext.PieceAttributes;
-        Coordinate = pieceContext.Coordinate;
+        Square = pieceContext.Square;
     }
 
     public abstract string PieceName { get; }
     public PieceAttributes PieceAttributes { get; init; }
-    public Coordinate Coordinate { get; init; }
+    public Square Square { get; init; }
     public Colour Colour => PieceAttributes.Colour;
     public Kind Kind => PieceAttributes.Kind;
 
-    public MoveResult CheckMove(Coordinate to, Game.Game game)
+    public MoveResult CheckMove(Square to, Game.Game game)
     {
         var generalMoveResult = IsGenerallyValid(to, game);
 
@@ -30,22 +30,22 @@ public abstract record PieceFlyweight
         return moveResult;
     }
 
-    private MoveResult IsGenerallyValid(Coordinate to, Game.Game game)
+    private MoveResult IsGenerallyValid(Square to, Game.Game game)
     {
-        var move = new Move(Coordinate, to);
+        var move = new Move(Square, to);
 
         var movedPieceColour = PieceAttributes.Colour;
         if (game.CurrentPlayer != PieceAttributes.Colour)
             return move.AsInvalidBecause(CannotMoveOpponentsPiece);
 
-        if (Coordinate == to)
+        if (Square == to)
             return move.AsInvalidBecause(CannotMoveToSameCell);
 
         if (game.TryGetPiece(to, out var piece) &&
             piece.Colour == movedPieceColour) return move.AsInvalidBecause(CannotCaptureOwnPiece);
 
         if (this is not IIgnorePathCheck &&
-            move.CoordinatesAlongPath.Any(coordinate => game.Board.HasPieceAt(coordinate)))
+            move.SquaresAlongPath.Any(square => game.Board.HasPieceAt(square)))
             return move.AsInvalidBecause(CannotJumpOverOtherPieces);
 
         if (MovingIntoCheck(movedPieceColour, move, game))
@@ -62,9 +62,9 @@ public abstract record PieceFlyweight
         return newGameState.IsInCheck(movedPieceColour);
     }
 
-    public bool CanMoveTo(Coordinate to, Game.Game game, params MoveValidity[] validationsToIgnore)
+    public bool CanMoveTo(Square to, Game.Game game, params MoveValidity[] validationsToIgnore)
     {
-        var move = new Move(Coordinate, to);
+        var move = new Move(Square, to);
         var val = ValidatePath(to, game.AsClone());
         if (!val.IsValid)
             return false;
@@ -72,28 +72,27 @@ public abstract record PieceFlyweight
         return move.HasPath && !move.IsBlocked(game.Board);
     }
 
-    // todo: restrict this per piece for performance
-    public IEnumerable<Coordinate> GetPossibleMoveCoordinates(Game.Game game) => Coordinate.All;
-
-    public IEnumerable<(Coordinate to, MoveResult result)> MoveValidities(Game.Game game)
+    public IEnumerable<(Square to, MoveResult result)> MoveValidities(Game.Game game)
     {
         // todo: cache?
         var newGameState = game.AsClone();
-        return GetPossibleMoveCoordinates(newGameState)
+        return SquaresToCheckForMoveValidities(newGameState)
             .Select(to => (to, CheckMove(to, newGameState)));
     }
 
-    protected abstract MoveResult ValidatePath(Coordinate to, Game.Game state);
+    // todo: We don't need to check very square dependent on piece. Optimise this to check only those that need to be.
+    private IEnumerable<Square> SquaresToCheckForMoveValidities(Game.Game game) => Square.All;
 
-    public void Deconstruct(out PieceAttributes pieceAttributes, out Coordinate coordinate)
+    protected abstract MoveResult ValidatePath(Square to, Game.Game state);
+
+    public void Deconstruct(out PieceAttributes pieceAttributes, out Square square)
     {
         pieceAttributes = PieceAttributes;
-        coordinate = Coordinate;
+        square = Square;
     }
 }
 
-public record struct PieceContext(PieceAttributes PieceAttributes, Coordinate Coordinate)
+public record struct PieceContext(PieceAttributes PieceAttributes, Square Square)
 {
-    public PieceContext(Coordinate Coordinate, PieceAttributes PieceAttributes) : this(PieceAttributes, Coordinate) { }
-    
+    public PieceContext(Square Square, PieceAttributes PieceAttributes) : this(PieceAttributes, Square) { }
 };

@@ -7,7 +7,7 @@ global using DChess.Core.Errors;
 global using DChess.Core.Game;
 global using DChess.Core.Moves;
 global using DChess.Core.Renderers;
-global using static DChess.Core.Game.NamedCoordinate;
+global using static DChess.Core.Game.NamedSquare;
 global using static DChess.Core.Flyweights.NamedPiece;
 global using static DChess.Core.Game.Colour;
 global using static DChess.Core.Game.Game.GameStatus;

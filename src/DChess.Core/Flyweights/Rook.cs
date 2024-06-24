@@ -8,9 +8,9 @@ internal record Rook : PieceFlyweight
 
     public override string PieceName => "Rook";
 
-    protected override MoveResult ValidatePath(Coordinate to, Game.Game game)
+    protected override MoveResult ValidatePath(Square to, Game.Game game)
     {
-        var move = new Move(Coordinate, to);
+        var move = new Move(Square, to);
 
         if (!(move.IsHorizontal || move.IsVertical))
             return move.AsInvalidBecause(RookCanOnlyMoveInAStraightLine);

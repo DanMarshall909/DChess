@@ -9,7 +9,7 @@ public static class MovementTestingExtensions
 
     /// <summary>
     ///     Test that A piece can move to a given set of offsets from its current position. Offsets resulting in invalid
-    ///     coordinates are ignored.
+    ///     squares are ignored.
     /// </summary>
     /// <param name="pieceAttributes">The pieceAttributes that will be evaluated e.g. WhiteKnight</param>
     /// <param name="offsetsFromCurrentPosition">
@@ -20,16 +20,16 @@ public static class MovementTestingExtensions
     /// <param name="testErrorHandler"></param>
     /// <param name="setupBoard">
     ///     An optional action that can be used to setup the board before each test. The action takes in
-    ///     the board and the coordinate of the pieceAttributes being tested
+    ///     the board and the square of the pieceAttributes being tested
     /// </param>
     public static void ShouldBeAbleToMoveTo(this PieceAttributes pieceAttributes,
         IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, IErrorHandler testErrorHandler,
-        Action<Game, Coordinate>? setupBoard = null)
+        Action<Game, Square>? setupBoard = null)
         => AbleToMoveWhenOffsetBy(pieceAttributes, offsetsFromCurrentPosition, true, testErrorHandler, setupBoard);
 
     /// <summary>
     ///     Tests that every offset in invalidOffsetsFromCurrentPosition array results in an invalid move.  Offsets resulting
-    ///     in invalid coordinates are ignored.
+    ///     in invalid squares are ignored.
     /// </summary>
     /// <param name="pieceAttributes"></param>
     /// <param name="invalidOffsetsFromCurrentPosition"></param>
@@ -37,12 +37,12 @@ public static class MovementTestingExtensions
     /// <param name="setupBoard"></param>
     public static void ShouldNotBeAbleToMoveTo(this PieceAttributes pieceAttributes,
         IReadOnlyCollection<MoveOffset> invalidOffsetsFromCurrentPosition, IErrorHandler errorHandler,
-        Action<Game, Coordinate>? setupBoard = null)
+        Action<Game, Square>? setupBoard = null)
         => AbleToMoveWhenOffsetBy(pieceAttributes, invalidOffsetsFromCurrentPosition, false, errorHandler, setupBoard);
 
     public static void ShouldOnlyBeAbleToMoveTo(this PieceAttributes pieceAttributes,
         IReadOnlyCollection<MoveOffset> validOffsetsFromCurrentPosition, IErrorHandler errorHandler,
-        Action<Game, Coordinate>? setupBoard = null)
+        Action<Game, Square>? setupBoard = null)
     {
         pieceAttributes.ShouldBeAbleToMoveTo(validOffsetsFromCurrentPosition, errorHandler, setupBoard);
         var invalidOffsetsFromCurrentPosition = validOffsetsFromCurrentPosition.Inverse().ToList().AsReadOnly();
@@ -51,7 +51,7 @@ public static class MovementTestingExtensions
 
     /// <summary>
     ///     Tests if A piece can move to a given set of offsets from its current position. Offsets resulting in invalid
-    ///     coordinates are ignored.
+    ///     squares are ignored.
     /// </summary>
     /// <param name="pieceAttributes"></param>
     /// <param name="offsetsFromCurrentPosition"></param>
@@ -60,13 +60,13 @@ public static class MovementTestingExtensions
     /// <param name="setupBoard"></param>
     private static void AbleToMoveWhenOffsetBy(this PieceAttributes pieceAttributes,
         IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, bool shouldBeAbleToMove, IErrorHandler errorHandler,
-        Action<Game, Coordinate>? setupBoard = null)
+        Action<Game, Square>? setupBoard = null)
     {
         var gameState = new Game(new Board(), errorHandler);
         for (byte rank = 1; rank < 8; rank++)
         for (var file = 'a'; file < 'h'; file++)
         {
-            var from = new Coordinate(file, rank);
+            var from = new Square(file, rank);
 
             gameState.Board.Clear();
             gameState.Board.Place(pieceAttributes, from);
@@ -85,7 +85,7 @@ public static class MovementTestingExtensions
         }
     }
 
-    public static void SetOffsetPositions(this Game game, Coordinate from, IEnumerable<MoveOffset> offsets,
+    public static void SetOffsetPositions(this Game game, Square from, IEnumerable<MoveOffset> offsets,
         PieceAttributes pieceAttributes)
     {
         foreach (var offset in offsets)
@@ -94,14 +94,14 @@ public static class MovementTestingExtensions
     }
 
     /// <summary>
-    ///     Sets the positions of the board to be 2 cells away from the given coordinate in all directions.
+    ///     Sets the positions of the board to be 2 cells away from the given square in all directions.
     /// </summary>
     /// <param name="game"></param>
-    /// <param name="coordinate">The coordinate to set the positions around</param>
+    /// <param name="square">The square to set the positions around</param>
     /// <param name="pieceAttributes"></param>
-    public static void Surround2CellsFrom(this Game game, Coordinate coordinate, PieceAttributes pieceAttributes)
+    public static void Surround2CellsFrom(this Game game, Square square, PieceAttributes pieceAttributes)
     {
-        SetOffsetPositions(game, coordinate, new MoveOffset[]
+        SetOffsetPositions(game, square, new MoveOffset[]
         {
             (-2, -2), (-1, -2), (0, -2), (1, -2), (2, -2),
             (-2, -1), (2, -1),
@@ -111,9 +111,9 @@ public static class MovementTestingExtensions
         }, pieceAttributes);
     }
 
-    public static void Surround(this Game game, Coordinate coordinate, PieceAttributes pieceAttributes)
+    public static void Surround(this Game game, Square square, PieceAttributes pieceAttributes)
     {
-        SetOffsetPositions(game, coordinate, new MoveOffset[]
+        SetOffsetPositions(game, square, new MoveOffset[]
         {
             (-1, 1),
             (1, 1),
@@ -129,7 +129,7 @@ public static class MovementTestingExtensions
 
     /// <summary>
     ///     Returns an "inverse" of the given offsets. The inverse of a set of offsets is the set of all offsets that are not
-    ///     in the given set bounded by -8 to 8. Note that not all of these offsets are valid coordinates on a chess board, so
+    ///     in the given set bounded by -8 to 8. Note that not all of these offsets are valid squares on a chess board, so
     ///     they should be checked before use.
     /// </summary>
     /// <param name="offsets">a collection of offsets</param>

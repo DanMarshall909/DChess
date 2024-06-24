@@ -10,8 +10,8 @@ public class PathFinderTests
     [InlineData("a1", "a2", 1)]
     public void a_vertical_move_has_a_path(string from, string to, int expectedLength)
     {
-        var move = new Move(new Coordinate(from), new Coordinate(to));
-        var path = move.CoordinatesAlongPath.ToList();
+        var move = new Move(new Square(from), new Square(to));
+        var path = move.SquaresAlongPath.ToList();
 
         Assert.Equal(expectedLength, path.Count());
     }
@@ -22,8 +22,8 @@ public class PathFinderTests
     [InlineData("a1", "b1", 1)]
     public void a_horizontal_move_has_a_path(string from, string to, int expectedLength)
     {
-        var move = new Move(new Coordinate(from), new Coordinate(to));
-        var path = move.CoordinatesAlongPath.ToList();
+        var move = new Move(new Square(from), new Square(to));
+        var path = move.SquaresAlongPath.ToList();
 
         Assert.Equal(expectedLength, path.Count());
     }
@@ -34,8 +34,8 @@ public class PathFinderTests
     [InlineData("a1", "b2", 1)]
     public void a_diagonal_move_has_a_path(string from, string to, int expectedLength)
     {
-        var move = new Move(new Coordinate(from), new Coordinate(to));
-        var path = move.CoordinatesAlongPath.ToList();
+        var move = new Move(new Square(from), new Square(to));
+        var path = move.SquaresAlongPath.ToList();
 
         Assert.Equal(expectedLength, path.Count());
     }

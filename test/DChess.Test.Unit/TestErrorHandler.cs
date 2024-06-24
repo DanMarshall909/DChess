@@ -16,5 +16,5 @@ public class TestErrorHandler : IErrorHandler
 
     public void HandleNoKingFound(Colour missingKingColour) => NoKingFoundExceptionThrown = true;
 
-    public void HandleNoPieceAt(Coordinate moveFrom) => NoPieceAtExceptionThrown = true;
+    public void HandleNoPieceAt(Square moveFrom) => NoPieceAtExceptionThrown = true;
 }
