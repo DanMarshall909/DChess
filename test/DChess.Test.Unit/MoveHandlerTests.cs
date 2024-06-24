@@ -64,4 +64,6 @@ public class MoveHandlerTests : GameTestBase
 
         MoveHandler.GetBestMove(Sut, Colour.White).Should().Be(takeQueen);
     }
+    
+    
 }

@@ -2,8 +2,8 @@
 
 public class TextRenderer : IBoardRenderer
 {
-    private const char WhiteSquare = '\u2588';
-    private const char BlackSquare = '\u2591';
+    public const char WhiteSquare = '\u2588';
+    public const char BlackSquare = '\u2591';
 
     public string LastRender { get; private set; } = string.Empty;
 
@@ -32,37 +32,10 @@ public class TextRenderer : IBoardRenderer
 
     private static char PieceChar(char file, byte rank, Board board)
     {
-        if (board.TryGetAtrributes(new Square(file, rank), out var chessPiece))
-            return DisplayChar(chessPiece);
+        if (board.TryGetAtrributes(new Square(file, rank), out var attribute))
+            return PieceAttributes.ToChar(attribute);
 
         bool isOddSquare = (rank + file) % 2 == 0;
         return isOddSquare ? BlackSquare : WhiteSquare;
-    }
-
-    private static char DisplayChar(PieceAttributes pieceAttributes)
-    {
-        return pieceAttributes.Colour switch
-        {
-            Black => pieceAttributes.Kind switch
-            {
-                Kind.Pawn => '♙',
-                Kind.Rook => '♖',
-                Kind.Knight => '♘',
-                Kind.Bishop => '♗',
-                Kind.Queen => '♕',
-                Kind.King => '♔',
-                _ => throw new ArgumentOutOfRangeException(nameof(Kind), pieceAttributes.Kind, "Unknown pieceAttributes kind")
-            },
-            _ => pieceAttributes.Kind switch
-            {
-                Kind.Pawn => '♟',
-                Kind.Rook => '♜',
-                Kind.Knight => '♞',
-                Kind.Bishop => '♝',
-                Kind.Queen => '♛',
-                Kind.King => '♚',
-                _ => throw new ArgumentOutOfRangeException(nameof(Kind), pieceAttributes.Kind, "Unknown pieceAttributes kind")
-            }
-        };
     }
 }
