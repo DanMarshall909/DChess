@@ -54,6 +54,7 @@ public abstract record PieceFlyweight
         return move.AsOkResult();
     }
 
+    
     private bool MovingIntoCheck(Colour movedPieceColour, Move move, Game.Game game)
     {
         var newGameState = game.AsClone();
@@ -61,7 +62,7 @@ public abstract record PieceFlyweight
 
         return newGameState.IsInCheck(movedPieceColour);
     }
-
+    
     public bool CanMoveTo(Square to, Game.Game game)
     {
         var move = new Move(Square, to);
@@ -69,7 +70,7 @@ public abstract record PieceFlyweight
         if (!val.IsValid)
             return false;
 
-        return move.HasPath && !move.IsBlocked(game.Board);
+        return !move.IsBlocked(game.Board);
     }
 
     public IEnumerable<(Square to, MoveResult result)> MoveValidities(Game.Game game)
@@ -91,8 +92,3 @@ public abstract record PieceFlyweight
         square = Square;
     }
 }
-
-public record struct PieceContext(PieceAttributes PieceAttributes, Square Square)
-{
-    public PieceContext(Square Square, PieceAttributes PieceAttributes) : this(PieceAttributes, Square) { }
-};

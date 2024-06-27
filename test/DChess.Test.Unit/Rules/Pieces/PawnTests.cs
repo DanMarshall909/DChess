@@ -1,3 +1,5 @@
+using DChess.Core.Game;
+
 namespace DChess.Test.Unit.Rules.Pieces;
 
 public class PawnTests : GameTestBase
@@ -20,7 +22,7 @@ public class PawnTests : GameTestBase
         Sut.Move(b2, b3);
         Sut.Move(b3, b4);
         Sut.Pieces[b4].CheckMove(b6, Sut).Validity.Should().Be(
-            PawnsCanOnlyMove2SquaresForwardFromStartingPosition,
+            PawnsCanOnlyMove1SquareForwardOr2SquaresForwardOnTheFirstMove,
             "the pawn has already moved");
     }
 
@@ -46,4 +48,23 @@ public class PawnTests : GameTestBase
         Sut.Move(f2, f1);
         Sut.Board[f1].Should().Be(BlackQueen, "black pawns are promoted to queens");
     }
+    
+    [Fact(DisplayName = "Pawns cannot take a piece to the side and 2 squares forward")]
+    public void pawns_cannot_take_a_piece_to_the_side_and_2_squares_forward()
+    {
+        var text = """
+                   █░█░k░█░
+                   ░█░█░█░█
+                   █░█░█░█░
+                   ░█░█░█░█
+                   █p█░█░█░
+                   ░█░█░█░█
+                   P░█░█░█░
+                   ░█░█K█░█
+                   """;
+        Sut.Board.Set(text);
+
+        Sut.Pieces[a2].CheckMove(b4, Sut).Validity.Should().Be(PawnsCanOnlySideStep1SquareWhenCapturing);
+    }
+
 }
