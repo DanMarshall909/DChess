@@ -19,6 +19,9 @@ public record Pawn : PieceFlyweight, IIgnorePathCheck
         {
             if (move.Distance.Total > (isFirstMove ? 2 : 1))
                 return move.AsInvalidBecause(PawnsCanOnlyMove1SquareForwardOr2SquaresForwardOnTheFirstMove);
+            
+            if(move.IsBackwards(Colour))
+                return move.AsInvalidBecause(PawnsCanOnlyMoveForward);
         }
         else if (move.IsDiagonal)
         {

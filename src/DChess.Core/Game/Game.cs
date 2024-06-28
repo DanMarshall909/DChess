@@ -15,7 +15,7 @@ public sealed class Game
         Stalemate
     }
 
-    private readonly Board _board;
+    private Board _board;
     private readonly IErrorHandler _errorHandler;
     private readonly MoveHandler _moveHandler;
 
@@ -56,7 +56,7 @@ public sealed class Game
             CurrentPlayer = CurrentPlayer
         };
 
-    public override string ToString() => Pieces.Where(x => x.Key != Square.None).ToString() ?? "Not initialised";
+    public override string ToString() => new Fen(this).FenString;
 
     public IEnumerable<PieceFlyweight> FriendlyPieces(Colour colour)
     {
@@ -121,5 +121,11 @@ public sealed class Game
         LastMove = move;
 
         return Task.CompletedTask;
+    }
+
+    public void Set(Fen fen)
+    {
+        _board = fen.Board;
+        CurrentPlayer = fen.CurrentPlayer;
     }
 }

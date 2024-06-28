@@ -46,18 +46,13 @@ public class MoveHandlerTests : GameTestBase
     [Fact(DisplayName = "The best move can be found by searching multiple moves ahead")]
     public void the_best_move_can_be_found_by_searching_multiple_moves_ahead()
     {
-        Sut.Board.SetStandardLayout();
-        Sut.Board.RemovePieceAt(b1);
-        Sut.Board.RemovePieceAt(f8);
+        Sut.Set(new Fen("7k/7p/7p/3p4/8/4N3/8/6R1 w - - 0 1"));
+        var moveRookToPutKingInCheck = new Move(c3, d5);
 
-        var takeBishop = new Move(c3, d5);
-        Sut.Board.Place(WhiteKnight, c3);
-
-        Sut.Board.Place(BlackBishop, d5);
-        MoveHandler.GetBestMove(Sut, Colour.White).Should().Be(takeBishop);
+        MoveHandler.GetBestMove(Sut, Colour.White).ToString().Should().Be(moveRookToPutKingInCheck.ToString());
 
         Sut.Board.Place(BlackPawn, e4);
-        MoveHandler.GetBestMove(Sut, Colour.White).Should().Be(takeBishop);
+        MoveHandler.GetBestMove(Sut, Colour.White).Should().Be(moveRookToPutKingInCheck);
 
         Sut.Board.Place(BlackQueen, b5);
         var takeQueen = new Move(c3, b5);
