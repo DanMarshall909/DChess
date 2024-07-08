@@ -5,9 +5,10 @@ namespace DChess.Test.Unit;
 
 public abstract class GameTestBase
 {
-    protected GameTestBase() => Sut = new Game(new Board(), ErrorHandler);
+    public int MaxAllowableDepth { get;set; } = 5;
+    protected GameTestBase() => Sut = new Game(new Board(), ErrorHandler, MaxAllowableDepth);
 
     protected IErrorHandler ErrorHandler { get; } = new TestErrorHandler();
-    protected MoveHandler MoveHandler => new(ErrorHandler);
+    protected MoveHandler MoveHandler => new(ErrorHandler, MaxAllowableDepth);
     protected Game Sut { get; init; }
 }

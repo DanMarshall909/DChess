@@ -9,6 +9,8 @@ public readonly record struct Move
         Offset = new MoveOffset(this);
     }
 
+    public bool Equals(Move? other) => other is not null && From == other?.From && To == other?.To;
+
     public static Move NullMove => new(NullSquare, NullSquare);
     public Distance Distance => new Memo<Move, Distance>(move => new Distance(move)).Execute(this);
     public bool HasPath => SquaresAlongPath.Any();
@@ -31,12 +33,13 @@ public readonly record struct Move
     public bool IsBlocked(Board board) =>
         SquaresAlongPath.SkipLast(1).Any(square => board.HasPieceAt(square));
 
-    public override string ToString() => $"{From} -> {To}";
+    public string Format() => $"({From}, {To})";
     public MoveResult AsOkResult() => new(this, Ok);
     public MoveResult AsInvalidBecause(MoveValidity invalidReason) => new(this, invalidReason);
+ 
     public void Deconstruct(out Square From, out Square To)
     {
-        From = this.From;
+        From = this.From; 
         To = this.To;
     }
 }

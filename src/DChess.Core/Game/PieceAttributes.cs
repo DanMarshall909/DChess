@@ -6,7 +6,7 @@ public readonly struct PieceAttributes(Colour colour, Kind kind) : IEquatable<Pi
     public Kind Kind { get; } = kind;
     public Colour Colour { get; } = colour;
 
-    public override string ToString() => $"{Colour} {Kind}";
+    public override string ToString() => AsChar.ToString();
 
     public bool Equals(PieceAttributes other) => Kind == other.Kind && Colour == other.Colour;
 
@@ -37,7 +37,7 @@ public readonly struct PieceAttributes(Colour colour, Kind kind) : IEquatable<Pi
     public static readonly Dictionary<char, PieceAttributes> AttributesByChar =
         CharByAttributes.ToDictionary(x => x.Value, x => x.Key);
 
-    public static char ToChar(PieceAttributes pieceAttributes) => CharByAttributes[pieceAttributes];
+    public char AsChar => CharByAttributes[this];
 
     public static PieceAttributes FromChar(char pieceChar) =>
         AttributesByChar.TryGetValue(pieceChar, out var pieceAttributes)

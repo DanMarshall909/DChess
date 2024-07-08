@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using DChess.Core;
 using DChess.Core.Errors;
 using DChess.Core.Game;
 using DChess.Core.Moves;
@@ -13,6 +12,8 @@ namespace DChess.Function;
 
 public static class GameFunction
 {
+    public const int MaxAllowableDepth = 5;
+
     [FunctionName("Game")]
     public static async Task<IActionResult> RunAsync(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]
@@ -26,7 +27,7 @@ public static class GameFunction
         var board = new Board();
         board.SetStandardLayout();
 
-        var game = new Game(board, new ExceptionErrorHandler());
+        var game = new Game(board, new ExceptionErrorHandler(), MaxAllowableDepth);
         game.CurrentPlayer = request.CurrentPlayer;
         game.Move(request.Move);
         await game.MakeBestMove(request.CurrentPlayer.Invert());
@@ -36,6 +37,7 @@ public static class GameFunction
             game.LastMove.ToString(),
             game.Board.RenderToText()));
     }
+
 
     public record Request(Colour Colour, Colour CurrentPlayer, Move Move);
 

@@ -32,8 +32,8 @@ public class TextRenderer : IBoardRenderer
 
     private static char PieceChar(char file, byte rank, Board board)
     {
-        if (board.TryGetAtrributes(new Square(file, rank), out var attribute))
-            return PieceAttributes.ToChar(attribute);
+        if (board.TryGetAtributes(new Square(file, rank), out var attribute))
+            return attribute.AsChar;
 
         bool isOddSquare = (rank + file) % 2 == 0;
         return isOddSquare ? BlackSquare : WhiteSquare;

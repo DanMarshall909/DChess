@@ -62,21 +62,21 @@ public static class MovementTestingExtensions
         IReadOnlyCollection<MoveOffset> offsetsFromCurrentPosition, bool shouldBeAbleToMove, IErrorHandler errorHandler,
         Action<Game, Square>? setupBoard = null)
     {
-        var gameState = new Game(new Board(), errorHandler);
+        var game = new Game(new Board(), errorHandler, maxAllowableDepth: 3);
         for (byte rank = 1; rank < 8; rank++)
         for (var file = 'a'; file < 'h'; file++)
         {
             var from = new Square(file, rank);
 
-            gameState.Board.Clear();
-            gameState.Board.Place(pieceAttributes, from);
-            setupBoard?.Invoke(gameState, from);
+            game.Board.Clear();
+            game.Board.Place(pieceAttributes, from);
+            setupBoard?.Invoke(game, from);
 
-            var pieceAtFrom = gameState.Pieces[from];
+            var pieceAtFrom = game.Pieces[from];
             foreach (var offset in offsetsFromCurrentPosition)
                 if (from.TryApplyOffset(offset, out var to))
                 {
-                    var moveResult = pieceAtFrom.CheckMove(to, gameState);
+                    var moveResult = pieceAtFrom.CheckMove(to, game);
                     moveResult
                         .IsValid
                         .Should().Be(shouldBeAbleToMove,

@@ -1,7 +1,16 @@
 namespace DChess.Core.Moves;
 
-public class MoveHandler(IErrorHandler errorHandler)
+public class MoveHandler
 {
+    private readonly int _maxAllowableDepth;
+    private readonly IErrorHandler _errorHandler;
+
+    public MoveHandler(IErrorHandler errorHandler, int maxAllowableDepth)
+    {
+        _errorHandler = errorHandler;
+        _maxAllowableDepth = maxAllowableDepth;
+    }
+
     public void Make(Move move, Game.Game game)
     {
         ApplyMove(move, game);
@@ -10,8 +19,8 @@ public class MoveHandler(IErrorHandler errorHandler)
 
     private void ApplyMove(Move move, Game.Game game)
     {
-        if (!game.Board.TryGetAtrributes(move.From, out var props))
-            errorHandler.HandleInvalidMove(new MoveResult(move, FromCellDoesNoteContainPiece));
+        if (!game.Board.TryGetAtributes(move.From, out var props))
+            _errorHandler.HandleInvalidMove(new MoveResult(move, FromCellDoesNoteContainPiece));
 
         bool pawnIsPromoted = props.Kind is Kind.Pawn && move.To.Rank is 1 or 8;
         var updatedProperties = pawnIsPromoted
@@ -21,7 +30,7 @@ public class MoveHandler(IErrorHandler errorHandler)
         game.Board.RemovePieceAt(move.From);
         game.Board.Place(updatedProperties, move.To);
     }
-    
+
     public static bool HasLegalMoves(Colour colour, Game.Game game) => LegalMoves(colour, game).Any();
 
     public static IEnumerable<Move> LegalMoves(Colour colour, Game.Game game)
@@ -35,39 +44,83 @@ public class MoveHandler(IErrorHandler errorHandler)
     // Gets the best move for the current player
     public Move GetBestMove(Game.Game game, Colour playerColour, int depth = 1)
     {
-        var bestMove = NullMove;
-        var bestScore = int.MinValue;
+        // function minimax(board, depth, isMaximizingPlayer):
+        // if current board state is a terminal state :
+        //     return value of the board
+        //
+        // if isMaximizingPlayer :
+        //     bestVal = -INFINITY 
+        //     for each move in board :
+        //         value = minimax(board, depth+1, false)
+        //         bestVal = max( bestVal, value) 
+        //     return bestVal
+        //
+        // else :
+        //     bestVal = +INFINITY 
+        //     for each move in board :
+        //         value = minimax(board, depth+1, true)
+        //         bestVal = min( bestVal, value) 
+        //     return bestVal
 
-        var oppositeColour = playerColour.Invert();
+        var bestMove = NullMove;
+
+        var bestVal = int.MinValue;
         foreach (var move in LegalMoves(playerColour, game))
         {
             var clonedGame = game.AsClone();
             clonedGame.Move(move);
-            int score = GetGameStateScore(clonedGame, playerColour);
-            if (score > bestScore)
+            var value = Minimax(clonedGame, depth, false);
+            if (value > bestVal)
             {
-                bestScore = score;
+                bestVal = value;
                 bestMove = move;
             }
-
-            if (depth <= 1) continue;
-            
-            int opponentScore = -GetGameStateScore(clonedGame, oppositeColour);
-            
-            if (opponentScore <= bestScore) continue;
-            
-            bestScore = opponentScore;
-            bestMove = move;
         }
 
         return bestMove;
+    }
+
+    int Minimax(Game.Game game, int depth, bool isMaximizingPlayer)
+    {
+        var bestVal = isMaximizingPlayer ? int.MinValue : int.MaxValue;
+
+        if (game.Status(game.Opponent) == Checkmate)
+            return bestVal;
+
+        if (depth == 0)
+            return GetGameStateScore(game, game.CurrentPlayer);
+
+        if (isMaximizingPlayer)
+        {
+            foreach (var move in LegalMoves(game.CurrentPlayer, game))
+            {
+                var clonedGame = game.AsClone();
+                clonedGame.Move(move);
+                var value = Minimax(clonedGame, depth - 1, false);
+                bestVal = Math.Max(bestVal, value);
+            }
+
+            return bestVal;
+        }
+        else
+        {
+            foreach (var move in LegalMoves(game.CurrentPlayer, game))
+            {
+                var clonedGame = game.AsClone();
+                clonedGame.Move(move);
+                var value = Minimax(clonedGame, depth - 1, true);
+                bestVal = Math.Min(bestVal, value);
+            }
+
+            return bestVal;
+        }
     }
 
     public int GetGameStateScore(Game.Game game, Colour playerColour)
     {
         var score = 0;
         var oppositeColour = playerColour.Invert();
-        
+
         var status = game.Status(oppositeColour);
         switch (status)
         {

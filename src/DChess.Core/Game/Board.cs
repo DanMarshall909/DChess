@@ -4,6 +4,8 @@ public readonly record struct Board
 {
     private const int TotalCellsOnBoard = 8 * 8;
 
+    public string AsText => this.RenderToText();
+    
     public Board()
         => Clear();
 
@@ -101,7 +103,7 @@ public readonly record struct Board
         this[at] = piecePieceAttributes;
     }
 
-    public bool TryGetAtrributes(Square square, out PieceAttributes pieceAttributes)
+    public bool TryGetAtributes(Square square, out PieceAttributes pieceAttributes)
     {
         pieceAttributes = this[square];
         return pieceAttributes != PieceAttributes.None;

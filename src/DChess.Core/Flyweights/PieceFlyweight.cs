@@ -11,6 +11,8 @@ public abstract record PieceFlyweight
         Square = pieceContext.Square;
     }
 
+    public override string ToString() => PieceAttributes.ToString();
+
     public abstract string PieceName { get; }
     public PieceAttributes PieceAttributes { get; }
     public Square Square { get; }

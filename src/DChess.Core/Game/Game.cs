@@ -18,16 +18,19 @@ public sealed class Game
     private Board _board;
     private readonly IErrorHandler _errorHandler;
     private readonly MoveHandler _moveHandler;
+    private readonly int _maxAllowableDepth;
 
-    public Game(Board board, IErrorHandler errorHandler)
+    public Game(Board board, IErrorHandler errorHandler, int maxAllowableDepth)
     {
-        _moveHandler = new MoveHandler(errorHandler);
+        _maxAllowableDepth = maxAllowableDepth;
+        _moveHandler = new MoveHandler(errorHandler, maxAllowableDepth);
         _errorHandler = errorHandler;
         _board = Board.CloneOrEmptyIfNull(board);
     }
 
     public Board Board => _board;
     public Colour CurrentPlayer { get; set; } = White;
+    public Colour Opponent => CurrentPlayer.Invert();
 
     public ReadOnlyDictionary<Square, PieceFlyweight> Pieces
     {
@@ -51,7 +54,7 @@ public sealed class Game
     public Move LastMove { get; private set; }
 
     public Game AsClone() =>
-        new(_board, _errorHandler)
+        new(_board, _errorHandler, _maxAllowableDepth)
         {
             CurrentPlayer = CurrentPlayer
         };
@@ -75,7 +78,7 @@ public sealed class Game
 
     public bool TryGetPiece(Square at, out PieceFlyweight pieceFlyweight)
     {
-        var a = _board.TryGetAtrributes(at, out var properties) ? properties : PieceAttributes.None;
+        var a = _board.TryGetAtributes(at, out var properties) ? properties : PieceAttributes.None;
         if (a == PieceAttributes.None)
         {
             pieceFlyweight = PieceFlyweightPool.PieceWithContext(new(at, properties));
