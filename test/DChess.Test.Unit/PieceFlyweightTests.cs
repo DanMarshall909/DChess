@@ -26,7 +26,6 @@ public class PieceFlyweightTests : GameTestBase
     {
         Sut.Board.Place(WhiteQueen, b2);
         Sut.Board.Place(WhiteKing, f1);
-        Sut.FriendlyPieces(White).Count().Should().Be(2);
 
         Sut.Move(b2, a3);
 

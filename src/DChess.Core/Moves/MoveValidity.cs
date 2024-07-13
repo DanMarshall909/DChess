@@ -16,6 +16,7 @@ public enum MoveValidity
     KnightsCanOnlyMoveInAnLShape,
     PawnsCanOnlyMove1SquareForwardOr2SquaresForwardOnTheFirstMove,
     PawnsCanOnlyMoveForward,
+    PawnsCannotTakeForward,
     PawnsCanOnlySideStep1SquareWhenCapturing,
     PawnsCannotMoveHorizontally,
     QueenCanOnlyMoveDiagonallyOrInAStraightLine,

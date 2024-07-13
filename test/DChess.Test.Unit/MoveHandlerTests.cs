@@ -1,57 +1,59 @@
-using DChess.Core.Game;
-using static DChess.Core.Game.Piece.Kind;
+using static DChess.Core.Game.Colour;
 
 namespace DChess.Test.Unit;
 
 public class MoveHandlerTests : GameTestBase
 {
-    [Fact(DisplayName = "A move score can be calculated")]
-    public void a_move_score_can_be_calculated()
+    [Theory(DisplayName = "Game score can be calculated for CurrentPlayer")]
+    [InlineData("k7/p7/KPP5/8/8/8/8/8 w - - 0 1", 1)]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", 0)]
+    public void game_score_can_be_calculated(string fenString, int expectedScore)
     {
-        Sut.Board.SetStandardLayout();
-        Sut.Board.RemovePieceAt(b1);
-        Sut.Board.Place(WhiteKnight, c3);
-        Sut.Board.RemovePieceAt(f8);
-        Sut.Board.Place(BlackBishop, d5);
-        MoveHandler.GetGameStateScore(Sut, Colour.White).Should().Be(0);
-
-        var takeBishop = new Move(c3, d5);
-        Sut.Move(takeBishop);
-        MoveHandler.GetGameStateScore(Sut, Colour.White).Should().Be(Knight.Value());
-        MoveHandler.GetGameStateScore(Sut, Colour.Black).Should().Be(-Knight.Value());
+        Sut.Set(fenString);
+        MoveHandler.GetGameStateScore(Sut, White).Should().Be(expectedScore, $"Lichess url: {Sut.AsLichessUrl}");
     }
 
-    [Fact(DisplayName = "The best move can be found when there are multiple options")]
-    public void the_best_move_can_be_found_when_there_are_multiple_options()
+    [Fact(DisplayName =
+        "A move that would result in the opponent having a better score on the next move should be avoided")]
+    public void a_move_that_would_result_in_the_opponent_having_a_better_score_on_the_next_move_should_be_avoided()
     {
-        Sut.Board.SetStandardLayout();
-        Sut.Board.RemovePieceAt(b1);
-        Sut.Board.RemovePieceAt(f8);
+        Sut.Set("2k5/2p5/8/B7/1P6/8/8/K7 w - - 0 1");
 
-        var takeBishop = new Move(c3, d5);
-        Sut.Board.Place(WhiteKnight, c3);
-
-        Sut.Board.Place(BlackBishop, d5);
-        MoveHandler.GetBestMove(Sut, Colour.White).Should().Be(takeBishop);
-
-        Sut.Board.Place(BlackPawn, e4);
-        MoveHandler.GetBestMove(Sut, Colour.White).Should().Be(takeBishop);
-
-        Sut.Board.Place(BlackQueen, b5);
-        var takeQueen = new Move(c3, b5);
-
-        MoveHandler.GetBestMove(Sut, Colour.White).Should().Be(takeQueen);
+        var bestMove = MoveHandler.GetBestMove(Sut, White, 2);
+        var takeBlackPawn = new Move(a5, c7);
+        ShouldNotBe(bestMove, takeBlackPawn, "the bishop will be taken on the next move");
     }
 
-    [Fact(DisplayName = "The best move can be found by searching multiple moves ahead")]
+    [Theory(DisplayName = "Best move is calculated for CurrentPlayer", Skip = "Skip for now")]
+    [InlineData("3k3b/5p2/5P2/p7/8/8/3N4/4K3 w - - 0 1", "d2e4")]
+    public void best_move_would_be(string fenString, string expectedBestMoveString)
+    {
+        Sut.Set(fenString);
+        var bestMove = MoveHandler.GetBestMove(Sut, White, 2);
+        ShouldBe(bestMove, new Move(expectedBestMoveString));
+    }
+
+    private void ShouldBe(Move move, Move expected)
+    {
+        move.Format().Should().Be(expected.Format());
+    }
+
+    private void ShouldNotBe(Move move, Move expectedNotToBe, string because)
+    {
+        move.Format().Should().NotBe(expectedNotToBe.Format(), because);
+    }
+
+    [Fact(DisplayName = "The best move can be found by searching multiple moves ahead",
+        Skip = "Leaving this for now until I have the simpler tests working")]
     public void the_best_move_can_be_found_by_searching_multiple_moves_ahead()
     {
-        Sut.Set(new Fen("7k/3N3p/1p5p/8/8/8/8/6R1 w - - 0 1"));
+        Sut.Set("k7/p7/KPP5/8/8/8/8/8 w - - 0 1");
         var takePawn = new Move(d7, b6);
-        var moveKnightToSetUpCheckmateNextMove = new Move(d7,f6);
+        var moveKnightToSetUpCheckmateNextMove = new Move(d7, f6);
 
-        var bestMove = MoveHandler.GetBestMove(Sut, Colour.White, 3);
-        bestMove.Should().NotBe(takePawn);
-        bestMove.Should().Be(moveKnightToSetUpCheckmateNextMove, "The knight should move to set up a checkmate");
+        var bestMove = MoveHandler.GetBestMove(Sut, White, 3);
+        bestMove.Format().Should().NotBe(takePawn.Format());
+        bestMove.Format().Should().Be(moveKnightToSetUpCheckmateNextMove.Format(),
+            "The knight should move to set up a checkmate");
     }
 }

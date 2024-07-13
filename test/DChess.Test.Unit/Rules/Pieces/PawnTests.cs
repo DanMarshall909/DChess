@@ -66,5 +66,24 @@ public class PawnTests : GameTestBase
 
         Sut.Pieces[a2].CheckMove(b4, Sut).Validity.Should().Be(PawnsCanOnlySideStep1SquareWhenCapturing);
     }
+    
+    [Fact(DisplayName = "Pawns cannot take a piece forwards")]
+    public void pawns_cannot_take_a_piece_forwards()
+    {
+        var text = """
+                   █░█░k░█░
+                   ░█░█░█░█
+                   █░█░█░█░
+                   ░█░█░█░█
+                   █░█░█░█░
+                   p█░█░█░█
+                   P░█░█░█░
+                   ░█░█K█░█
+                   """;
+        Sut.Board.Set(text);
+
+        Sut.Pieces[a2].CheckMove(a3, Sut).Validity.Should().Be(PawnsCannotTakeForward);
+    }
+    
 
 }

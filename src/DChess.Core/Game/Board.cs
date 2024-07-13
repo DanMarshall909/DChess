@@ -5,7 +5,7 @@ public readonly record struct Board
     private const int TotalCellsOnBoard = 8 * 8;
 
     public string AsText => this.RenderToText();
-    
+
     public Board()
         => Clear();
 

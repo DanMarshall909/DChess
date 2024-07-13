@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using DChess.Core.Errors;
 using DChess.Core.Game;
 using static DChess.Core.Game.Colour;
+using static DChess.Core.Game.Piece.Kind;
 
 namespace DChess.Test.Unit;
 
@@ -64,14 +65,14 @@ public class GameTests : GameTestBase
     }
 
     [Theory(DisplayName = "Board can be created with a standard pieceAttributes layout")]
-    [InlineData("a8", Piece.Kind.Rook, Black)]
-    [InlineData("b8", Piece.Kind.Knight, Black)]
-    [InlineData("c8", Piece.Kind.Bishop, Black)]
+    [InlineData("a8", Rook, Black)]
+    [InlineData("b8", Knight, Black)]
+    [InlineData("c8", Bishop, Black)]
     [InlineData("d8", Piece.Kind.Queen, Black)]
-    [InlineData("e8", Piece.Kind.King, Black)]
-    [InlineData("f8", Piece.Kind.Bishop, Black)]
-    [InlineData("g8", Piece.Kind.Knight, Black)]
-    [InlineData("h8", Piece.Kind.Rook, Black)]
+    [InlineData("e8", King, Black)]
+    [InlineData("f8", Bishop, Black)]
+    [InlineData("g8", Knight, Black)]
+    [InlineData("h8", Rook, Black)]
     [InlineData("a7", Piece.Kind.Pawn, Black)]
     [InlineData("b7", Piece.Kind.Pawn, Black)]
     [InlineData("c7", Piece.Kind.Pawn, Black)]
@@ -88,14 +89,14 @@ public class GameTests : GameTestBase
     [InlineData("f2", Piece.Kind.Pawn, White)]
     [InlineData("g2", Piece.Kind.Pawn, White)]
     [InlineData("h2", Piece.Kind.Pawn, White)]
-    [InlineData("a1", Piece.Kind.Rook, White)]
-    [InlineData("b1", Piece.Kind.Knight, White)]
-    [InlineData("c1", Piece.Kind.Bishop, White)]
+    [InlineData("a1", Rook, White)]
+    [InlineData("b1", Knight, White)]
+    [InlineData("c1", Bishop, White)]
     [InlineData("d1", Piece.Kind.Queen, White)]
-    [InlineData("e1", Piece.Kind.King, White)]
-    [InlineData("f1", Piece.Kind.Bishop, White)]
-    [InlineData("g1", Piece.Kind.Knight, White)]
-    [InlineData("h1", Piece.Kind.Rook, White)]
+    [InlineData("e1", King, White)]
+    [InlineData("f1", Bishop, White)]
+    [InlineData("g1", Knight, White)]
+    [InlineData("h1", Rook, White)]
     public void board_can_be_created_with_a_standard_piece_layout(string squareString, Piece.Kind kind,
         Colour colour)
     {
@@ -154,25 +155,34 @@ public class GameTests : GameTestBase
     [Fact(DisplayName = "Game state reflects king in check")]
     public void game_state_reflects_king_in_check()
     {
-        Sut.Board.Place(WhiteKing, f1);
-        Sut.Board.Place(BlackQueen, a2);
+        Sut.Set("k7/8/1P6/8/8/8/8/K7 w - - 0 1");
         Sut.Status(White).Should().Be(InPlay);
-
-        Sut.CurrentPlayer = Black;
-        Sut.Move(a2, a6);
-        Sut.Status(White).Should().Be(Check);
+        
+        Sut.Move(b6, b7);
+        Sut.Status(Black).Should().Be(Check);
     }
 
     [Fact(DisplayName = "Game state reflects king in checkmate")]
     public void game_state_reflects_king_in_checkmate()
     {
-        Sut.Board.Place(WhiteKing, f1);
-        Sut.Board.Place(BlackKing, f8);
-        Sut.Board.Place(BlackQueen, c2);
-        Sut.Board.Place(BlackRook, b8);
+        Sut.Set("1r3k2/8/8/8/8/8/2q5/5K2 w - - 0 1");
         Sut.Status(White).Should().Be(InPlay);
-
+        
         Sut.Move(b8, b1);
         Sut.Status(White).Should().Be(Checkmate);
+    }
+
+    [Theory(DisplayName = "Friendly pieces can be found")]
+    [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        new[]
+        {
+            Rook, Knight, Bishop, King, Queen, Bishop, Knight, Rook, Pawn, Pawn, Pawn, Pawn, Pawn, Pawn, Pawn, Pawn
+        })]
+    [InlineData("k7/p7/KPP5/8/8/8/8/8 w - - 0 1", new[] { King, Pawn, Pawn })]
+    [InlineData("k7/p7/K1P5/8/8/8/8/8 w - - 0 1", new[] { King, Pawn })]
+    public void friendly_pieces_can_be_found(string fenString, Piece.Kind[] pieces)
+    {
+        Sut.Set(fenString);
+        Sut.FriendlyPieces(White).ToList().Select(x => x.Kind).Should().BeEquivalentTo(pieces);
     }
 }

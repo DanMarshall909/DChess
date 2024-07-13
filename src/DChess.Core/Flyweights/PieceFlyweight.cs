@@ -60,7 +60,7 @@ public abstract record PieceFlyweight
     private bool MovingIntoCheck(Colour movedPieceColour, Move move, Game.Game game)
     {
         var newGameState = game.AsClone();
-        newGameState.Move(move);
+        newGameState.Make(move);
 
         return newGameState.IsInCheck(movedPieceColour);
     }
@@ -79,12 +79,12 @@ public abstract record PieceFlyweight
     {
         // todo: cache?
         var newGameState = game.AsClone();
-        return SquaresToCheckForMoveValidities()
+        return SquaresToCheckForMoveValidMoves()
             .Select(to => (to, CheckMove(to, newGameState)));
     }
 
     // todo: We don't need to check very square dependent on piece. Optimise this to check only those that need to be.
-    private IEnumerable<Square> SquaresToCheckForMoveValidities() => Square.All;
+    private IEnumerable<Square> SquaresToCheckForMoveValidMoves() => Square.All;
 
     protected abstract MoveResult ValidatePath(Square to, Game.Game state);
 

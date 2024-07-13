@@ -1,11 +1,21 @@
+using System.Diagnostics;
+
 namespace DChess.Core.Moves;
 
+[DebuggerDisplay("{Format()}")]
 public readonly record struct Move
 {
     public Move(Square From, Square To)
     {
         this.From = From;
         this.To = To;
+        Offset = new MoveOffset(this);
+    }
+
+    public Move(string moveString)
+    {
+        From = new Square(moveString[..2]);
+        To = new Square(moveString[2..]);
         Offset = new MoveOffset(this);
     }
 
@@ -33,6 +43,7 @@ public readonly record struct Move
     public bool IsBlocked(Board board) =>
         SquaresAlongPath.SkipLast(1).Any(square => board.HasPieceAt(square));
 
+    
     public string Format() => $"({From}, {To})";
     public MoveResult AsOkResult() => new(this, Ok);
     public MoveResult AsInvalidBecause(MoveValidity invalidReason) => new(this, invalidReason);

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using DChess.Core.Flyweights;
 
 namespace DChess.Core.Game;
@@ -5,6 +6,8 @@ namespace DChess.Core.Game;
 /// <summary>
 ///     All the pieceAttributes of a game at a specific point in play
 /// </summary>
+
+[DebuggerDisplay("{AsLichessUrl()}")]
 public sealed class Game
 {
     public enum GameStatus
@@ -19,6 +22,7 @@ public sealed class Game
     private readonly IErrorHandler _errorHandler;
     private readonly MoveHandler _moveHandler;
     private readonly int _maxAllowableDepth;
+    private Game _lastMoveGameState;
 
     public Game(Board board, IErrorHandler errorHandler, int maxAllowableDepth)
     {
@@ -50,6 +54,15 @@ public sealed class Game
             return new ReadOnlyDictionary<Square, PieceFlyweight>(pieces);
         }
     }
+    
+    public void OpenLichess()
+    {
+        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+        {
+            FileName = AsLichessUrl,
+            UseShellExecute = true // This is important for URLs
+        });
+    }
 
     public Move LastMove { get; private set; }
 
@@ -60,17 +73,22 @@ public sealed class Game
         };
 
     public override string ToString() => new Fen(this).FenString;
+    
+    public string AsLichessUrl => "https://lichess.org/editor/" + this.ToString();
 
     public IEnumerable<PieceFlyweight> FriendlyPieces(Colour colour)
     {
         // todo: optimise
+        List<PieceFlyweight> pieces = new List<PieceFlyweight>();
         for (var f = 0; f < 8; f++)
         for (var r = 0; r < 8; r++)
         {
             var props = _board[f, r];
             if (props.Colour == colour)
-                yield return PieceFlyweightPool.PieceWithContext(new PieceContext(Square.FromZeroOffset(f, r), props));
+                pieces.Add(PieceFlyweightPool.PieceWithContext(new PieceContext(Square.FromZeroOffset(f, r), props)));
         }
+
+        return pieces;
     }
 
     public IEnumerable<PieceFlyweight> OpposingPieces(Colour colour)
@@ -102,13 +120,15 @@ public sealed class Game
     public GameStatus Status(Colour colour)
     {
         bool isInCheck = IsInCheck(colour);
-        if (!MoveHandler.HasLegalMoves(colour, this)) return isInCheck ? Checkmate : Stalemate;
+        bool hasLegalMoves = MoveHandler.HasLegalMoves(colour, this);
+        if (hasLegalMoves) return isInCheck ? Check : InPlay;
+        return isInCheck ? Checkmate : Stalemate;
 
-        return isInCheck ? Check : InPlay;
     }
 
-    public void Move(Move move)
+    public void Make(Move move)
     {
+        _lastMoveGameState = this.AsClone();
         _moveHandler.Make(move, this);
     }
 
@@ -120,7 +140,7 @@ public sealed class Game
     public Task MakeBestMove(Colour colour)
     {
         var move = _moveHandler.GetBestMove(this, colour);
-        Move(move);
+        Make(move);
         LastMove = move;
 
         return Task.CompletedTask;
@@ -130,5 +150,16 @@ public sealed class Game
     {
         _board = fen.Board;
         CurrentPlayer = fen.CurrentPlayer;
+    }
+
+    public void UndoLastMove()
+    {
+        _board = _lastMoveGameState.Board;
+        CurrentPlayer = _lastMoveGameState.CurrentPlayer;
+    }
+
+    public void Set(string fenString)
+    {
+        Set(new Fen(fenString));
     }
 }
