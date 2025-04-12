@@ -1,6 +1,6 @@
 ﻿namespace DChess.Core.Flyweights;
 
-public record Queen : PieceFlyweight
+public record Queen : ChessPiece
 {
     public Queen(PieceContext pieceContext) : base(pieceContext)
     {

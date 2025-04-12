@@ -1,6 +1,6 @@
 ﻿namespace DChess.Core.Flyweights;
 
-internal record Knight : PieceFlyweight, IIgnorePathCheck
+internal record Knight : ChessPiece, IIgnorePathCheck
 {
     public Knight(PieceContext pieceContext) : base(pieceContext)
     {

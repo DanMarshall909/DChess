@@ -1,6 +1,6 @@
 ﻿namespace DChess.Core.Flyweights;
 
-internal record Rook : PieceFlyweight
+internal record Rook : ChessPiece
 {
     public Rook(PieceContext pieceContext) : base(pieceContext)
     {

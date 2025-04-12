@@ -18,7 +18,7 @@ public static class BoardAssertions
                 "Expected board to have piece {0} at {1}, but found {2}.\n\nBoard state:\n{3}",
                 expectedPiece,
                 square,
-                board.TryGetAtributes(square, out var piece) ? piece.ToString() : "no piece",
+                board.TryGetAtributes(square, out var piece) ? piece.ToString() : "no chessPiece",
                 renderer.LastRender);
     }
 
@@ -33,7 +33,7 @@ public static class BoardAssertions
             .FailWith(
                 "Expected board to not have a piece at {0}, but found {1}.\n\nBoard state:\n{2}",
                 square,
-                board.TryGetAtributes(square, out var piece) ? piece.ToString() : "no piece",
+                board.TryGetAtributes(square, out var piece) ? piece.ToString() : "no chessPiece",
                 renderer.LastRender);
     }
 
@@ -89,9 +89,9 @@ public static class BoardAssertions
         }
 
         var game = new Game(board, new TestErrorHandler(), maxAllowableDepth: 3);
-        var chessPiece = game.Pieces[from];
-        var moveResult = chessPiece.CheckMove(to, game);
+        var piece = game.Pieces[from];
+        var moveResult = piece.CheckMove(to, game);
         
-        return (renderer, pieceAttributes, game, chessPiece, moveResult);
+        return (renderer, pieceAttributes, game, piece, moveResult);
     }
 } 

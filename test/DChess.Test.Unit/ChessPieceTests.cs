@@ -4,7 +4,7 @@ using static DChess.Core.Game.Colour;
 
 namespace DChess.Test.Unit;
 
-public class PieceFlyweightTests : GameTestBase
+public class ChessPieceTests : GameTestBase
 {
     [Fact(DisplayName = "A piece can be moved")]
     public void a_piece_can_be_moved()

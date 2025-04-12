@@ -1,6 +1,6 @@
 ﻿namespace DChess.Core.Flyweights;
 
-public record Pawn : PieceFlyweight, IIgnorePathCheck
+public record Pawn : ChessPiece, IIgnorePathCheck
 {
     public Pawn(PieceContext pieceContext) : base(pieceContext)
     {

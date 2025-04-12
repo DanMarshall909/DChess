@@ -3,9 +3,9 @@ namespace DChess.Core.Flyweights;
 /// <summary>
 ///     Abstract class for handling piece specific logic.
 /// </summary>
-public abstract record PieceFlyweight
+public abstract record ChessPiece
 {
-    protected PieceFlyweight(PieceContext pieceContext)
+    protected ChessPiece(PieceContext pieceContext)
     {
         PieceAttributes = pieceContext.PieceAttributes;
         Square = pieceContext.Square;
@@ -83,7 +83,7 @@ public abstract record PieceFlyweight
             .Select(to => (to, CheckMove(to, newGameState)));
     }
 
-    // todo: We don't need to check very square dependent on piece. Optimise this to check only those that need to be.
+    // todo: We don't need to check very square dependent on chessPiece. Optimise this to check only those that need to be.
     private IEnumerable<Square> SquaresToCheckForMoveValidMoves() => Square.All;
 
     protected abstract MoveResult ValidatePath(Square to, Game.Game state);

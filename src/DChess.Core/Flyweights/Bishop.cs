@@ -1,6 +1,6 @@
 ﻿namespace DChess.Core.Flyweights;
 
-internal record Bishop : PieceFlyweight
+internal record Bishop : ChessPiece
 {
     public Bishop(PieceContext pieceContext) : base(pieceContext)
     {

@@ -38,11 +38,11 @@ public sealed class Game
     public Colour Opponent => CurrentPlayer.Invert();
     public IReadOnlyList<Move> MoveHistory => _moveHistory.AsReadOnly();
 
-    public ReadOnlyDictionary<Square, PieceFlyweight> Pieces
+    public ReadOnlyDictionary<Square, ChessPiece> Pieces
     {
         get
         {
-            var pieces = new Dictionary<Square, PieceFlyweight>();
+            var pieces = new Dictionary<Square, ChessPiece>();
             for (var f = 0; f < 8; f++)
             for (var r = 0; r < 8; r++)
             {
@@ -53,7 +53,7 @@ public sealed class Game
                     , PieceFlyweightPool.PieceWithContext(new PieceContext(squareFromZeroOffset, props)));
             }
 
-            return new ReadOnlyDictionary<Square, PieceFlyweight>(pieces);
+            return new ReadOnlyDictionary<Square, ChessPiece>(pieces);
         }
     }
     
@@ -78,10 +78,10 @@ public sealed class Game
     
     public string AsLichessUrl => "https://lichess.org/editor/" + this.ToString();
 
-    public IEnumerable<PieceFlyweight> FriendlyPieces(Colour colour)
+    public IEnumerable<ChessPiece> FriendlyPieces(Colour colour)
     {
         // todo: optimise
-        List<PieceFlyweight> pieces = new List<PieceFlyweight>();
+        List<ChessPiece> pieces = new List<ChessPiece>();
         for (var f = 0; f < 8; f++)
         for (var r = 0; r < 8; r++)
         {
@@ -93,19 +93,19 @@ public sealed class Game
         return pieces;
     }
 
-    public IEnumerable<PieceFlyweight> OpposingPieces(Colour colour)
+    public IEnumerable<ChessPiece> OpposingPieces(Colour colour)
         => FriendlyPieces(colour.Invert());
 
-    public bool TryGetPiece(Square at, out PieceFlyweight pieceFlyweight)
+    public bool TryGetPiece(Square at, out ChessPiece chessPiece)
     {
         var a = _board.TryGetAtributes(at, out var properties) ? properties : PieceAttributes.None;
         if (a == PieceAttributes.None)
         {
-            pieceFlyweight = PieceFlyweightPool.PieceWithContext(new(at, properties));
+            chessPiece = PieceFlyweightPool.PieceWithContext(new(at, properties));
             return false;
         }
 
-        pieceFlyweight = PieceFlyweightPool.PieceWithContext(new(at, properties));
+        chessPiece = PieceFlyweightPool.PieceWithContext(new(at, properties));
         return true;
     }
 

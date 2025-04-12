@@ -20,12 +20,12 @@ public static class MoveValidityExtensions
             RookCanOnlyMoveInAStraightLine => "Rook can only move in a straight line",
             CannotJumpOverOtherPieces => "Cannot jump over other pieces",
             CannotMoveToSameCell => "Cannot move to the same cell",
-            CannotCaptureOwnPiece => "Cannot capture own piece",
+            CannotCaptureOwnPiece => "Cannot capture own chessPiece",
             CannotMoveIntoCheck => "Cannot move into check",
             WhiteIsInCheckMate => "White is in check mate",
             BlackIsInCheckMate => "Black is in check mate",
-            FromCellDoesNoteContainPiece => "From cell does not contain a piece",
-            CannotMoveOpponentsPiece => "Cannot move opponent's piece",
+            FromCellDoesNoteContainPiece => "From cell does not contain a chessPiece",
+            CannotMoveOpponentsPiece => "Cannot move opponent's chessPiece",
             _ => throw new ArgumentOutOfRangeException(nameof(validity), validity, null)
         };
     }

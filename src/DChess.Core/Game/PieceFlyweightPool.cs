@@ -9,9 +9,9 @@ namespace DChess.Core.Game;
 /// </summary>
 public static class PieceFlyweightPool
 {
-    private static readonly ConcurrentDictionary<PieceContext, PieceFlyweight> Pool = new();
+    private static readonly ConcurrentDictionary<PieceContext, ChessPiece> Pool = new();
 
-    public static PieceFlyweight PieceWithContext(PieceContext pieceContext)
+    public static ChessPiece PieceWithContext(PieceContext pieceContext)
     {
         if (Pool.TryGetValue(pieceContext, out var piece))
             return piece;
@@ -22,7 +22,7 @@ public static class PieceFlyweightPool
         return piece;
     }
 
-    private static PieceFlyweight CreatePiece(PieceContext pieceContext)
+    private static ChessPiece CreatePiece(PieceContext pieceContext)
     {
         var props = pieceContext.PieceAttributes;
         return props.Kind switch
@@ -33,7 +33,7 @@ public static class PieceFlyweightPool
             Kind.Bishop => new Bishop(pieceContext),
             Kind.Queen => new Queen(pieceContext),
             Kind.King => new King(pieceContext),
-            Kind.None => new NullPieceFlyweight(pieceContext),
+            Kind.None => new NullChessPiece(pieceContext),
             _ => throw new ArgumentOutOfRangeException(nameof(props), props, null)
         };
     }

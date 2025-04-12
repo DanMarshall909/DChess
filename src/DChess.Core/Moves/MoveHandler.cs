@@ -41,27 +41,27 @@ public class MoveHandler
         List<Move> validMoves = [];
         foreach (var piece in friendlyPieces)
         {
-            // get all valid moves for the piece
+            // get all valid moves for the chessPiece
             validMoves.AddRange(GetValidMoves(piece, game));
             
-            // var moveValidities = piece.MoveValidities(game);
+            // var moveValidities = chessPiece.MoveValidities(game);
             // foreach (var moveValidity in moveValidities)
             //     if (moveValidity.result.IsValid)
-            //         moves.Add(new Move(piece.Square, moveValidity.to));
+            //         moves.Add(new Move(chessPiece.Square, moveValidity.to));
         }
 
         return validMoves;
     }
 
-    private static List<Move> GetValidMoves(PieceFlyweight piece, Game.Game game)
+    private static List<Move> GetValidMoves(ChessPiece chessPiece, Game.Game game)
     {
         var validMoves = new List<Move>();
         for (var f = 0; f < 8; f++)
         for (var r = 0; r < 8; r++)
         {
             var to = Square.FromZeroOffset(f, r);
-            var move = new Move(piece.Square, to);
-            if (piece.CheckMove(to, game).IsValid)
+            var move = new Move(chessPiece.Square, to);
+            if (chessPiece.CheckMove(to, game).IsValid)
                 validMoves.Add(move);
         }
 
