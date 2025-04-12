@@ -24,7 +24,7 @@ public class MoveHandlerTests : GameTestBase
         ShouldNotBe(bestMove, takeBlackPawn, "the bishop will be taken on the next move");
     }
 
-    [Theory(DisplayName = "Best move is calculated for CurrentPlayer", Skip = "Skip for now")]
+    [Theory(DisplayName = "Best move is calculated for CurrentPlayer")]
     [InlineData("3k3b/5p2/5P2/p7/8/8/3N4/4K3 w - - 0 1", "d2e4")]
     public void best_move_would_be(string fenString, string expectedBestMoveString)
     {
@@ -43,17 +43,37 @@ public class MoveHandlerTests : GameTestBase
         move.Format().Should().NotBe(expectedNotToBe.Format(), because);
     }
 
-    [Fact(DisplayName = "The best move can be found by searching multiple moves ahead",
-        Skip = "Leaving this for now until I have the simpler tests working")]
-    public void the_best_move_can_be_found_by_searching_multiple_moves_ahead()
+    [Fact(DisplayName = "At depth 2, the engine avoids capturing a pawn if it results in material loss")]
+    public void bishop_does_not_capture_pawn_when_it_will_be_recaptured()
     {
-        Sut.Set("k7/p7/KPP5/8/8/8/8/8 w - - 0 1");
-        var takePawn = new Move(d7, b6);
-        var moveKnightToSetUpCheckmateNextMove = new Move(d7, f6);
+        // Bxa3xc5 is legal, but leads to immediate Kxc5, losing the bishop
+        Sut.Set("8/8/2k5/2p5/8/B7/8/K7 w - - 0 1");
 
-        var bestMove = MoveHandler.GetBestMove(Sut, White, 3);
-        bestMove.Format().Should().NotBe(takePawn.Format());
-        bestMove.Format().Should().Be(moveKnightToSetUpCheckmateNextMove.Format(),
-            "The knight should move to set up a checkmate");
+        var losingMove = new Move(a3, c5); // Bxc5
+        var bestMove = MoveHandler.GetBestMove(Sut, White, maxDepth: 2);
+
+        bestMove.Should().NotBe(losingMove, "the bishop will be immediately recaptured by the king, resulting in a net loss");
+    }
+
+
+    [Theory(DisplayName = "Game state score correctly evaluates material advantage")]
+    [InlineData("k7/8/8/8/8/8/8/K7 w - - 0 1", 0)] // Equal material (just kings)
+    [InlineData("k7/8/8/8/8/8/8/KQ6 w - - 0 1", 9)] // White has queen advantage
+    [InlineData("k7/8/8/8/8/8/8/KR6 w - - 0 1", 5)] // White has rook advantage
+    [InlineData("k7/8/8/8/8/8/8/KB6 w - - 0 1", 3)] // White has bishop advantage
+    public void game_state_score_correctly_evaluates_material_advantage(string fenString, int expectedScore)
+    {
+        Sut.Set(fenString);
+        MoveHandler.GetGameStateScore(Sut, White).Should().Be(expectedScore);
+    }
+
+    [Theory(DisplayName = "Game state score correctly evaluates check and checkmate")]
+    [InlineData("k7/8/8/8/8/8/8/K7 w - - 0 1", 0)] // No check
+    [InlineData("k7/8/8/8/8/8/Q7/K7 w - - 0 1", 19)] // Check with queen (material + check bonus)
+    [InlineData("k7/Q7/K7/8/8/8/8/8 b - - 0 1", -1000000)] // Checkmate
+    public void game_state_score_correctly_evaluates_check_and_checkmate(string fenString, int expectedScore)
+    {
+        Sut.Set(fenString);
+        MoveHandler.GetGameStateScore(Sut, White).Should().Be(expectedScore);
     }
 }

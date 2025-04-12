@@ -23,6 +23,7 @@ public sealed class Game
     private readonly MoveHandler _moveHandler;
     private readonly int _maxAllowableDepth;
     private Game _lastMoveGameState;
+    private List<Move> _moveHistory = new List<Move>();
 
     public Game(Board board, IErrorHandler errorHandler, int maxAllowableDepth)
     {
@@ -35,6 +36,7 @@ public sealed class Game
     public Board Board => _board;
     public Colour CurrentPlayer { get; set; } = White;
     public Colour Opponent => CurrentPlayer.Invert();
+    public IReadOnlyList<Move> MoveHistory => _moveHistory.AsReadOnly();
 
     public ReadOnlyDictionary<Square, PieceFlyweight> Pieces
     {
@@ -123,13 +125,13 @@ public sealed class Game
         bool hasLegalMoves = MoveHandler.HasLegalMoves(colour, this);
         if (hasLegalMoves) return isInCheck ? Check : InPlay;
         return isInCheck ? Checkmate : Stalemate;
-
     }
 
     public void Make(Move move)
     {
         _lastMoveGameState = this.AsClone();
         _moveHandler.Make(move, this);
+        _moveHistory.Add(move);
     }
 
     public void Move(Square from, Square to)
