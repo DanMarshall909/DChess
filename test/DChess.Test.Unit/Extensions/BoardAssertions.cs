@@ -18,7 +18,7 @@ public static class BoardAssertions
                 "Expected board to have piece {0} at {1}, but found {2}.\n\nBoard state:\n{3}",
                 expectedPiece,
                 square,
-                board.TryGetAtributes(square, out var piece) ? piece.ToString() : "no piece",
+                board.TryGetAtributes(square, out var piece) ? piece.ToString() : "no chessPiece",
                 renderer.LastRender);
     }
 
@@ -33,7 +33,7 @@ public static class BoardAssertions
             .FailWith(
                 "Expected board to not have a piece at {0}, but found {1}.\n\nBoard state:\n{2}",
                 square,
-                board.TryGetAtributes(square, out var piece) ? piece.ToString() : "no piece",
+                board.TryGetAtributes(square, out var piece) ? piece.ToString() : "no chessPiece",
                 renderer.LastRender);
     }
 
@@ -70,63 +70,6 @@ public static class BoardAssertions
                 from,
                 to,
                 renderer.LastRender);
-    }
-
-    public static void ShouldBeMove(this Move move, Move expected, string because = "", params object[] becauseArgs)
-    {
-        Execute.Assertion
-            .ForCondition(move.Equals(expected))
-            .BecauseOf(because, becauseArgs)
-            .FailWith(
-                "Expected move {0}, but got {1}.",
-                expected.Format(),
-                move.Format());
-    }
-
-    public static void ShouldNotBeMove(this Move move, Move expectedNotToBe, string because = "", params object[] becauseArgs)
-    {
-        Execute.Assertion
-            .ForCondition(!move.Equals(expectedNotToBe))
-            .BecauseOf(because, becauseArgs)
-            .FailWith(
-                "Expected move to not be {0}, but it was. {1}",
-                expectedNotToBe.Format(),
-                because);
-    }
-
-    public static string GetBoardState(this Board board)
-    {
-        var renderer = new TextRenderer();
-        renderer.Render(board);
-        return renderer.LastRender;
-    }
-
-    public static void ShouldBeMoveWithBoard(this Move move, Move expected, Board board, string because = "", params object[] becauseArgs)
-    {
-        var boardState = board.GetBoardState();
-        
-        Execute.Assertion
-            .ForCondition(move.Equals(expected))
-            .BecauseOf(because, becauseArgs)
-            .FailWith(
-                "Expected move {0}, but got {1}.\n\nBoard state:\n{2}",
-                expected.Format(),
-                move.Format(),
-                boardState);
-    }
-
-    public static void ShouldNotBeMoveWithBoard(this Move move, Move expectedNotToBe, Board board, string because = "", params object[] becauseArgs)
-    {
-        var boardState = board.GetBoardState();
-        
-        Execute.Assertion
-            .ForCondition(!move.Equals(expectedNotToBe))
-            .BecauseOf(because, becauseArgs)
-            .FailWith(
-                "Expected move to not be {0}, but it was. {1}\n\nBoard state:\n{2}",
-                expectedNotToBe.Format(),
-                because,
-                boardState);
     }
 
     private static (TextRenderer renderer, PieceAttributes? pieceAttributes, Game game, dynamic chessPiece, dynamic moveResult) ValidateMove(Board board, Square from, Square to)

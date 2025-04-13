@@ -18,145 +18,61 @@ public class MoveHandler
         if (!game.Board.TryGetAtributes(move.From, out var props))
             _errorHandler.HandleInvalidMove(new MoveResult(move, FromCellDoesNoteContainPiece));
 
-        bool pawnIsPromoted = props.Kind is Kind.Pawn && move.To.Rank is 1 or 8;
+        bool pawnIsPromoted = props.Kind == Kind.Pawn && (move.To.Rank == 1 || move.To.Rank == 8);
         var updatedProperties = pawnIsPromoted
             ? new PieceAttributes(props.Colour, Kind.Queen)
             : props;
 
         game.Board.RemovePieceAt(move.From);
         game.Board.Place(updatedProperties, move.To);
-        game.CurrentPlayer = game.CurrentPlayer.Invert();
+        game.CurrentPlayer = game.CurrentPlayer.Opponent();
     }
 
     public static bool HasLegalMoves(Colour colour, Game.Game game)
     {
-        var legalMoves = LegalMoves(colour, game).ToList();
-        return legalMoves.Any();
+        return LegalMoves(colour, game).Any();
     }
 
     public static IEnumerable<Move> LegalMoves(Colour colour, Game.Game game)
     {
-        var friendlyPieces = game.FriendlyPieces(colour).ToList();
-
-        List<Move> validMoves = [];
+        var friendlyPieces = game.FriendlyPieces(colour);
         foreach (var piece in friendlyPieces)
         {
-            // get all valid moves for the chessPiece
-            validMoves.AddRange(GetValidMoves(piece, game));
-            
-            // var moveValidities = chessPiece.MoveValidities(game);
-            // foreach (var moveValidity in moveValidities)
-            //     if (moveValidity.result.IsValid)
-            //         moves.Add(new Move(chessPiece.Square, moveValidity.to));
+            foreach (var move in GetValidMoves(piece, game))
+                yield return move;
         }
-
-        return validMoves;
     }
 
-    private static List<Move> GetValidMoves(ChessPiece chessPiece, Game.Game game)
+    private static IEnumerable<Move> GetValidMoves(ChessPiece chessPiece, Game.Game game)
     {
-        var validMoves = new List<Move>();
         for (var f = 0; f < 8; f++)
         for (var r = 0; r < 8; r++)
         {
             var to = Square.FromZeroOffset(f, r);
-            var move = new Move(chessPiece.Square, to);
             if (chessPiece.CheckMove(to, game).IsValid)
-                validMoves.Add(move);
-        }
-
-        return validMoves;
-    }
-
-
-    public int EvaluatePosition(Game.Game game, int depth, int alpha, int beta, bool isMaximizingPlayer = true)
-    {
-        if (game.Status(game.CurrentPlayer) == Checkmate)
-            return isMaximizingPlayer ? int.MaxValue : int.MinValue;
-
-        if (depth == 0)
-            return GetGameStateScore(game, game.CurrentPlayer);
- 
-        if (isMaximizingPlayer)
-        {
-            int maxEval = int.MinValue;
-            foreach (var move in LegalMoves(game.CurrentPlayer, game))
-            {
-                game.Make(move);
-                int eval = EvaluatePosition(game, depth - 1, alpha, beta);
-                game.UndoLastMove();
-                maxEval = Math.Max(maxEval, eval);
-                alpha = Math.Max(alpha, eval);
-                if (beta <= alpha)
-                    break;
-            }
-            return maxEval;
-        }
-        else
-        {
-            int minEval = int.MaxValue;
-            foreach (var move in LegalMoves(game.CurrentPlayer, game))
-            {
-                game.Make(move);
-                int eval = EvaluatePosition(game, depth - 1, alpha, beta);
-                game.UndoLastMove();
-                minEval = Math.Min(minEval, eval);
-                beta = Math.Min(beta, eval);
-                if (beta <= alpha)
-                    break;
-            }
-            return minEval;
+                yield return new Move(chessPiece.Square, to);
         }
     }
 
-    public static int GetGameStateScore(Game.Game game, Colour playerColour)
-    {
-        var score = 0;
-
-        var status = game.Status(playerColour);
-        score += status switch
-        {
-            Stalemate => 0,
-            Checkmate => -1_000_000,
-            Check => 10,
-            InPlay => 0,
-            _ => 0
-        };
-
-        score += MaterialScore(playerColour, game);
-
-        return score;
-    }
-
-    private static int MaterialScore(Colour playerColour, Game.Game clonedGame)
-    {
-        var opponentColour = playerColour.Invert();
-        var result = 0;
-        foreach (var (_, piece) in clonedGame.Pieces)
-        {
-            if (piece.PieceAttributes.Colour == playerColour)
-                result += piece.Kind.Value();
-            else if (piece.PieceAttributes.Colour == opponentColour)
-                result -= piece.Kind.Value();
-        }
-
-        return result;
-    }
-
-    public Move GetBestMove(Game.Game game, Colour colour, int maxDepth = 3)
+    public Move GetBestMove(Game.Game game, Colour forColour, int maxDepth = 3)
     {
         maxDepth = Math.Min(maxDepth, _maxAllowableDepth);
-        var bestMove = NullMove;
+
+        var legalMoves = LegalMoves(forColour, game).ToList();
+        if (!legalMoves.Any())
+            throw new InvalidOperationException("No legal moves available");
+
+        var bestMove = legalMoves[0];
         var bestScore = int.MinValue;
-        var legalMoves = LegalMoves(colour, game);
+
         foreach (var move in legalMoves)
         {
             var clone = game.AsClone();
             clone.Make(move);
-            int score = EvaluatePosition(clone, _maxAllowableDepth, int.MinValue, int.MaxValue, false);
-            clone.UndoLastMove();
 
-            if (score >= bestScore)
+            int score = EvaluatePosition(clone, maxDepth - 1, int.MinValue, int.MaxValue, forColour, false);
+
+            if (score > bestScore)
             {
                 bestScore = score;
                 bestMove = move;
@@ -164,5 +80,95 @@ public class MoveHandler
         }
 
         return bestMove;
+    }
+
+    public int EvaluatePosition(Game.Game game, int depth, int alpha, int beta, Colour forColor,
+        bool isMaximizingPlayer)
+    {
+        var status = game.Status(game.CurrentPlayer);
+        if (depth <= 0 || status == Checkmate)
+            return GetGameStateScore(game, forColor);
+
+        var legalMoves = LegalMoves(game.CurrentPlayer, game).ToList();
+        if (!legalMoves.Any())
+            return GetGameStateScore(game, forColor);
+
+        if (isMaximizingPlayer)
+        {
+            int maxEval = int.MinValue;
+            foreach (var move in legalMoves)
+            {
+                var gameClone = game.AsClone();
+                gameClone.Make(move);
+                int eval = EvaluatePosition(gameClone, depth - 1, alpha, beta, forColor, false);
+                maxEval = Math.Max(maxEval, eval);
+                alpha = Math.Max(alpha, eval);
+                if (beta <= alpha)
+                    break;
+            }
+
+            return maxEval;
+        }
+        else
+        {
+            int minEval = int.MaxValue;
+            foreach (var move in legalMoves)
+            {
+                var gameClone = game.AsClone();
+                gameClone.Make(move);
+                int eval = EvaluatePosition(gameClone, depth - 1, alpha, beta, forColor, true);
+                minEval = Math.Min(minEval, eval);
+                beta = Math.Min(beta, eval);
+                if (beta <= alpha)
+                    break;
+            }
+
+            return minEval;
+        }
+    }
+
+    public static int GetGameStateScore(Game.Game game, Colour playerColour)
+    {
+        int score = GetStatusScore(game, playerColour) + GetMaterialScore(playerColour, game);
+        return score;
+    }
+
+    private static int GetStatusScore(Game.Game game, Colour playerColour)
+    {
+        var status = game.Status(playerColour);
+
+        return status switch
+        {
+            Stalemate => 0,
+            Checkmate => -Weights.GameState.Checkmate,
+            Check => -Weights.GameState.Check,
+            OpponentInCheck => Weights.GameState.Check,
+            OpponentCheckmate => Weights.GameState.Checkmate,
+            InPlay => 0,
+            _ => 0
+        };
+    }
+
+    /// <summary>
+    /// Calculates the material score for the given player colour in the game by summing the values of all pieces on the board. Opponent's pieces are subtracted from the score. 
+    /// </summary>
+    /// <param name="playerColour">The colour of the player for whom the score is being calculated.</param>
+    /// <param name="game">The current game state.</param>
+    /// <returns></returns>
+    private static int GetMaterialScore(Colour playerColour, Game.Game game)
+    {
+        var opponentColour = playerColour.Opponent();
+        int score = 0;
+
+        foreach (var (_, piece) in game.Pieces)
+        {
+            int value = piece.Kind.Value();
+            if (piece.PieceAttributes.Colour == playerColour)
+                score += value;
+            else if (piece.PieceAttributes.Colour == opponentColour)
+                score -= value;
+        }
+
+        return score;
     }
 }

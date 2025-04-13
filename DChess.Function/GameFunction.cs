@@ -31,7 +31,7 @@ public static class GameFunction
         var game = new Game(board, new ExceptionErrorHandler(), MaxAllowableDepth);
         game.CurrentPlayer = request.CurrentPlayer;
         game.Make(request.Move);
-        await game.MakeBestMove(request.CurrentPlayer.Invert());
+        await game.MakeBestMove(request.CurrentPlayer.Opponent());
         game.Board.RenderToText();
 
         return new OkObjectResult(new Response(

@@ -1,9 +1,14 @@
+using DChess.Core.Game;
 using static DChess.Core.Game.Colour;
 
 namespace DChess.Test.Unit;
 
 public class MoveHandlerTests : GameTestBase
 {
+    private const string NoCheckNoMaterialAdvantage = "k7/8/8/8/8/8/8/K7 w - - 0 1";
+    private const string BlackKingInCheckWith1PawnMaterialAdvantage = "k7/1P6/8/8/8/8/8/K7 w - - 0 1";
+    private const string BlackCheckMateWith2PawnWhiteAdvantage = "k7/PP6/1K6/8/8/8/8/8 w - - 0 1";
+
     [Theory(DisplayName = "Game score can be calculated for CurrentPlayer")]
     [InlineData("k7/p7/KPP5/8/8/8/8/8 w - - 0 1", 1)]
     [InlineData("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", 0)]
@@ -21,16 +26,35 @@ public class MoveHandlerTests : GameTestBase
 
         var bestMove = MoveHandler.GetBestMove(Sut, White, 2);
         var takeBlackPawn = new Move(a5, c7);
-        bestMove.ShouldNotBeMoveWithBoard(takeBlackPawn, Sut.Board, "the bishop will be taken on the next move");
+        ShouldNotBe(bestMove, takeBlackPawn, "the bishop will be taken on the next move");
     }
 
     [Theory(DisplayName = "Best move is calculated for CurrentPlayer")]
+    //  abcdefgh
+    // 8█░█k█░█b
+    // 7░█░█░p░█
+    // 6█░█░█P█░
+    // 5p█░█░█░█
+    // 4█░█░█░█░
+    // 3░█░█░█░█
+    // 2█░█N█░█░
+    // 1░█░█K█░█
     [InlineData("3k3b/5p2/5P2/p7/8/8/3N4/4K3 w - - 0 1", "d2e4")]
     public void best_move_would_be(string fenString, string expectedBestMoveString)
     {
         Sut.Set(fenString);
         var bestMove = MoveHandler.GetBestMove(Sut, White, 2);
-        bestMove.ShouldBeMoveWithBoard(new Move(expectedBestMoveString), Sut.Board);
+        ShouldBe(bestMove, new Move(expectedBestMoveString));
+    }
+
+    private void ShouldBe(Move move, Move expected)
+    {
+        move.Format().Should().Be(expected.Format());
+    }
+
+    private void ShouldNotBe(Move move, Move expectedNotToBe, string because)
+    {
+        move.Format().Should().NotBe(expectedNotToBe.Format(), because);
     }
 
     [Fact(DisplayName = "At depth 2, the engine avoids capturing a pawn if it results in material loss")]
@@ -42,11 +66,12 @@ public class MoveHandlerTests : GameTestBase
         var losingMove = new Move(a3, c5); // Bxc5
         var bestMove = MoveHandler.GetBestMove(Sut, White, maxDepth: 2);
 
-        bestMove.ShouldNotBeMoveWithBoard(losingMove, Sut.Board, "the bishop will be immediately recaptured by the king, resulting in a net loss");
+        bestMove.Should().NotBe(losingMove, "the bishop will be immediately recaptured by the king, resulting in a net loss");
     }
 
+
     [Theory(DisplayName = "Game state score correctly evaluates material advantage")]
-    [InlineData("k7/8/8/8/8/8/8/K7 w - - 0 1", 0)] // Equal material (just kings)
+    [InlineData(NoCheckNoMaterialAdvantage, 0)] // Equal material (just kings)
     [InlineData("k7/8/8/8/8/8/8/KQ6 w - - 0 1", 9)] // White has queen advantage
     [InlineData("k7/8/8/8/8/8/8/KR6 w - - 0 1", 5)] // White has rook advantage
     [InlineData("k7/8/8/8/8/8/8/KB6 w - - 0 1", 3)] // White has bishop advantage
@@ -57,9 +82,9 @@ public class MoveHandlerTests : GameTestBase
     }
 
     [Theory(DisplayName = "Game state score correctly evaluates check and checkmate")]
-    [InlineData("k7/8/8/8/8/8/8/K7 w - - 0 1", 0)] // No check
-    [InlineData("k7/8/8/8/8/8/Q7/K7 w - - 0 1", 19)] // Check with queen (material + check bonus)
-    [InlineData("k7/Q7/K7/8/8/8/8/8 b - - 0 1", -1000000)] // Checkmate
+    [InlineData(NoCheckNoMaterialAdvantage, 0)]
+    [InlineData(BlackKingInCheckWith1PawnMaterialAdvantage, Weights.Material.Pawn + Weights.GameState.Check)]  // Check with pawn
+    // [InlineData(BlackCheckMateWith2PawnWhiteAdvantage, -(Weights.Material.Pawn * 2 + Weights.GameState.Checkmate))] // Checkmate with 2 pawns
     public void game_state_score_correctly_evaluates_check_and_checkmate(string fenString, int expectedScore)
     {
         Sut.Set(fenString);

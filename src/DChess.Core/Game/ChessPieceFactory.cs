@@ -7,7 +7,7 @@ namespace DChess.Core.Game;
 ///     This allows us to use structs to store the pieceAttributes internally, but expose classes
 ///     to the outside world to allow for polymorphism.
 /// </summary>
-public static class PieceFlyweightPool
+public static class ChessPieceFactory
 {
     private static readonly ConcurrentDictionary<PieceContext, ChessPiece> Pool = new();
 

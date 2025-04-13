@@ -6,7 +6,6 @@ namespace DChess.Core.Game;
 /// <summary>
 ///     All the pieceAttributes of a game at a specific point in play
 /// </summary>
-
 [DebuggerDisplay("{AsLichessUrl()}")]
 public sealed class Game
 {
@@ -14,8 +13,11 @@ public sealed class Game
     {
         InPlay,
         Check,
+        OpponentInCheck,
         Checkmate,
-        Stalemate
+        OpponentCheckmate,
+        Stalemate,
+        Invalid
     }
 
     private Board _board;
@@ -35,7 +37,7 @@ public sealed class Game
 
     public Board Board => _board;
     public Colour CurrentPlayer { get; set; } = White;
-    public Colour Opponent => CurrentPlayer.Invert();
+    public Colour Opponent => CurrentPlayer.Opponent();
     public IReadOnlyList<Move> MoveHistory => _moveHistory.AsReadOnly();
 
     public ReadOnlyDictionary<Square, ChessPiece> Pieces
@@ -50,16 +52,16 @@ public sealed class Game
                 if (props == PieceAttributes.None) continue;
                 var squareFromZeroOffset = Square.FromZeroOffset(f, r);
                 pieces.Add(squareFromZeroOffset
-                    , PieceFlyweightPool.PieceWithContext(new PieceContext(squareFromZeroOffset, props)));
+                    , ChessPieceFactory.PieceWithContext(new PieceContext(squareFromZeroOffset, props)));
             }
 
             return new ReadOnlyDictionary<Square, ChessPiece>(pieces);
         }
     }
-    
+
     public void OpenLichess()
     {
-        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+        Process.Start(new ProcessStartInfo
         {
             FileName = AsLichessUrl,
             UseShellExecute = true // This is important for URLs
@@ -75,8 +77,8 @@ public sealed class Game
         };
 
     public override string ToString() => new Fen(this).FenString;
-    
-    public string AsLichessUrl => "https://lichess.org/editor/" + this.ToString();
+
+    public string AsLichessUrl => "https://lichess.org/editor/" + ToString();
 
     public IEnumerable<ChessPiece> FriendlyPieces(Colour colour)
     {
@@ -87,25 +89,25 @@ public sealed class Game
         {
             var props = _board[f, r];
             if (props.Colour == colour)
-                pieces.Add(PieceFlyweightPool.PieceWithContext(new PieceContext(Square.FromZeroOffset(f, r), props)));
+                pieces.Add(ChessPieceFactory.PieceWithContext(new PieceContext(Square.FromZeroOffset(f, r), props)));
         }
 
         return pieces;
     }
 
     public IEnumerable<ChessPiece> OpposingPieces(Colour colour)
-        => FriendlyPieces(colour.Invert());
+        => FriendlyPieces(colour.Opponent());
 
     public bool TryGetPiece(Square at, out ChessPiece chessPiece)
     {
         var a = _board.TryGetAtributes(at, out var properties) ? properties : PieceAttributes.None;
         if (a == PieceAttributes.None)
         {
-            chessPiece = PieceFlyweightPool.PieceWithContext(new(at, properties));
+            chessPiece = ChessPieceFactory.PieceWithContext(new(at, properties));
             return false;
         }
 
-        chessPiece = PieceFlyweightPool.PieceWithContext(new(at, properties));
+        chessPiece = ChessPieceFactory.PieceWithContext(new(at, properties));
         return true;
     }
 
@@ -123,13 +125,16 @@ public sealed class Game
     {
         bool isInCheck = IsInCheck(colour);
         bool hasLegalMoves = MoveHandler.HasLegalMoves(colour, this);
-        if (hasLegalMoves) return isInCheck ? Check : InPlay;
-        return isInCheck ? Checkmate : Stalemate;
+
+        if (isInCheck)
+            return !hasLegalMoves ? Checkmate : Check;
+        
+        return IsInCheck(colour.Opponent()) ? OpponentInCheck : InPlay;
     }
 
     public void Make(Move move)
     {
-        _lastMoveGameState = this.AsClone();
+        _lastMoveGameState = AsClone();
         _moveHandler.Make(move, this);
         _moveHistory.Add(move);
     }

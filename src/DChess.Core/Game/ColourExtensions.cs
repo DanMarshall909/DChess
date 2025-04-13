@@ -10,7 +10,7 @@ public static class ColourExtensions
             _ => White
         };
 
-    public static Colour Invert(this Colour colour) => colour switch
+    public static Colour Opponent(this Colour colour) => colour switch
     {
         White => Black,
         Black => White,

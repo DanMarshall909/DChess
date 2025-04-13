@@ -31,7 +31,7 @@ public class MovementTestingExtensionsTests
         Matrix.ToMoveOffsets().Should().BeEquivalentTo(moveOffsets);
     }
 
-    [Fact(DisplayName = "Invert inverts a matrix")]
+    [Fact(DisplayName = "Opponent inverts a matrix")]
     public void Invert_inverts_an_offset_matrix()
     {
         var inverse = Matrix.ToMoveOffsets().Inverse().ToArray();
