@@ -21,7 +21,7 @@ public class MoveHandlerTests : GameTestBase
 
         var bestMove = MoveHandler.GetBestMove(Sut, White, 2);
         var takeBlackPawn = new Move(a5, c7);
-        ShouldNotBe(bestMove, takeBlackPawn, "the bishop will be taken on the next move");
+        bestMove.ShouldNotBeMoveWithBoard(takeBlackPawn, Sut.Board, "the bishop will be taken on the next move");
     }
 
     [Theory(DisplayName = "Best move is calculated for CurrentPlayer")]
@@ -30,17 +30,7 @@ public class MoveHandlerTests : GameTestBase
     {
         Sut.Set(fenString);
         var bestMove = MoveHandler.GetBestMove(Sut, White, 2);
-        ShouldBe(bestMove, new Move(expectedBestMoveString));
-    }
-
-    private void ShouldBe(Move move, Move expected)
-    {
-        move.Format().Should().Be(expected.Format());
-    }
-
-    private void ShouldNotBe(Move move, Move expectedNotToBe, string because)
-    {
-        move.Format().Should().NotBe(expectedNotToBe.Format(), because);
+        bestMove.ShouldBeMoveWithBoard(new Move(expectedBestMoveString), Sut.Board);
     }
 
     [Fact(DisplayName = "At depth 2, the engine avoids capturing a pawn if it results in material loss")]
@@ -52,9 +42,8 @@ public class MoveHandlerTests : GameTestBase
         var losingMove = new Move(a3, c5); // Bxc5
         var bestMove = MoveHandler.GetBestMove(Sut, White, maxDepth: 2);
 
-        bestMove.Should().NotBe(losingMove, "the bishop will be immediately recaptured by the king, resulting in a net loss");
+        bestMove.ShouldNotBeMoveWithBoard(losingMove, Sut.Board, "the bishop will be immediately recaptured by the king, resulting in a net loss");
     }
-
 
     [Theory(DisplayName = "Game state score correctly evaluates material advantage")]
     [InlineData("k7/8/8/8/8/8/8/K7 w - - 0 1", 0)] // Equal material (just kings)
