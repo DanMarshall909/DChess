@@ -9,23 +9,28 @@ namespace DChess.Core.Game;
 [DebuggerDisplay("{AsLichessUrl()}")]
 public sealed class Game
 {
-    public enum GameStatus
-    {
-        InPlay,
-        Check,
-        OpponentInCheck,
-        Checkmate,
-        OpponentCheckmate,
-        Stalemate,
-        Invalid
-    }
+	public enum GameStatus
+	{
+		InPlay,
+		Check,
+		OpponentInCheck,
+		Checkmate,
+		OpponentCheckmate,
+		Stalemate,
+		Invalid
+	}
 
-    private Board _board;
-    private readonly IErrorHandler _errorHandler;
-    private readonly MoveHandler _moveHandler;
-    private readonly int _maxAllowableDepth;
-    private Game _lastMoveGameState;
-    private List<Move> _moveHistory = new List<Move>();
+	private Board _board;
+	private readonly IErrorHandler _errorHandler;
+	private readonly MoveHandler _moveHandler;
+	private readonly int _maxAllowableDepth;
+	private Game _lastMoveGameState;
+	private List<Move> _moveHistory = new List<Move>();
+
+	static Game()
+	{
+		// Static constructor for any static initialisation if needed
+	}
 
     public Game(Board board, IErrorHandler errorHandler, int maxAllowableDepth)
     {
