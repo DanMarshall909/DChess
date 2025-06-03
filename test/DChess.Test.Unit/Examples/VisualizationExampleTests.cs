@@ -1,6 +1,8 @@
 using DChess.Core.Game;
+using DChess.Test.Unit.Extensions;
 using DChess.Test.Unit.TestHelpers;
 using static DChess.Core.Game.Colour;
+using static DChess.Core.Game.Piece.Kind;
 
 namespace DChess.Test.Unit.Examples;
 
@@ -94,7 +96,29 @@ public class VisualizationExampleTests : VisualizationTestBase
         AssertGameState(game =>
         {
             game.IsInCheck(Black).Should().BeTrue("the black king should be in check");
-            game.Status(Black).Should().Be(Checkmate, "the game status should be Checkmate");
+            game.Status(Black).Should().Be(Game.GameStatus.Checkmate, "the game status should be Checkmate");
         }, "Checkmate Position Assertion Failed");
+    }
+    
+    [Fact(DisplayName = "Example of using FluentAssertions with visualization")]
+    public void example_of_using_fluentassertions_with_visualization()
+    {
+        // Arrange - Set up a position
+        Sut.Set("rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2");
+        
+        // Act & Assert using the FluentAssertions extensions
+        // These assertions will automatically visualize the board if they fail
+        
+        // Boolean assertion with visualization
+        Sut.CurrentPlayer.Should().Be(Black, "it should be black's turn", Sut, "Current Player Visualization");
+        
+        // Check that a piece is at the expected position
+        var knight = Sut.Board[f3];
+        knight.Should().NotBeNull("there should be a piece at f3", Sut, "Knight Visualization");
+        knight.Kind.Should().Be(Knight, "the piece at f3 should be a knight", Sut, "Knight Type Visualization");
+        
+        // Intentionally commented out failing assertion to demonstrate visualization
+        // Uncomment to see the visualization when the assertion fails
+        // Sut.IsInCheck(Black).Should().BeTrue("black should be in check", Sut, "Check Visualization");
     }
 }
