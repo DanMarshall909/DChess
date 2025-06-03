@@ -4,8 +4,8 @@ namespace DChess.Core.Moves;
 
 public class MoveHandler
 {
-    private readonly int _maxAllowableDepth;
     private readonly IErrorHandler _errorHandler;
+    private readonly int _maxAllowableDepth;
 
     public MoveHandler(IErrorHandler errorHandler, int maxAllowableDepth)
     {
@@ -28,19 +28,14 @@ public class MoveHandler
         game.CurrentPlayer = game.CurrentPlayer.Opponent();
     }
 
-    public static bool HasLegalMoves(Colour colour, Game.Game game)
-    {
-        return LegalMoves(colour, game).Any();
-    }
+    public static bool HasLegalMoves(Colour colour, Game.Game game) => LegalMoves(colour, game).Any();
 
     public static IEnumerable<Move> LegalMoves(Colour colour, Game.Game game)
     {
         var friendlyPieces = game.FriendlyPieces(colour);
         foreach (var piece in friendlyPieces)
-        {
-            foreach (var move in GetValidMoves(piece, game))
-                yield return move;
-        }
+        foreach (var move in GetValidMoves(piece, game))
+            yield return move;
     }
 
     private static IEnumerable<Move> GetValidMoves(ChessPiece chessPiece, Game.Game game)
@@ -93,7 +88,7 @@ public class MoveHandler
 
         if (isMaximizingPlayer)
         {
-            int maxEval = int.MinValue;
+            var maxEval = int.MinValue;
             foreach (var move in legalMoves)
             {
                 var gameClone = game.AsClone();
@@ -107,22 +102,20 @@ public class MoveHandler
 
             return maxEval;
         }
-        else
-        {
-            int minEval = int.MaxValue;
-            foreach (var move in legalMoves)
-            {
-                var gameClone = game.AsClone();
-                gameClone.Make(move);
-                int eval = EvaluatePosition(gameClone, depth - 1, alpha, beta, forColor, true);
-                minEval = Math.Min(minEval, eval);
-                beta = Math.Min(beta, eval);
-                if (beta <= alpha)
-                    break;
-            }
 
-            return minEval;
+        var minEval = int.MaxValue;
+        foreach (var move in legalMoves)
+        {
+            var gameClone = game.AsClone();
+            gameClone.Make(move);
+            int eval = EvaluatePosition(gameClone, depth - 1, alpha, beta, forColor, true);
+            minEval = Math.Min(minEval, eval);
+            beta = Math.Min(beta, eval);
+            if (beta <= alpha)
+                break;
         }
+
+        return minEval;
     }
 
     public static int GetGameStateScore(Game.Game game, Colour playerColour)
@@ -148,7 +141,8 @@ public class MoveHandler
     }
 
     /// <summary>
-    /// Calculates the material score for the given player colour in the game by summing the values of all pieces on the board. Opponent's pieces are subtracted from the score. 
+    ///     Calculates the material score for the given player colour in the game by summing the values of all pieces on the
+    ///     board. Opponent's pieces are subtracted from the score.
     /// </summary>
     /// <param name="playerColour">The colour of the player for whom the score is being calculated.</param>
     /// <param name="game">The current game state.</param>
@@ -156,7 +150,7 @@ public class MoveHandler
     private static int GetMaterialScore(Colour playerColour, Game.Game game)
     {
         var opponentColour = playerColour.Opponent();
-        int score = 0;
+        var score = 0;
 
         foreach (var (_, piece) in game.Pieces)
         {

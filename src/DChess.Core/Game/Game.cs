@@ -9,28 +9,24 @@ namespace DChess.Core.Game;
 [DebuggerDisplay("{AsLichessUrl()}")]
 public sealed class Game
 {
-	public enum GameStatus
-	{
-		InPlay,
-		Check,
-		OpponentInCheck,
-		Checkmate,
-		OpponentCheckmate,
-		Stalemate,
-		Invalid
-	}
+    public enum GameStatus
+    {
+        InPlay,
+        Check,
+        OpponentInCheck,
+        Checkmate,
+        OpponentCheckmate,
+        Stalemate,
+        Invalid
+    }
 
-	private Board _board;
-	private readonly IErrorHandler _errorHandler;
-	private readonly MoveHandler _moveHandler;
-	private readonly int _maxAllowableDepth;
-	private Game _lastMoveGameState;
-	private List<Move> _moveHistory = new List<Move>();
+    private readonly IErrorHandler _errorHandler;
+    private readonly int _maxAllowableDepth;
+    private readonly MoveHandler _moveHandler;
+    private readonly List<Move> _moveHistory = new();
 
-	static Game()
-	{
-		// Static constructor for any static initialisation if needed
-	}
+    private Board _board;
+    private Game _lastMoveGameState;
 
     public Game(Board board, IErrorHandler errorHandler, int maxAllowableDepth)
     {
@@ -64,6 +60,10 @@ public sealed class Game
         }
     }
 
+    public Move LastMove { get; private set; }
+
+    public string AsLichessUrl => "https://lichess.org/editor/" + ToString();
+
     public void OpenLichess()
     {
         Process.Start(new ProcessStartInfo
@@ -73,8 +73,6 @@ public sealed class Game
         });
     }
 
-    public Move LastMove { get; private set; }
-
     public Game AsClone() =>
         new(_board, _errorHandler, _maxAllowableDepth)
         {
@@ -82,8 +80,6 @@ public sealed class Game
         };
 
     public override string ToString() => new Fen(this).FenString;
-
-    public string AsLichessUrl => "https://lichess.org/editor/" + ToString();
 
     public IEnumerable<ChessPiece> FriendlyPieces(Colour colour)
     {
@@ -108,11 +104,11 @@ public sealed class Game
         var a = _board.TryGetAtributes(at, out var properties) ? properties : PieceAttributes.None;
         if (a == PieceAttributes.None)
         {
-            chessPiece = ChessPieceFactory.PieceWithContext(new(at, properties));
+            chessPiece = ChessPieceFactory.PieceWithContext(new PieceContext(at, properties));
             return false;
         }
 
-        chessPiece = ChessPieceFactory.PieceWithContext(new(at, properties));
+        chessPiece = ChessPieceFactory.PieceWithContext(new PieceContext(at, properties));
         return true;
     }
 
@@ -133,14 +129,8 @@ public sealed class Game
 
         if (isInCheck)
             return !hasLegalMoves ? Checkmate : Check;
-        
-        bool opponentInCheck = IsInCheck(colour.Opponent());
-        bool opponentHasLegalMoves = MoveHandler.HasLegalMoves(colour.Opponent(), this);
-        
-        if (opponentInCheck)
-            return !opponentHasLegalMoves ? OpponentCheckmate : OpponentInCheck;
-            
-        return InPlay;
+
+        return IsInCheck(colour.Opponent()) ? OpponentInCheck : InPlay;
     }
 
     public void Make(Move move)
@@ -157,7 +147,7 @@ public sealed class Game
 
     public Task MakeBestMove(Colour colour)
     {
-        var move = MoveHandler.GetBestMove(this, colour);
+        var move = _moveHandler.GetBestMove(this, colour);
         Make(move);
         LastMove = move;
 

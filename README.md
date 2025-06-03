@@ -84,13 +84,13 @@ DChess is a chess engine designed to be:
 ## Move text rendering into a separate class
 
 - [x] Provide interface for rendering the board
-  - [x] Takes in a board and returns a string representation of the board
+    - [x] Takes in a board and returns a string representation of the board
 - [x] Adjust the display logic to use the new class
 
 ## Refactor the board to be a collection of pieces rather than a 2D array of cells
 
 - [x] Create a `Piece` base abstract class that holds the piece type and colour (eventually it will contain the rules
-      and other things specific to that piece).
+  and other things specific to that piece).
 - [x] Refactor the `Board` class to store pieces and their positions.
 - [x] Update the display logic to show pieces on the board.
 
@@ -178,9 +178,9 @@ DChess is a chess engine designed to be:
 ## Error Handling
 
 - [ ] Plan for robust error handling, especially for user input. This includes providing useful error messages when
-      illegal moves are attempted.
+  illegal moves are attempted.
 - [ ] Ensure that the error messages are clear and helpful, guiding the user on how to correct their input or explaining
-      why a move cannot be made.
+  why a move cannot be made.
 
 ## REST API
 
@@ -212,7 +212,8 @@ Welcome to DChess API!
 
 Returns a new game state with the initial board setup a link to the game state.
 
-#### GET /game?bitboard={`bitboards`}&name={`name`}&colour={`black`|`white`}&turn={`black`|`white`}&level={`level`}&render={`true`|`false`}&move={`move`}
+#### GET /game?bitboard={`bitboards`}&name={`name`}&colour={`black`|`white`}&turn={`black`|`white`}&level={
+`level`}&render={`true`|`false`}&move={`move`}
 
 This endpoint returns a board with a given game state.
 

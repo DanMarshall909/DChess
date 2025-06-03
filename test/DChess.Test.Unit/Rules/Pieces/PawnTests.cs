@@ -48,7 +48,7 @@ public class PawnTests : GameTestBase
         Sut.Move(f2, f1);
         Sut.Board[f1].Should().Be(BlackQueen, "black pawns are promoted to queens");
     }
-    
+
     [Fact(DisplayName = "Pawns cannot take a piece to the side and 2 squares forward")]
     public void pawns_cannot_take_a_piece_to_the_side_and_2_squares_forward()
     {
@@ -66,7 +66,7 @@ public class PawnTests : GameTestBase
 
         Sut.Pieces[a2].CheckMove(b4, Sut).Validity.Should().Be(PawnsCanOnlySideStep1SquareWhenCapturing);
     }
-    
+
     [Fact(DisplayName = "Pawns cannot take a piece forwards")]
     public void pawns_cannot_take_a_piece_forwards()
     {
@@ -84,6 +84,4 @@ public class PawnTests : GameTestBase
 
         Sut.Pieces[a2].CheckMove(a3, Sut).Validity.Should().Be(PawnsCannotTakeForward);
     }
-    
-
 }

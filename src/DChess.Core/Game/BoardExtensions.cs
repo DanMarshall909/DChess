@@ -45,14 +45,14 @@ public static class BoardExtensions
     public static Board Set(this Board board, string text)
     {
         board.Clear();
-        var lines = text.Split(Environment.NewLine);
+        string[] lines = text.Split(Environment.NewLine);
         for (byte rank = 8; rank >= 1; rank--)
         {
-            var line = lines[8 - rank].Trim();
+            string line = lines[8 - rank].Trim();
             for (var file = 'a'; file <= 'h'; file++)
             {
                 var square = new Square(file, rank);
-                var pieceChar = line[file - 'a'];
+                char pieceChar = line[file - 'a'];
                 var piece = PieceAttributes.FromChar(pieceChar);
                 if (piece == PieceAttributes.None) continue;
 
@@ -62,25 +62,25 @@ public static class BoardExtensions
 
         return board;
     }
-    
+
     public static string RenderToText(this Board board)
     {
         var renderer = new TextRenderer();
         renderer.Render(board);
         return renderer.LastRender;
     }
-    
+
     public static Board FromText(string text)
     {
         var board = new Board();
-        var lines = text.Split(Environment.NewLine);
+        string[] lines = text.Split(Environment.NewLine);
         for (byte rank = 8; rank >= 1; rank--)
         {
-            var line = lines[8 - rank].Trim();
+            string line = lines[8 - rank].Trim();
             for (var file = 'a'; file <= 'h'; file++)
             {
                 var square = new Square(file, rank);
-                var pieceChar = line[file - 'a'];
+                char pieceChar = line[file - 'a'];
                 var piece = PieceAttributes.FromChar(pieceChar);
                 if (piece == PieceAttributes.None) continue;
 
@@ -90,5 +90,4 @@ public static class BoardExtensions
 
         return board;
     }
-
 }

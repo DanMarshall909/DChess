@@ -4,13 +4,13 @@ public readonly record struct Board
 {
     private const int TotalCellsOnBoard = 8 * 8;
 
-    public string AsText => this.RenderToText();
-
     public Board()
         => Clear();
 
     private Board(PieceAttributes[] data)
         => Data = CloneOf(data);
+
+    public string AsText => this.RenderToText();
 
     private PieceAttributes[] Data { get; } = new PieceAttributes[TotalCellsOnBoard];
 

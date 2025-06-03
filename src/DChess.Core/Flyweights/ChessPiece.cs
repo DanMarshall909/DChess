@@ -11,13 +11,13 @@ public abstract record ChessPiece
         Square = pieceContext.Square;
     }
 
-    public override string ToString() => PieceAttributes.ToString();
-
     public abstract string PieceName { get; }
     public PieceAttributes PieceAttributes { get; }
     public Square Square { get; }
     public Colour Colour => PieceAttributes.Colour;
     public Kind Kind => PieceAttributes.Kind;
+
+    public override string ToString() => PieceAttributes.ToString();
 
     public MoveResult CheckMove(Square to, Game.Game game)
     {
@@ -56,7 +56,7 @@ public abstract record ChessPiece
         return move.AsOkResult();
     }
 
-    
+
     private bool MovingIntoCheck(Colour movedPieceColour, Move move, Game.Game game)
     {
         var newGameState = game.AsClone();
@@ -64,7 +64,7 @@ public abstract record ChessPiece
 
         return newGameState.IsInCheck(movedPieceColour);
     }
-    
+
     public bool CanMoveTo(Square to, Game.Game game)
     {
         var move = new Move(Square, to);

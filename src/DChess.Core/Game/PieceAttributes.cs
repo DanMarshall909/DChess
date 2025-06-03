@@ -33,7 +33,7 @@ public readonly struct PieceAttributes(Colour colour, Kind kind) : IEquatable<Pi
         { BlackQueen, 'q' },
         { BlackKing, 'k' }
     };
-    
+
     public static readonly Dictionary<char, PieceAttributes> AttributesByChar =
         CharByAttributes.ToDictionary(x => x.Value, x => x.Key);
 

@@ -39,7 +39,7 @@ public class ChessPieceTests : GameTestBase
     {
         Sut.Board.Place(WhiteKing, f1);
         Sut.Board.Place(new PieceAttributes(White, Piece.Kind.Pawn), a1);
-        
+
         Sut.Board.ShouldNotBeValidMove(a1, a6, "pawns cannot move 5 squares forward");
     }
 }

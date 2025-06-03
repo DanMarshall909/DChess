@@ -1,7 +1,7 @@
 namespace DChess.Core.Game;
 
 /// <summary>
-/// A square on a chess board denoted by a file and a rank
+///     A square on a chess board denoted by a file and a rank
 /// </summary>
 public record struct Square
 {
@@ -149,7 +149,7 @@ public record struct Square
     public override string ToString() => this == NullSquare ? "Null Square" : $"{File}{Rank}";
 
     public static bool IsValid(char file, byte rank) => file is >= 'a' and <= 'h' && rank is >= 1 and <= 8;
-    
+
     /// <summary>
     ///     Returns a new Square that is offset by the given offset
     /// </summary>

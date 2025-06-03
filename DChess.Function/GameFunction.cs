@@ -18,7 +18,7 @@ public static class GameFunction
     public static async Task<IActionResult> RunAsync(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]
         HttpRequest req, ILogger log)
-    
+
     {
         var request = new Request(
             ColourExtensions.AsColour(req.Query["colour"]),

@@ -1,16 +1,15 @@
-using DChess.Core.Errors;
 using DChess.Core.Game;
 using DChess.UI.WPF.Extensions;
 
 namespace DChess.Test.Unit.TestHelpers;
 
 /// <summary>
-/// Base class for tests that need to visualize the chess board.
+///     Base class for tests that need to visualize the chess board.
 /// </summary>
 public abstract class VisualizationTestBase : GameTestBase
 {
     /// <summary>
-    /// Visualizes the current board state in a window.
+    ///     Visualizes the current board state in a window.
     /// </summary>
     /// <param name="title">The title of the window.</param>
     /// <param name="waitForClose">Whether to wait for the window to be closed before continuing.</param>
@@ -20,7 +19,7 @@ public abstract class VisualizationTestBase : GameTestBase
     }
 
     /// <summary>
-    /// Visualizes the current board state in a window and waits for the user to close the window.
+    ///     Visualizes the current board state in a window and waits for the user to close the window.
     /// </summary>
     /// <param name="title">The title of the window.</param>
     protected void VisualizeBoardAndWait(string title = "Chess Board Visualization")
@@ -29,7 +28,7 @@ public abstract class VisualizationTestBase : GameTestBase
     }
 
     /// <summary>
-    /// Executes the specified assertion on the board, and visualizes the board if the assertion fails.
+    ///     Executes the specified assertion on the board, and visualizes the board if the assertion fails.
     /// </summary>
     /// <param name="assertion">The assertion to execute.</param>
     /// <param name="title">The title of the window.</param>
@@ -48,7 +47,7 @@ public abstract class VisualizationTestBase : GameTestBase
     }
 
     /// <summary>
-    /// Executes the specified assertion on the game, and visualizes the board if the assertion fails.
+    ///     Executes the specified assertion on the game, and visualizes the board if the assertion fails.
     /// </summary>
     /// <param name="assertion">The assertion to execute.</param>
     /// <param name="title">The title of the window.</param>

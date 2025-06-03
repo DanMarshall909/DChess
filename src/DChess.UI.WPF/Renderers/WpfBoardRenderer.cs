@@ -1,19 +1,25 @@
-namespace DChess.UI.WPF.Renderers;
-
+using System;
+using System.Threading;
+using System.Windows;
+using System.Windows.Threading;
+using DChess.Core.Game;
+using DChess.Core.Renderers;
 using DChess.UI.WPF.Controls;
 
+namespace DChess.UI.WPF.Renderers;
+
 /// <summary>
-/// A renderer that displays a chess board in a WPF window.
+///     A renderer that displays a chess board in a WPF window.
 /// </summary>
 public class WpfBoardRenderer : IBoardRenderer
 {
-    private Window? _window;
-    private ChessBoardControl? _boardControl;
     private readonly string _title;
     private readonly bool _waitForClose;
+    private ChessBoardControl? _boardControl;
+    private Window? _window;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="WpfBoardRenderer"/> class.
+    ///     Initializes a new instance of the <see cref="WpfBoardRenderer" /> class.
     /// </summary>
     /// <param name="title">The title of the window.</param>
     /// <param name="waitForClose">Whether to wait for the window to be closed before continuing.</param>
@@ -24,7 +30,7 @@ public class WpfBoardRenderer : IBoardRenderer
     }
 
     /// <summary>
-    /// Renders the specified board in a WPF window.
+    ///     Renders the specified board in a WPF window.
     /// </summary>
     /// <param name="board">The board to render.</param>
     public void Render(Board board)
@@ -48,27 +54,21 @@ public class WpfBoardRenderer : IBoardRenderer
                     application.Startup += (s, e) => CreateAndShowWindow(board);
                     application.Run();
                 }
-                catch (InvalidOperationException ex) when (ex.Message.Contains("Cannot create more than one System.Windows.Application"))
+                catch (InvalidOperationException ex) when (ex.Message.Contains(
+                                                               "Cannot create more than one System.Windows.Application"))
                 {
                     // If we can't create a new Application, try to use the existing one
                     if (Application.Current != null)
-                    {
                         Application.Current.Dispatcher.Invoke(() => CreateAndShowWindow(board));
-                    }
                     else
-                    {
                         Console.WriteLine("Failed to create or access a WPF Application instance: " + ex.Message);
-                    }
                 }
             });
 
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
 
-            if (_waitForClose)
-            {
-                thread.Join();
-            }
+            if (_waitForClose) thread.Join();
         }
         else
         {
@@ -96,13 +96,9 @@ public class WpfBoardRenderer : IBoardRenderer
             _window.Content = _boardControl;
 
             if (_waitForClose)
-            {
                 _window.ShowDialog();
-            }
             else
-            {
                 _window.Show();
-            }
         }
 
         // Update the board

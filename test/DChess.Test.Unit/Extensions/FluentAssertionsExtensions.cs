@@ -1,17 +1,16 @@
 using DChess.Core.Game;
 using DChess.UI.WPF.Extensions;
-using FluentAssertions;
 using FluentAssertions.Primitives;
 
 namespace DChess.Test.Unit.Extensions;
 
 /// <summary>
-/// Extensions for FluentAssertions to integrate with the chess visualization system.
+///     Extensions for FluentAssertions to integrate with the chess visualization system.
 /// </summary>
 public static class FluentAssertionsExtensions
 {
     /// <summary>
-    /// Extends BooleanAssertions to visualize the game board if the assertion fails.
+    ///     Extends BooleanAssertions to visualize the game board if the assertion fails.
     /// </summary>
     /// <param name="assertion">The boolean assertion.</param>
     /// <param name="game">The game to visualize.</param>
@@ -39,7 +38,7 @@ public static class FluentAssertionsExtensions
     }
 
     /// <summary>
-    /// Extends BooleanAssertions to visualize the game board if the assertion fails.
+    ///     Extends BooleanAssertions to visualize the game board if the assertion fails.
     /// </summary>
     /// <param name="assertion">The boolean assertion.</param>
     /// <param name="game">The game to visualize.</param>
@@ -67,7 +66,7 @@ public static class FluentAssertionsExtensions
     }
 
     /// <summary>
-    /// Extends ObjectAssertions to visualize the game board if the assertion fails.
+    ///     Extends ObjectAssertions to visualize the game board if the assertion fails.
     /// </summary>
     /// <typeparam name="T">The type of the object.</typeparam>
     /// <param name="assertion">The object assertion.</param>
@@ -98,7 +97,7 @@ public static class FluentAssertionsExtensions
     }
 
     /// <summary>
-    /// Extends ObjectAssertions to visualize the game board if the assertion fails.
+    ///     Extends ObjectAssertions to visualize the game board if the assertion fails.
     /// </summary>
     /// <param name="assertion">The object assertion.</param>
     /// <param name="game">The game to visualize.</param>

@@ -11,8 +11,8 @@ public class ChessPieceFactoryTests : GameTestBase
     {
         var attribute = new PieceAttributes(White, Piece.Kind.Pawn);
 
-        var piece = ChessPieceFactory.PieceWithContext(new(a1, attribute));
-        var secondPieceWithSameDefinition = ChessPieceFactory.PieceWithContext(new(a1, attribute));
+        var piece = ChessPieceFactory.PieceWithContext(new PieceContext(a1, attribute));
+        var secondPieceWithSameDefinition = ChessPieceFactory.PieceWithContext(new PieceContext(a1, attribute));
 
         piece.Should().BeEquivalentTo(new Pawn(new PieceContext(attribute, a1)));
         piece.Should().Be(secondPieceWithSameDefinition, "the pieceAttributes should be the same instance");

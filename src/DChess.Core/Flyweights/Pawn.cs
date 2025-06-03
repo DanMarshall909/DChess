@@ -19,8 +19,8 @@ public record Pawn : ChessPiece, IIgnorePathCheck
         {
             if (move.Distance.Total > (isFirstMove ? 2 : 1))
                 return move.AsInvalidBecause(PawnsCanOnlyMove1SquareForwardOr2SquaresForwardOnTheFirstMove);
-        
-            if(move.IsBackwards(Colour))
+
+            if (move.IsBackwards(Colour))
                 return move.AsInvalidBecause(PawnsCanOnlyMoveForward);
 
             // Check if attempting to capture forward
@@ -33,9 +33,13 @@ public record Pawn : ChessPiece, IIgnorePathCheck
                 return move.AsInvalidBecause(PawnsCanOnlySideStep1SquareWhenCapturing);
         }
         else if (move.IsHorizontal)
+        {
             return move.AsInvalidBecause(PawnsCannotMoveHorizontally);
+        }
         else
+        {
             return move.AsInvalidBecause(PawnsCanOnlySideStep1SquareWhenCapturing);
+        }
 
         return move.AsOkResult();
     }

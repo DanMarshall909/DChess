@@ -6,7 +6,8 @@ namespace DChess.Test.Unit.Extensions;
 
 public static class BoardAssertions
 {
-    public static void ShouldHavePieceAt(this Board board, Square square, PieceAttributes expectedPiece, string because = "", params object[] becauseArgs)
+    public static void ShouldHavePieceAt(this Board board, Square square, PieceAttributes expectedPiece,
+        string because = "", params object[] becauseArgs)
     {
         var renderer = new TextRenderer();
         renderer.Render(board);
@@ -22,7 +23,8 @@ public static class BoardAssertions
                 renderer.LastRender);
     }
 
-    public static void ShouldNotHavePieceAt(this Board board, Square square, string because = "", params object[] becauseArgs)
+    public static void ShouldNotHavePieceAt(this Board board, Square square, string because = "",
+        params object[] becauseArgs)
     {
         var renderer = new TextRenderer();
         renderer.Render(board);
@@ -37,10 +39,12 @@ public static class BoardAssertions
                 renderer.LastRender);
     }
 
-    public static void ShouldBeValidMove(this Board board, Square from, Square to, string because = "", params object[] becauseArgs)
+    public static void ShouldBeValidMove(this Board board, Square from, Square to, string because = "",
+        params object[] becauseArgs)
     {
-        var (renderer, pieceAttributes, game, chessPiece, moveResult) = ValidateMove(board, from, to);
-        
+        (var renderer, var pieceAttributes, var game, dynamic? chessPiece, dynamic? moveResult) =
+            ValidateMove(board, from, to);
+
         if (pieceAttributes == null) return;
 
         Execute.Assertion
@@ -55,10 +59,12 @@ public static class BoardAssertions
                 renderer.LastRender);
     }
 
-    public static void ShouldNotBeValidMove(this Board board, Square from, Square to, string because = "", params object[] becauseArgs)
+    public static void ShouldNotBeValidMove(this Board board, Square from, Square to, string because = "",
+        params object[] becauseArgs)
     {
-        var (renderer, pieceAttributes, game, chessPiece, moveResult) = ValidateMove(board, from, to);
-        
+        (var renderer, var pieceAttributes, var game, dynamic? chessPiece, dynamic? moveResult) =
+            ValidateMove(board, from, to);
+
         if (pieceAttributes == null) return;
 
         Execute.Assertion
@@ -72,7 +78,8 @@ public static class BoardAssertions
                 renderer.LastRender);
     }
 
-    private static (TextRenderer renderer, PieceAttributes? pieceAttributes, Game game, dynamic chessPiece, dynamic moveResult) ValidateMove(Board board, Square from, Square to)
+    private static (TextRenderer renderer, PieceAttributes? pieceAttributes, Game game, dynamic chessPiece, dynamic
+        moveResult) ValidateMove(Board board, Square from, Square to)
     {
         var renderer = new TextRenderer();
         renderer.Render(board);
@@ -88,10 +95,10 @@ public static class BoardAssertions
             return (renderer, null, null, null, null);
         }
 
-        var game = new Game(board, new TestErrorHandler(), maxAllowableDepth: 3);
+        var game = new Game(board, new TestErrorHandler(), 3);
         var piece = game.Pieces[from];
         var moveResult = piece.CheckMove(to, game);
-        
+
         return (renderer, pieceAttributes, game, piece, moveResult);
     }
-} 
+}
