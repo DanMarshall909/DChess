@@ -129,7 +129,13 @@ public sealed class Game
         if (isInCheck)
             return !hasLegalMoves ? Checkmate : Check;
         
-        return IsInCheck(colour.Opponent()) ? OpponentInCheck : InPlay;
+        bool opponentInCheck = IsInCheck(colour.Opponent());
+        bool opponentHasLegalMoves = MoveHandler.HasLegalMoves(colour.Opponent(), this);
+        
+        if (opponentInCheck)
+            return !opponentHasLegalMoves ? OpponentCheckmate : OpponentInCheck;
+            
+        return InPlay;
     }
 
     public void Make(Move move)
@@ -146,7 +152,7 @@ public sealed class Game
 
     public Task MakeBestMove(Colour colour)
     {
-        var move = _moveHandler.GetBestMove(this, colour);
+        var move = MoveHandler.GetBestMove(this, colour);
         Make(move);
         LastMove = move;
 

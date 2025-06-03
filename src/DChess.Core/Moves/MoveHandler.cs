@@ -54,10 +54,8 @@ public class MoveHandler
         }
     }
 
-    public Move GetBestMove(Game.Game game, Colour forColour, int maxDepth = 3)
+    public static Move GetBestMove(Game.Game game, Colour forColour, int maxDepth = 3)
     {
-        maxDepth = Math.Min(maxDepth, _maxAllowableDepth);
-
         var legalMoves = LegalMoves(forColour, game).ToList();
         if (!legalMoves.Any())
             throw new InvalidOperationException("No legal moves available");
@@ -82,7 +80,7 @@ public class MoveHandler
         return bestMove;
     }
 
-    public int EvaluatePosition(Game.Game game, int depth, int alpha, int beta, Colour forColor,
+    public static int EvaluatePosition(Game.Game game, int depth, int alpha, int beta, Colour forColor,
         bool isMaximizingPlayer)
     {
         var status = game.Status(game.CurrentPlayer);
