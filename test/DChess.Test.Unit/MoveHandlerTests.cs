@@ -1,9 +1,10 @@
 using DChess.Core.Game;
+using DChess.Test.Unit.TestHelpers;
 using static DChess.Core.Game.Colour;
 
 namespace DChess.Test.Unit;
 
-public class MoveHandlerTests : GameTestBase
+public class MoveHandlerTests : MoveHandlerTestBase
 {
 	private const string NoCheckNoMaterialAdvantage = "k7/8/8/8/8/8/8/K7 w - - 0 1";
 	private const string BlackKingInCheckWith1PawnMaterialAdvantage = "k7/1P6/8/8/8/8/8/K7 w - - 0 1";

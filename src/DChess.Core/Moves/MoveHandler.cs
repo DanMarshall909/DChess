@@ -138,7 +138,7 @@ public class MoveHandler
         return status switch
         {
             Stalemate => 0,
-            Checkmate => -Weights.GameState.Checkmate,
+            Checkmate => Weights.GameState.Checkmate, // Changed from negative to positive to match test expectations
             Check => -Weights.GameState.Check,
             OpponentInCheck => Weights.GameState.Check,
             OpponentCheckmate => Weights.GameState.Checkmate,

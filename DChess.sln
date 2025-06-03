@@ -16,6 +16,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DChess.UI.Console", "src\DC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DChess.Function", "DChess.Function\DChess.Function.csproj", "{F6F9749B-52E0-4438-97C6-07877ECD2AD8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E4DA84D8-E20F-4708-A07A-9AB5F4BCE10B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DChess.UI.WPF", "src\DChess.UI.WPF\DChess.UI.WPF.csproj", "{74D1A3E8-D34C-4EB6-963A-C827252E84FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,5 +45,12 @@ Global
 		{F6F9749B-52E0-4438-97C6-07877ECD2AD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6F9749B-52E0-4438-97C6-07877ECD2AD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6F9749B-52E0-4438-97C6-07877ECD2AD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74D1A3E8-D34C-4EB6-963A-C827252E84FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74D1A3E8-D34C-4EB6-963A-C827252E84FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74D1A3E8-D34C-4EB6-963A-C827252E84FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74D1A3E8-D34C-4EB6-963A-C827252E84FC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{74D1A3E8-D34C-4EB6-963A-C827252E84FC} = {E4DA84D8-E20F-4708-A07A-9AB5F4BCE10B}
 	EndGlobalSection
 EndGlobal
