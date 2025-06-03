@@ -108,6 +108,64 @@ public void game_state_transitions_from_check_to_checkmate()
 public void game_state_transitions_to_stalemate()
 ```
 
+## Test Visualization Framework
+
+The DChess project now includes a robust visualization framework for tests, which helps with debugging and understanding test failures.
+
+### 1. FluentAssertions Extensions
+
+```csharp
+// Example of using FluentAssertions extensions with visualization
+[Fact(DisplayName = "Game state reflects king in check")]
+public void game_state_reflects_king_in_check()
+{
+    Sut.Set("k7/8/1P6/8/8/8/8/K7 w - - 0 1");
+    Sut.Status(White).Should().Be(InPlay, "white should be in play", Sut, "Initial Position Visualization");
+
+    Sut.Move(b6, b7);
+    Sut.Status(Black).Should().Be(Check, "black king should be in check", Sut, "Check Position Visualization");
+}
+```
+
+### 2. Best Move Visualization
+
+```csharp
+[Fact(DisplayName = "Example of visualizing best move calculation")]
+public void example_of_visualizing_best_move_calculation()
+{
+    // Arrange - Set up a board position
+    Sut.Set("r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3");
+    
+    // Act - Calculate the best move
+    var bestMove = MoveHandler.GetBestMove(Sut, White, maxDepth: 3);
+    
+    // Assert with automatic visualization on failure
+    bestMove.Format().Should().Be("b1c3", "the best move should be Nc3", Sut, "Best Move Visualization");
+}
+```
+
+### 3. Capture Sequence Visualization
+
+```csharp
+[Fact(DisplayName = "Example of visualizing a capture sequence")]
+public void example_of_visualizing_a_capture_sequence()
+{
+    // Arrange - Set up a position with a capture sequence
+    Sut.Set("rnbqkbnr/ppp2ppp/8/3pp3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3");
+    
+    // Check if the destination square has a piece (which will be captured)
+    var destinationHasPiece = Sut.Board.HasPieceAt(new Square("d5"));
+    destinationHasPiece.Should().BeTrue("there should be a piece to capture at d5", Sut, "Pre-Capture Visualization");
+    
+    // Perform the move
+    Sut.Make(bestMove);
+    
+    // Verify the move was made correctly
+    Sut.Board.HasPieceAt(new Square("e4")).Should().BeFalse("the e4 pawn should have moved", Sut, "Post-Capture Visualization");
+    Sut.Board.HasPieceAt(new Square("d5")).Should().BeTrue("the pawn should now be at d5", Sut, "Capture Result Visualization");
+}
+```
+
 ## Implementation Strategy
 
 For each test category:
@@ -122,7 +180,9 @@ For each test category:
 
 3. **Leverage Existing Test Infrastructure**:
    - Use the `GameTestBase` class for common setup
-   - Utilize existing test helpers and extensions
+   - Use `MoveHandlerTestBase` for move calculation tests
+   - Use `VisualizationTestBase` for tests that need visual debugging
+   - Utilize FluentAssertions extensions for better test readability and visualization
 
 4. **Focus on Edge Cases**:
    - Test boundary conditions
@@ -133,6 +193,7 @@ For each test category:
    - Use descriptive test names
    - Add comments explaining the purpose of complex tests
    - Document expected behavior clearly
+   - Include visualization titles that describe what's being visualized
 
 ## Test Implementation Priority
 
@@ -142,6 +203,8 @@ For each test category:
 4. **Game State Transitions** - Ensures correct game flow
 5. **Pawn Promotion** - Special rule with multiple implications
 6. **Edge Case Tests for Piece Movement** - Ensures movement rules are robust
+7. **Best Move Calculations** - Verifies AI decision making
+8. **Visualization Tests** - Ensures visual debugging tools work correctly
 
 ## Future Test Areas (Not Yet Implemented Features)
 

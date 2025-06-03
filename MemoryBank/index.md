@@ -15,6 +15,10 @@ This Memory Bank serves as a centralized knowledge repository for the DChess pro
 9. [Sample Stalemate Tests](./Sample_StalemateTests.cs) - Example implementation of stalemate detection tests
 10. [Sample Illegal Move Tests](./Sample_IllegalMoveTests.cs) - Example implementation of illegal move tests
 11. [Summary](./Summary.md) - Summary of Memory Bank initialization and next steps
+12. [Example Tests](../test/DChess.Test.Unit/Examples/) - Example tests demonstrating visualization capabilities:
+    - [Visualization Examples](../test/DChess.Test.Unit/Examples/VisualizationExampleTests.cs) - Basic visualization examples
+    - [MoveHandler Visualization Examples](../test/DChess.Test.Unit/Examples/MoveHandlerVisualizationExampleTests.cs) - Move handler visualization
+    - [Best Move Visualization Examples](../test/DChess.Test.Unit/Examples/BestMoveVisualizationExampleTests.cs) - Best move calculation visualization
 
 ## Purpose
 
@@ -51,6 +55,8 @@ Current test coverage focuses on:
 - Game state tracking
 - Move validation
 - Pawn promotion
+- Visualization capabilities for test failures
+- Best move calculations
 
 Areas needing additional test coverage:
 
@@ -59,3 +65,5 @@ Areas needing additional test coverage:
 - Game state transitions
 - Pinned piece scenarios
 - Detailed check resolution tests
+- Advanced AI decision making
+- Performance testing for move calculations

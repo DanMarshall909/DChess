@@ -63,10 +63,18 @@ DChess is a chess engine designed to be:
 - Flyweight pattern for chess pieces to reduce memory usage
 - Move validation system with general and piece-specific rules
 
+### Testing Framework
+- ✅ FluentAssertions extensions for chess-specific assertions
+- ✅ Visualization capabilities for test failures
+- ✅ MoveHandlerTestBase for testing move calculations
+- ✅ VisualizationTestBase for visual debugging
+- ✅ Example tests for best move calculations with visualization
+
 ### Design Patterns Used
 - ✅ Flyweight Pattern: Used for chess pieces to reduce memory allocation
 - ✅ Memoization: Used for caching expensive calculations
 - ✅ Factory Pattern: Used in ChessPieceFactory
+- ✅ Extension Methods: Used for FluentAssertions to enhance testing
 
 ### API Design
 - REST API with endpoints for game creation and moves

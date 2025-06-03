@@ -23,6 +23,11 @@ We have successfully initialized the DChess Memory Bank with the following compo
 4. **Organization**
    - [Index](./index.md) - Central index of all Memory Bank contents
 
+5. **Testing Framework Enhancements**
+   - FluentAssertions extensions for chess-specific assertions
+   - Visualization capabilities for test failures
+   - Example tests for best move calculations with visualization
+
 ## Next Steps
 
 To complete the implementation of the unit tests for existing features, follow these steps:
@@ -39,6 +44,8 @@ To complete the implementation of the unit tests for existing features, follow t
    - Phase 4: Game State Transition Tests
    - Phase 5: Pawn Promotion Tests
    - Phase 6: Edge Case Tests for Piece Movement
+   - Phase 7: Best Move Calculation Tests
+   - Phase 8: Visualization Tests
 
 3. **Run and Verify Tests**
    - Execute the tests to ensure they pass
@@ -59,7 +66,9 @@ When implementing the tests:
 
 2. **Use Existing Infrastructure**
    - Extend `GameTestBase` for all test classes
-   - Utilize existing test helpers and extensions
+   - Use `MoveHandlerTestBase` for move calculation tests
+   - Use `VisualizationTestBase` for tests that need visual debugging
+   - Utilize FluentAssertions extensions for better test readability and visualization
 
 3. **Focus on Edge Cases**
    - Test boundary conditions
@@ -70,7 +79,24 @@ When implementing the tests:
    - Use descriptive test names
    - Add comments explaining the purpose of complex tests
    - Document expected behavior clearly
+   - Include visualization titles that describe what's being visualized
+
+## Visualization Framework
+
+The DChess project now includes a robust visualization framework for tests, which helps with debugging and understanding test failures:
+
+1. **FluentAssertions Extensions**
+   - Enhanced assertions with automatic visualization on failure
+   - Descriptive error messages with board state visualization
+
+2. **Best Move Visualization**
+   - Visualize AI decision making process
+   - Compare expected vs. actual best moves
+
+3. **Capture Sequence Visualization**
+   - Visualize before and after states for captures
+   - Verify piece movements and captures
 
 ## Conclusion
 
-The Memory Bank now provides a solid foundation for understanding the DChess project and implementing comprehensive tests for existing features. By following the test plan and implementation guidance, you can ensure that the chess engine's core functionality is thoroughly tested and robust.
+The Memory Bank now provides a solid foundation for understanding the DChess project and implementing comprehensive tests for existing features. By following the test plan and implementation guidance, you can ensure that the chess engine's core functionality is thoroughly tested and robust. The new visualization framework enhances the testing experience by providing visual feedback on test failures, making debugging easier and more intuitive.
