@@ -4,7 +4,8 @@
       "Bash(find:*)",
       "Bash(gh repo view:*)",
       "Bash(gh label create:*)",
-      "Bash(gh issue create:*)"
+      "Bash(gh issue create:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }
