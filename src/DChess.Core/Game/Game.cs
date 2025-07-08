@@ -51,9 +51,8 @@ public sealed class Game
             {
                 var props = _board[f, r];
                 if (props == PieceAttributes.None) continue;
-                var squareFromZeroOffset = Square.FromZeroOffset(f, r);
-                pieces.Add(squareFromZeroOffset
-                    , ChessPieceFactory.PieceWithContext(new PieceContext(squareFromZeroOffset, props)));
+                var square = Square.FromZeroOffset(f, r);
+                pieces.Add(square, ChessPieceFactory.PieceWithContext(new PieceContext(square, props)));
             }
 
             return new ReadOnlyDictionary<Square, ChessPiece>(pieces);
@@ -83,17 +82,13 @@ public sealed class Game
 
     public IEnumerable<ChessPiece> FriendlyPieces(Colour colour)
     {
-        // todo: optimise
-        List<ChessPiece> pieces = new List<ChessPiece>();
         for (var f = 0; f < 8; f++)
         for (var r = 0; r < 8; r++)
         {
             var props = _board[f, r];
             if (props.Colour == colour)
-                pieces.Add(ChessPieceFactory.PieceWithContext(new PieceContext(Square.FromZeroOffset(f, r), props)));
+                yield return ChessPieceFactory.PieceWithContext(new PieceContext(Square.FromZeroOffset(f, r), props));
         }
-
-        return pieces;
     }
 
     public IEnumerable<ChessPiece> OpposingPieces(Colour colour)
