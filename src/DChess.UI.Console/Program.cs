@@ -35,11 +35,23 @@ class Program
     {
         while (true)
         {
-            System.Console.Write("> ");
-            var input = System.Console.ReadLine()?.Trim().ToLower();
-
-            if (string.IsNullOrEmpty(input))
-                continue;
+            try
+            {
+                System.Console.Write("> ");
+                System.Console.Out.Flush();
+                var input = System.Console.ReadLine();
+                
+                // Handle EOF or null input (Ctrl+C, Ctrl+D, etc.)
+                if (input == null)
+                {
+                    System.Console.WriteLine("\nGoodbye!");
+                    return;
+                }
+                
+                input = input.Trim().ToLower();
+                
+                if (string.IsNullOrEmpty(input))
+                    continue;
 
             switch (input)
             {
@@ -78,6 +90,12 @@ class Program
                         System.Console.WriteLine("Invalid command or move format. Try 'help' for instructions.");
                     }
                     break;
+            }
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"An error occurred: {ex.Message}");
+                System.Console.WriteLine("Type 'quit' to exit or continue playing.");
             }
         }
     }
