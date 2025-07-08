@@ -21,5 +21,12 @@ public enum MoveValidity
     PawnsCannotMoveHorizontally,
     QueenCanOnlyMoveDiagonallyOrInAStraightLine,
     RookCanOnlyMoveInAStraightLine,
-    WhiteIsInCheckMate
+    WhiteIsInCheckMate,
+    CastlingKingHasMoved,
+    CastlingRookHasMoved,
+    CastlingKingInCheck,
+    CastlingKingPassesThroughCheck,
+    CastlingSquaresOccupied,
+    CastlingKingNotInStartingPosition,
+    CastlingRookNotInStartingPosition
 }

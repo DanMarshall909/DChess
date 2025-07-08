@@ -18,6 +18,13 @@ public class MoveHandler
         if (!game.Board.TryGetAtributes(move.From, out var props))
             _errorHandler.HandleInvalidMove(new MoveResult(move, FromCellDoesNoteContainPiece));
 
+        // Check if this is a castling move
+        if (IsCastlingMove(move, props))
+        {
+            ExecuteCastlingMove(move, game);
+            return;
+        }
+
         bool pawnIsPromoted = props.Kind == Kind.Pawn && (move.To.Rank == 1 || move.To.Rank == 8);
         var updatedProperties = pawnIsPromoted
             ? new PieceAttributes(props.Colour, Kind.Queen)
@@ -26,6 +33,55 @@ public class MoveHandler
         game.Board.RemovePieceAt(move.From);
         game.Board.Place(updatedProperties, move.To);
         game.CurrentPlayer = game.CurrentPlayer.Opponent();
+    }
+
+    private bool IsCastlingMove(Move move, PieceAttributes props)
+    {
+        // Castling is when king moves exactly 2 squares horizontally
+        return props.Kind == Kind.King && 
+               move.IsHorizontal && 
+               Math.Abs(move.To.File - move.From.File) == 2;
+    }
+
+    private void ExecuteCastlingMove(Move move, Game.Game game)
+    {
+        if (!game.Board.TryGetAtributes(move.From, out var kingProps))
+            return;
+
+        // Determine if this is kingside or queenside castling
+        bool isKingsideCastling = move.To.File > move.From.File;
+        
+        // Get rook positions
+        var rookFromSquare = GetRookSquare(isKingsideCastling, kingProps.Colour);
+        var rookToSquare = GetRookDestination(isKingsideCastling, kingProps.Colour);
+
+        if (!game.Board.TryGetAtributes(rookFromSquare, out var rookProps))
+            return;
+
+        // Move the king
+        game.Board.RemovePieceAt(move.From);
+        game.Board.Place(kingProps, move.To);
+
+        // Move the rook
+        game.Board.RemovePieceAt(rookFromSquare);
+        game.Board.Place(rookProps, rookToSquare);
+
+        // Switch player
+        game.CurrentPlayer = game.CurrentPlayer.Opponent();
+    }
+
+    private Square GetRookSquare(bool isKingsideCastling, Colour colour)
+    {
+        var rank = colour == White ? 1 : 8;
+        var file = isKingsideCastling ? 8 : 1; // h-file or a-file
+        return new Square((char)('a' + file - 1), (byte)rank);
+    }
+
+    private Square GetRookDestination(bool isKingsideCastling, Colour colour)
+    {
+        var rank = colour == White ? 1 : 8;
+        var file = isKingsideCastling ? 6 : 4; // f-file or d-file
+        return new Square((char)('a' + file - 1), (byte)rank);
     }
 
     public static bool HasLegalMoves(Colour colour, Game.Game game) => LegalMoves(colour, game).Any();
