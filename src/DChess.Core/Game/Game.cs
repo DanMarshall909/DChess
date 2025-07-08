@@ -27,6 +27,7 @@ public sealed class Game
 
     private Board _board;
     private Game? _lastMoveGameState;
+    private ReadOnlyDictionary<Square, ChessPiece>? _cachedPieces;
 
     public Game(Board board, IErrorHandler errorHandler, int maxAllowableDepth)
     {
@@ -34,6 +35,7 @@ public sealed class Game
         _moveHandler = new MoveHandler(errorHandler, maxAllowableDepth);
         _errorHandler = errorHandler;
         _board = Board.CloneOrEmptyIfNull(board);
+        InvalidatePiecesCache();
     }
 
     public Board Board => _board;
@@ -45,6 +47,9 @@ public sealed class Game
     {
         get
         {
+            if (_cachedPieces is not null)
+                return _cachedPieces;
+
             var pieces = new Dictionary<Square, ChessPiece>();
             for (var f = 0; f < 8; f++)
             for (var r = 0; r < 8; r++)
@@ -55,7 +60,8 @@ public sealed class Game
                 pieces.Add(square, ChessPieceFactory.PieceWithContext(new PieceContext(square, props)));
             }
 
-            return new ReadOnlyDictionary<Square, ChessPiece>(pieces);
+            _cachedPieces = new ReadOnlyDictionary<Square, ChessPiece>(pieces);
+            return _cachedPieces;
         }
     }
 
@@ -133,11 +139,13 @@ public sealed class Game
         _lastMoveGameState = AsClone();
         _moveHandler.Make(move, this);
         _moveHistory.Add(move);
+        InvalidatePiecesCache();
     }
 
     public void Move(Square from, Square to)
     {
         _moveHandler.Make(new Move(from, to), this);
+        InvalidatePiecesCache();
     }
 
     public Task MakeBestMove(Colour colour)
@@ -153,6 +161,7 @@ public sealed class Game
     {
         _board = fen.Board;
         CurrentPlayer = fen.CurrentPlayer;
+        InvalidatePiecesCache();
     }
 
     public void UndoLastMove()
@@ -162,10 +171,16 @@ public sealed class Game
             
         _board = _lastMoveGameState.Board;
         CurrentPlayer = _lastMoveGameState.CurrentPlayer;
+        InvalidatePiecesCache();
     }
 
     public void Set(string fenString)
     {
         Set(new Fen(fenString));
+    }
+
+    private void InvalidatePiecesCache()
+    {
+        _cachedPieces = null;
     }
 }
