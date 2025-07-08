@@ -26,7 +26,7 @@ public sealed class Game
     private readonly List<Move> _moveHistory = new();
 
     private Board _board;
-    private Game _lastMoveGameState;
+    private Game? _lastMoveGameState;
 
     public Game(Board board, IErrorHandler errorHandler, int maxAllowableDepth)
     {
@@ -147,7 +147,7 @@ public sealed class Game
 
     public Task MakeBestMove(Colour colour)
     {
-        var move = _moveHandler.GetBestMove(this, colour);
+        var move = MoveHandler.GetBestMove(this, colour, _maxAllowableDepth);
         Make(move);
         LastMove = move;
 
@@ -162,6 +162,9 @@ public sealed class Game
 
     public void UndoLastMove()
     {
+        if (_lastMoveGameState == null)
+            return;
+            
         _board = _lastMoveGameState.Board;
         CurrentPlayer = _lastMoveGameState.CurrentPlayer;
     }

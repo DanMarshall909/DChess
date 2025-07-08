@@ -6,7 +6,12 @@
       "Bash(gh label create:*)",
       "Bash(gh issue create:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh issue:*)",
+      "Bash(dotnet test:*)",
+      "Bash(dotnet build:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }

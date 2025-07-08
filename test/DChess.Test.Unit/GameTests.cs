@@ -186,4 +186,12 @@ public class GameTests : GameTestBase
         Sut.Set(fenString);
         Sut.FriendlyPieces(White).ToList().Select(x => x.Kind).Should().BeEquivalentTo(pieces);
     }
+
+    [Fact(DisplayName = "UndoLastMove should not throw null reference exception when no moves have been made")]
+    public void undo_last_move_should_not_throw_when_no_moves_made()
+    {
+        Action act = () => Sut.UndoLastMove();
+        
+        act.Should().NotThrow<NullReferenceException>("Game should handle case where no moves have been made");
+    }
 }
